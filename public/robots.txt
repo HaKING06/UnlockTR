@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /account
+Disallow: /manage
+Disallow: /verify
+Disallow: /forgot-password
+Sitemap: https://unlocktr.haking.tr/sitemap.xml

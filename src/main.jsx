@@ -23,19 +23,18 @@ import {
   WifiOff,
   Clock3,
   ChevronDown,
+  Eye,
+  Crown,
+  Settings,
 } from "lucide-react";
-import {
-  Modal,
-  Auth,
-  Verify,
-  RequestForm,
-  GameDetail,
-  Cover,
-  Admin,
-} from "./components";
+import { Modal, RequestForm, Cover } from "./components";
+import { AuthPage, VerifyPage } from "./auth-pages";
+import { AccountPage, GamePage, VipPage } from "./member-pages";
+import { AdminPage } from "./admin-page";
+import { SessionProvider, useSession } from "./state";
 import { api, ADMIN, engines } from "./api";
 import "./style.css";
-const VERSION = "0.2.3";
+const VERSION = "0.3.0";
 function Brand() {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
@@ -56,12 +55,12 @@ function getTheme() {
     return "dark";
   }
 }
-function GameCard({ game, onOpen }) {
-  const [reveal, setReveal] = useState(false);
+function GameCard({ game }) {
+  const { nsfw: reveal } = useSession();
   return (
     <article className="game-card">
       <div className="card-art">
-        <Cover game={game} reveal={reveal} onReveal={() => setReveal(true)} />
+        <Cover game={game} />
         {(!game.is_adult || reveal) && (
           <div className="card-image-label">
             <span>{game.engine}</span>
@@ -85,17 +84,20 @@ function GameCard({ game, onOpen }) {
           )}
         </div>
         <h3>
-          <button onClick={onOpen}>{game.title}</button>
+          <a href={"/game?id=" + game.id}>{game.title}</a>
         </h3>
         <p className="card-description">{game.description}</p>
         <div className="card-bottom">
           <span>
             <Clock3 size={12} />v{game.version}
           </span>
-          <button onClick={onOpen} aria-label={game.title + " incele ve indir"}>
-            İncele ve indir
+          <a
+            href={"/game?id=" + game.id}
+            aria-label={game.title + " oyun sayfası"}
+          >
+            Oyunu keşfet
             <ArrowUpRight size={16} />
-          </button>
+          </a>
         </div>
       </div>
     </article>
@@ -116,9 +118,9 @@ function Skeletons() {
   );
 }
 function App() {
+  const { token, user, nsfw, showNsfw, logout } = useSession();
   const [theme, setTheme] = useState(getTheme),
     [modal, setModal] = useState(null),
-    [session, setSession] = useState(null),
     [games, setGames] = useState([]),
     [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
@@ -161,13 +163,36 @@ function App() {
       (engine === "all" || g.engine === engine) &&
       (filter === "all" || (filter === "patch" ? g.has_tr_patch : g.has_mod)),
   );
-  const request = () =>
-    setModal(session ? { type: "request" } : { type: "auth", next: "request" });
+  const request = () => {
+    if (user) setModal({ type: "request" });
+    else location.href = "/login?next=" + encodeURIComponent("/?request=1");
+  };
+  useEffect(() => {
+    if (user && new URLSearchParams(location.search).get("request") === "1")
+      setModal({ type: "request" });
+  }, [user]);
   const routePath = location.pathname.replace(/\/$/, "");
-  const adminPage = routePath === "/" + ADMIN;
+  const adminPage = routePath === "/" + ADMIN || routePath === "/manage";
   const verifyPage =
     routePath === "/verify" ||
     (routePath === "" && new URLSearchParams(location.search).has("token"));
+  const routeContent = verifyPage ? (
+    <VerifyPage />
+  ) : adminPage ? (
+    <AdminPage />
+  ) : routePath === "/login" ? (
+    <AuthPage />
+  ) : routePath === "/register" ? (
+    <AuthPage mode="register" />
+  ) : routePath === "/forgot-password" ? (
+    <AuthPage mode="forgot" />
+  ) : routePath === "/account" ? (
+    <AccountPage />
+  ) : routePath === "/game" ? (
+    <GamePage />
+  ) : routePath === "/vip" ? (
+    <VipPage />
+  ) : null;
   function category(value) {
     if (location.pathname !== "/") {
       location.href = "/?type=" + value + "#library";
@@ -189,10 +214,7 @@ function App() {
         <header className="topbar">
           <Brand />
           <nav aria-label="Ana menü">
-            <a
-              href="/#library"
-              className={!adminPage && !verifyPage ? "nav-active" : ""}
-            >
+            <a href="/#library" className={!routeContent ? "nav-active" : ""}>
               <Compass size={16} />
               Keşfet
             </a>
@@ -219,33 +241,60 @@ function App() {
             >
               {theme === "dark" ? <Sun size={18} /> : <Moon size={18} />}
             </button>
-            {session ? (
-              <button
-                className="secondary login-button"
-                onClick={() => setSession(null)}
-                title={session.user.display_name}
-              >
-                <LogOut size={15} />
-                <span>Çıkış yap</span>
-              </button>
+            <button
+              className={"icon nsfw-toggle " + (nsfw ? "enabled" : "")}
+              aria-label={
+                nsfw ? "18+ kapaklarını gizle" : "18+ kapaklarını göster"
+              }
+              aria-pressed={nsfw}
+              onClick={() => showNsfw(!nsfw)}
+              title="18+ içerik tercihi"
+            >
+              <Eye size={17} />
+              <small>18+</small>
+            </button>
+            <a href="/vip" className="header-vip" aria-label="VIP üyelik">
+              <Crown size={17} />
+            </a>
+            {user ? (
+              <details className="user-menu">
+                <summary>
+                  <UserRound size={15} />
+                  <span>{user.display_name}</span>
+                  <ChevronDown size={12} />
+                </summary>
+                <div>
+                  <a href="/account">
+                    <Settings size={14} />
+                    Hesap ayarları
+                  </a>
+                  <a href="/vip">
+                    <Crown size={14} />
+                    VIP üyeliğim
+                  </a>
+                  {user.permissions.moderate_comments && (
+                    <a href="/manage">
+                      <ShieldCheck size={14} />
+                      Yönetim merkezi
+                    </a>
+                  )}
+                  <button onClick={() => logout().catch(() => {})}>
+                    <LogOut size={14} />
+                    Çıkış yap
+                  </button>
+                </div>
+              </details>
             ) : (
-              <button
-                className="secondary login-button"
-                onClick={() => setModal({ type: "auth" })}
-              >
+              <a className="secondary login-button" href="/login">
                 <UserRound size={15} />
                 Giriş yap
-              </button>
+              </a>
             )}
           </div>
         </header>
       </div>
       <main id="main">
-        {verifyPage ? (
-          <Verify />
-        ) : adminPage ? (
-          <Admin />
-        ) : (
+        {routeContent || (
           <>
             <div className="page-intro">
               <p>
@@ -455,11 +504,7 @@ function App() {
               ) : (
                 <div className="game-grid">
                   {shown.map((g) => (
-                    <GameCard
-                      key={g.id}
-                      game={g}
-                      onOpen={() => setModal({ type: "game", game: g })}
-                    />
+                    <GameCard key={g.id} game={g} />
                   ))}
                 </div>
               )}
@@ -517,6 +562,9 @@ function App() {
           </p>
           <div className="footer-links">
             <a href="/#library">Kütüphane</a>
+            <a href="/login">Giriş yap</a>
+            <a href="/register">Hesap oluştur</a>
+            <a href="/vip">VIP</a>
             <button onClick={request}>
               Oyun isteği
               <ArrowUpRight size={13} />
@@ -533,44 +581,16 @@ function App() {
           </span>
         </div>
       </footer>
-      {modal && (
-        <Modal
-          title={
-            modal.type === "auth"
-              ? "Topluluğa katıl"
-              : modal.type === "request"
-                ? "Oyun isteği oluştur"
-                : modal.game.title
-          }
-          onClose={() => setModal(null)}
-        >
-          {modal.type === "auth" ? (
-            <Auth
-              onLogin={(d) => {
-                setSession(d);
-                setModal(
-                  modal.next === "request"
-                    ? { type: "request" }
-                    : modal.next === "game"
-                      ? { type: "game", game: modal.game }
-                      : null,
-                );
-              }}
-            />
-          ) : modal.type === "request" ? (
-            <RequestForm token={session?.token} />
-          ) : (
-            <GameDetail
-              game={modal.game}
-              token={session?.token}
-              onAuth={() =>
-                setModal({ type: "auth", next: "game", game: modal.game })
-              }
-            />
-          )}
+      {modal && user && (
+        <Modal title="Oyun isteği oluştur" onClose={() => setModal(null)}>
+          <RequestForm token={token} />
         </Modal>
       )}
     </>
   );
 }
-createRoot(document.getElementById("root")).render(<App />);
+createRoot(document.getElementById("root")).render(
+  <SessionProvider>
+    <App />
+  </SessionProvider>,
+);

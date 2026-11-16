@@ -1,0 +1,473 @@
+import React, { useEffect, useState } from "react";
+import {
+  Crown,
+  ShieldCheck,
+  Download,
+  ArrowUpRight,
+  Settings,
+  Eye,
+  UserRound,
+  KeyRound,
+  Trash2,
+} from "lucide-react";
+import { api } from "./api";
+import { useSession, roleLabel } from "./state";
+import { Field, Notice, PageHeader, Protected } from "./ui";
+import { Cover } from "./components";
+export function AccountPage() {
+  const s = useSession(),
+    [message, setMessage] = useState(""),
+    [busy, setBusy] = useState(false);
+  async function save(e, path, method = "POST") {
+    e.preventDefault();
+    setBusy(true);
+    let body = Object.fromEntries(new FormData(e.currentTarget));
+    if (path === "/me") body.show_nsfw = body.show_nsfw === "on";
+    try {
+      const d = await api(path, { token: s.token, method, body });
+      if (d.token) s.setSession(d);
+      if (method === "DELETE") {
+        s.setSession(null);
+        location.href = "/login";
+        return;
+      }
+      if (path === "/me") await s.showNsfw(body.show_nsfw);
+      setMessage(d.message || "Ayarların kaydedildi.");
+    } catch (e) {
+      setMessage(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  return (
+    <Protected user={s.user} loading={s.loading}>
+      {s.user && (
+        <section className="account-page">
+          <PageHeader
+            eyebrow="HESABIM"
+            title="Kontrol sende."
+            description="Profilini, güvenliğini ve içerik tercihlerini yönet."
+          />
+          <div className="profile-banner">
+            <span className="avatar large">
+              {s.user.display_name.slice(0, 1).toLocaleUpperCase("tr")}
+            </span>
+            <div>
+              <h2>{s.user.display_name}</h2>
+              <p>{s.user.email}</p>
+            </div>
+            <span className="role-tag">{roleLabel[s.user.role]}</span>
+            {s.user.vip.active && (
+              <span className="vip-badge">
+                <Crown size={13} />
+                {s.user.vip.lifetime ? "Sınırsız VIP" : "VIP"}
+              </span>
+            )}
+          </div>
+          <Notice>{message}</Notice>
+          <div className="settings-grid">
+            <section className="panel">
+              <h2>
+                <UserRound size={19} />
+                Profil ve tercihler
+              </h2>
+              <form onSubmit={(e) => save(e, "/me", "PATCH")}>
+                <Field
+                  label="Görünen ad"
+                  name="display_name"
+                  defaultValue={s.user.display_name}
+                  minLength={2}
+                  maxLength={40}
+                  required
+                />
+                <label className="switch-row">
+                  <span>
+                    <strong>Yetişkin kapaklarını göster</strong>
+                    <small>18 yaşından büyük olduğunu onaylarsın.</small>
+                  </span>
+                  <input
+                    type="checkbox"
+                    name="show_nsfw"
+                    defaultChecked={s.nsfw}
+                    key={String(s.nsfw)}
+                  />
+                </label>
+                <button className="primary" disabled={busy}>
+                  Ayarları kaydet
+                </button>
+              </form>
+            </section>
+            <section className="panel">
+              <h2>
+                <KeyRound size={19} />
+                Şifre değiştir
+              </h2>
+              <form onSubmit={(e) => save(e, "/me/password")}>
+                <Field
+                  label="Mevcut şifre"
+                  name="current_password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                />
+                <Field
+                  label="Yeni şifre (en az 12 karakter)"
+                  name="password"
+                  type="password"
+                  minLength={12}
+                  maxLength={72}
+                  autoComplete="new-password"
+                  required
+                />
+                <button className="secondary" disabled={busy}>
+                  Şifreyi güncelle
+                </button>
+              </form>
+            </section>
+            <section className="panel">
+              <h2>
+                <Crown size={19} />
+                VIP üyeliğin
+              </h2>
+              <p className="muted">
+                {s.user.vip.lifetime
+                  ? "Ekip hesabın sayesinde sınırsız VIP erişimin var."
+                  : s.user.vip.active
+                    ? "VIP bitişi: " +
+                      new Date(s.user.vip.expires_at).toLocaleString("tr-TR")
+                    : "Henüz aktif VIP üyeliğin yok."}
+              </p>
+              <a href="/vip" className="secondary">
+                VIP avantajlarını keşfet
+                <ArrowUpRight size={15} />
+              </a>
+            </section>
+            <section className="panel danger-zone">
+              <h2>
+                <Trash2 size={19} />
+                Hesabı sil
+              </h2>
+              {s.user.role === "founder" ? (
+                <p className="muted">
+                  Kurucu hesabı panelden silinemez. Sahiplik devri ayrı olarak
+                  yapılmalıdır.
+                </p>
+              ) : (
+                <>
+                  <p className="muted">
+                    Profilin ve e-postan kaldırılır, oturumların kapanır,
+                    isteklerin silinir. Mevcut yorumların “Silinen kullanıcı”
+                    adıyla anonim kalır. Bu işlem geri alınamaz.
+                  </p>
+                  <form onSubmit={(e) => save(e, "/me", "DELETE")}>
+                    <Field
+                      label="Şifren"
+                      type="password"
+                      name="password"
+                      autoComplete="current-password"
+                      required
+                    />
+                    <Field
+                      label="Onaylamak için SİL yaz"
+                      name="confirmation"
+                      pattern="SİL"
+                      required
+                    />
+                    <button className="danger-button" disabled={busy}>
+                      Hesabımı kalıcı olarak sil
+                    </button>
+                  </form>
+                </>
+              )}
+            </section>
+          </div>
+        </section>
+      )}
+    </Protected>
+  );
+}
+export function VipPage() {
+  const { user } = useSession();
+  return (
+    <section className="vip-page">
+      <PageHeader
+        eyebrow="UNLOCKTR VIP"
+        title="Deneyimin bir adım ötesi."
+        description="Reklamsız alternatif indirme bağlantılarına eriş, projeye destek ol."
+      />
+      <div className="vip-intro">
+        <Crown size={39} />
+        <h2>Daha az bekleme. Daha çok oyun.</h2>
+        <p>
+          VIP üyelik, mevcut oyunlardaki VIP Pixeldrain bağlantılarına erişim
+          sağlar. Standart indirmeler herkese açık kalır.
+        </p>
+      </div>
+      {user?.vip.active && (
+        <Notice>
+          {user.vip.lifetime
+            ? "Hesabında sınırsız VIP etkin."
+            : "VIP üyeliğin " +
+              new Date(user.vip.expires_at).toLocaleDateString("tr-TR") +
+              " tarihine kadar aktif."}
+        </Notice>
+      )}
+      <div className="vip-plans">
+        {[
+          ["Aylık", "49", "1 ay VIP erişimi"],
+          ["Yıllık", "399", "12 ay VIP erişimi · aylığa göre 189 TL avantaj"],
+        ].map(([name, price, desc]) => (
+          <article className="panel vip-plan" key={name}>
+            <span className="eyebrow">
+              {name === "Yıllık" ? "UZUN VADELİ DESTEK" : "KEŞFETMEYE BAŞLA"}
+            </span>
+            <h2>{name} VIP</h2>
+            <p className="price">
+              {price}
+              <span> TL / {name === "Aylık" ? "ay" : "yıl"}</span>
+            </p>
+            <p className="muted">{desc}</p>
+            <ul>
+              <li>Mevcut VIP indirme bağlantılarına erişim</li>
+              <li>Hesap ayarlarında üyelik süresi takibi</li>
+              <li>Üyeliğin kurucu tarafından etkinleştirilmesi</li>
+            </ul>
+            <a
+              className="primary"
+              href="https://www.itemsatis.com/profil/haking06.html"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              ItemSatış mağazasına git
+              <ArrowUpRight size={16} />
+            </a>
+          </article>
+        ))}
+      </div>
+      <div className="panel">
+        <h3>Nasıl etkinleştirilir?</h3>
+        <p className="muted">
+          Satış ve ödeme ItemSatış üzerinden yürütülür. Mağazadaki güncel ilan
+          koşullarını kontrol et; ödeme sonrası UnlockTR hesap e-postanı
+          satıcıya ilet. Kurucu üyeliğini elle tanımlar. Bu sitede kart bilgisi
+          alınmaz ve otomatik abonelik başlatılmaz. Ücretsiz VIP atamaları da
+          yalnızca kurucu tarafından yapılabilir.
+        </p>
+      </div>
+    </section>
+  );
+}
+export function GamePage() {
+  const s = useSession(),
+    id = new URLSearchParams(location.search).get("id"),
+    [game, setGame] = useState(null),
+    [comments, setComments] = useState([]),
+    [message, setMessage] = useState(""),
+    [busy, setBusy] = useState(false),
+    [error, setError] = useState("");
+  useEffect(() => {
+    if (!id) {
+      setError("Oyun adresi geçersiz.");
+      return;
+    }
+    const c = new AbortController();
+    Promise.all([
+      api("/games/" + id, { signal: c.signal }),
+      api("/games/" + id + "/comments", { signal: c.signal }),
+    ])
+      .then(([g, cm]) => {
+        setGame(g);
+        setComments(cm);
+        document.title = g.title + " · UnlockTR";
+      })
+      .catch((e) => {
+        if (e.name !== "AbortError") setError(e.message);
+      });
+    return () => c.abort();
+  }, [id]);
+  async function comment(e) {
+    e.preventDefault();
+    setBusy(true);
+    const form = e.currentTarget;
+    try {
+      await api("/games/" + id + "/comments", {
+        method: "POST",
+        token: s.token,
+        body: Object.fromEntries(new FormData(form)),
+      });
+      form.reset();
+      setComments(await api("/games/" + id + "/comments"));
+      setMessage("Yorumun eklendi.");
+    } catch (e) {
+      setMessage(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  async function vip() {
+    setBusy(true);
+    try {
+      const d = await api("/games/" + id + "/downloads/vip", {
+        token: s.token,
+      });
+      location.assign(d.url);
+    } catch (e) {
+      setMessage(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  if (error)
+    return (
+      <div className="empty">
+        <h1>Bu oyun açılamadı.</h1>
+        <p>{error}</p>
+        <a className="secondary" href="/">
+          Kütüphaneye dön
+        </a>
+      </div>
+    );
+  if (!game)
+    return (
+      <div className="empty" role="status">
+        Oyun yükleniyor…
+      </div>
+    );
+  return (
+    <article className="game-page">
+      <div className="breadcrumbs">
+        <a href="/">Kütüphane</a>
+        <span>/</span>
+        <span>{game.title}</span>
+      </div>
+      <PageHeader
+        eyebrow={game.engine}
+        title={game.title}
+        description={"Sürüm " + game.version}
+      >
+        {s.user?.permissions.manage_games && (
+          <a className="secondary" href={"/manage?edit=" + id}>
+            <Settings size={15} />
+            Bu projeyi düzenle
+          </a>
+        )}
+      </PageHeader>
+      <div className="game-layout">
+        <div>
+          <Cover game={game} />
+          <div className="tags">
+            <span>{game.engine}</span>
+            {game.has_tr_patch && <span className="badge-patch">TR Yama</span>}
+            {game.has_mod && <span className="badge-mod">Mod</span>}
+            {game.is_adult && <span>18+ / NSFW</span>}
+          </div>
+          <section className="panel description-panel">
+            <h2>Oyun hakkında</h2>
+            <p className="description">{game.description}</p>
+          </section>
+        </div>
+        <aside className="panel download-panel">
+          <h2>
+            <Download size={20} />
+            İndirme merkezi
+          </h2>
+          <p className="muted">
+            Oyun sürümünü kontrol et. Bağlantılar harici sağlayıcıda açılır.
+          </p>
+          {[
+            ["trlink_url", "Standart indirme", "TRLink · Reklamlı"],
+            ["mediafire_url", "Alternatif indirme", "MediaFire"],
+          ].map(
+            ([key, title, label]) =>
+              game[key] && (
+                <a
+                  key={key}
+                  className="download-option"
+                  href={game[key]}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>
+                    <strong>{title}</strong>
+                    <small>{label}</small>
+                  </span>
+                  <Download size={18} />
+                </a>
+              ),
+          )}
+          {game.has_vip_download && (
+            <div className="vip-download">
+              <Crown size={24} />
+              <h3>VIP hızlı erişim</h3>
+              <p>Pixeldrain alternatif bağlantısı</p>
+              {s.user?.vip.active ? (
+                <button disabled={busy} className="primary" onClick={vip}>
+                  VIP bağlantısını aç
+                  <ArrowUpRight size={15} />
+                </button>
+              ) : (
+                <a className="primary" href="/vip">
+                  VIP’yi keşfet
+                  <ArrowRightIcon />
+                </a>
+              )}
+            </div>
+          )}
+          <small className="muted">
+            Dosyaları çalıştırmadan önce güvenlik taraması yap.
+          </small>
+        </aside>
+      </div>
+      <section className="panel comments-panel">
+        <div className="section-head">
+          <h2>
+            Topluluk yorumları{" "}
+            <span className="muted">({comments.length})</span>
+          </h2>
+        </div>
+        {comments.length === 0 && (
+          <p className="muted">Henüz yorum yok. Deneyimini ilk sen paylaş.</p>
+        )}
+        {comments.map((c) => (
+          <article className="comment" key={c.id}>
+            <div className="comment-author">
+              <span className="avatar">
+                {c.display_name.slice(0, 1).toLocaleUpperCase("tr")}
+              </span>
+              <strong>{c.display_name}</strong>
+              <time>{new Date(c.created_at).toLocaleDateString("tr-TR")}</time>
+              {c.edited_at && <span className="muted small">Düzenlendi</span>}
+            </div>
+            <p>{c.body}</p>
+          </article>
+        ))}
+        {s.user ? (
+          <form onSubmit={comment}>
+            <Field
+              label="Yorumun"
+              textarea
+              name="body"
+              rows={4}
+              maxLength={2000}
+              required
+            />
+            <button disabled={busy} className="primary">
+              Yorum paylaş
+            </button>
+          </form>
+        ) : (
+          <a
+            className="secondary"
+            href={"/login?next=" + encodeURIComponent("/game?id=" + id)}
+          >
+            Yorum yazmak için giriş yap
+          </a>
+        )}
+        <Notice>{message}</Notice>
+      </section>
+    </article>
+  );
+}
+function ArrowRightIcon() {
+  return <ArrowUpRight size={16} />;
+}

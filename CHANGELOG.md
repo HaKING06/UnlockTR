@@ -1,5 +1,14 @@
 # Frontend changelog
 
+## 0.3.0 — 2026-11-17
+
+- Doğrulanmış kurucu hesabı, yardımcı kurucu/moderatör/üye yetkileri ve normal hesapla yönetim.
+- Oyun düzenleme, yorum moderasyonu, istek durumu, kullanıcı arama, rol/VIP atama ve işlem geçmişi.
+- Kodla e-posta doğrulama ve otomatik giriş; HTML mail, şifre sıfırlama/değiştirme ve hesap anonimleştirme.
+- Aylık/yıllık manuel VIP, ekip için otomatik VIP, korumalı VIP indirme bağlantıları.
+- Ayrı üyelik/hesap/VIP/oyun sayfaları, kalıcı NSFW tercihi ve iki oyun motoru.
+- Mevcut kayıtları koruyan migration ve kapsamlı yetki/akış testleri.
+
 ## 0.2.3 — 2026-11-17
 
 - Canlı Workers ortamında /verify yolunu ana sayfaya taşıyan rewrite kaldırıldı.

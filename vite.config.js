@@ -19,8 +19,40 @@ export default defineConfig(({ mode }) => {
           // Real HTML entries avoid Cloudflare's /index.html canonical redirect.
           const directory = options.dir || "dist";
           const shell = readFileSync(resolve(directory, "index.html"), "utf8");
-          for (const route of ["verify", adminSlug]) {
-            writeFileSync(resolve(directory, route + ".html"), shell);
+          for (const route of [
+            "verify",
+            "login",
+            "register",
+            "forgot-password",
+            "account",
+            "game",
+            "vip",
+            "manage",
+            adminSlug,
+          ]) {
+            const titles = {
+              login: "Giriş yap",
+              register: "Hesap oluştur",
+              verify: "E-posta doğrulama",
+              account: "Hesap ayarları",
+              game: "Oyun detayları",
+              vip: "VIP üyelik",
+              manage: "Yönetim merkezi",
+              "forgot-password": "Şifremi unuttum",
+            };
+            const title = (titles[route] || "Yönetim merkezi") + " · UnlockTR";
+            const noindex = !["login", "register", "vip"].includes(route);
+            const page = shell
+              .replace(/<title>.*?<\/title>/s, "<title>" + title + "</title>")
+              .replace(
+                "</head>",
+                (noindex
+                  ? '<meta name="robots" content="noindex,nofollow"/>'
+                  : '<link rel="canonical" href="https://unlocktr.haking.tr/' +
+                    route +
+                    '"/>') + "</head>",
+              );
+            writeFileSync(resolve(directory, route + ".html"), page);
           }
         },
       },

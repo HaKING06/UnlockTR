@@ -1,79 +1,36 @@
-# UnlockTR Frontend
+# UnlockTR Frontend — 0.3.0
 
-**Frontend version: 0.2.3** — Türkçe oyun yamaları ve modları için React/Vite arayüzü.
-Hedef adres: https://unlocktr.haking.tr
+React/Vite, Lucide, CSS animasyonları. Repo: C:\GitHub\UnlockTR. Yerel kaynak: C:\Users\halit\Desktop\WEB\UnlockTR\frontend.
 
-## Geliştirme
+Node.js 22.12+; `npm ci`, `npm run dev`, `npm run build`, `npm run format:check`.
 
-Node.js 22.12+ gerekir.
+## Cloudflare Workers Static Assets / Pages
 
-```powershell
-npm ci
-Copy-Item .env.example .env
-npm run dev
-```
+Root Directory boş; build `npm run build`; assets/output `dist`.
 
-`.env` dosyasında `VITE_API_URL` backend API adresidir. Örnek: `http://localhost:3001/api`. `VITE_ADMIN_ROUTE_SLUG`, backend `ADMIN_ROUTE_SLUG` ile aynı olmalıdır. Varsayılan kurucu yolu `/founder-console`.
+- VITE_API_URL=https://unlocktr-backend.onrender.com/api
+- VITE_ADMIN_ROUTE_SLUG=founder-console (eski yönetim yolu alias'ı)
 
-```powershell
-npm run format:check
-npm run build
-npm run preview
-```
+Üretim API varsayılanı Render adresidir; yerel varsayılan localhost:3001/api. Render FRONTEND_URL=https://unlocktr.haking.tr olmalıdır. Gizli değerler frontend'e eklenmez.
 
-## Cloudflare Pages
+Vite, her sabit sayfa için HTML girişi üretir: /login, /register, /verify, /forgot-password, /account, /game, /vip, /manage ve eski admin slug. _redirects kullanılmaz. Oyunlar /game?id=UUID üzerinden açılır; doğrudan yenileme ve paylaşma desteklenir. Başlıkları ve sitemap'i olan giriş/kayıt/VIP sayfaları sunulur; Google sitelinks garantisi yoktur. Hesap/yönetim/oyun sorgu girişleri noindex olarak işaretlenir.
 
-Bu depo yalnızca frontend içerir; Root Directory **boş / depo kökü**, Build Command `npm run build`, Output Directory `dist`. Monorepo içindeki Desktop kopyasından dağıtım yapılıyorsa Root Directory `frontend` seçilir.
+## Uygulama
 
-| Build ortam değişkeni | Değer |
-|---|---|
-| `VITE_API_URL` | Render API adresi, sonunda `/api`; örneğin `https://unlocktr-backend.onrender.com/api` |
-| `VITE_ADMIN_ROUTE_SLUG` | Backend ile aynı kurucu yol adı |
+- src/state.jsx: sessionStorage oturumu, gerçek /me kontrolü, kalıcı NSFW tercihi.
+- src/auth-pages.jsx: giriş/kayıt, 6 haneli kod, otomatik giriş, şifre sıfırlama.
+- src/member-pages.jsx: hesap ayarları/silme/şifre değiştirme, VIP ve ayrı oyun sayfası.
+- src/admin-page.jsx: role göre yönetim, oyun düzenleme, yorum moderasyonu, e-postayla üye arama, rol/VIP atama, işlem geçmişi.
+- src/main.jsx: vitrin, katalog, menü, gerçek oyun bağlantıları.
+- src/components.jsx: kapak, istek formu, istek dialog'u.
+- public/images/unlocktr-world.webp: projeye özel üretilmiş görsel; gerçek oyun kapağı değildir.
 
-Bu iki değer herkese açıktır. Değiştirildiğinde yeniden build gerekir. Veritabanı adresi, Resend anahtarı, JWT_SECRET ve ADMIN_SECRET_KEY frontend'e **eklenmez**. Custom domain: `unlocktr.haking.tr`. `public/_redirects` SPA yollarını, `public/_headers` güvenlik başlıklarını sağlar.
+Backend 0.3.0 önce yayınlanmalıdır; sonra frontend push edilir. Eski ADMIN_SECRET_KEY giriş alanı yoktur. Kurucu gunshalit@gmail.com doğrulanmış hesabıyla giriş yapar. Yönetim linki profil menüsünde görünür.
 
-## Arayüz
+VIP 49 TL/ay ve 399 TL/yıl; ItemSatış mağazasına bağlanır, bu sitede ödeme veya otomatik etkinleştirme yapılmaz. Kurucu manuel atar. Personel görevleri boyunca sınırsız VIP alır. VIP linki sunucudan yalnız yetkili üyeye verilir. NSFW tercihi cihazda/hesapta saklanır; yaş doğrulaması değildir.
 
-- Sinematik, projeye özel görsel; gece mavisi yüzeyler ve mor/mavi vurgular.
-- Kategori ve motor filtreleri, sunucuda oyun adı arama ve sayfalama; filtreler yüklenen oyunlara uygulanır.
-- Hover hareketleri, belirgin TR Yama / Mod etiketleri, görsel yüklenemediğinde kapak alternatifi.
-- Varsayılan NSFW bulanıklığı, cam efekti ve 18+ onayı. Tercih kalıcı saklanmaz; hukuki yaş doğrulaması değildir.
-- Yerleşik dialog ile klavye odağı/Escape; açık/koyu tema, azaltılmış hareket desteği ve mobil düzen.
-- Giriş, kayıt, doğrulama e-postası yeniden gönderimi; girişten sonra yorum/istek akışına dönüş.
-- Kurucu oyun formu, yorum moderasyonu ve oyun istekleri. Mevcut backend API sözleşmesi korunur.
-- Tokenlar yalnızca sayfa belleğinde tutulur. Gerçek izin ve e-posta doğrulama kontrollerini backend uygular.
+Hesap silme ekranı profilin anonimleştirildiğini ve yorumların Silinen kullanıcı olarak kaldığını açıklar. Kurucu hesabı sahiplik devri olmadan silinmez.
 
-## Kod
+Kontrol: build/format ve 390px/768px mock API Playwright akışları. Gerçek yeni API/Resend teslimatı deploy sonrası sınanmalıdır. Ayrıntılı geçiş notları: RELEASE-0.3.0.md.
 
-`src/main.jsx`: ana sayfa, kartlar, navigasyon ve oturum görünümü.
-`src/components.jsx`: üyelik, oyun detayı, istek ve kurucu ekranları.
-`src/api.js`: API istemcisi ve ortak sabitler.
-`src/style.css`: temalar, responsive düzen, animasyonlar.
-`public/images/unlocktr-world.webp`: Imagegen ile üretilen özgün vitrin görseli (~167 KiB); gerçek bir oyunun kapağı değildir. Yeniden üretim için API anahtarı gerekmez; mevcut görsel yerelde paketlenir. Lucide ikonları kullanılır. Animasyonlar CSS ile sağlanır.
-
-## Yerel depo yolları
-
-Kullanıcının 16 Kasım 2026 tarihinde bildirdiği yollar:
-
-- Geliştirme: `C:\Users\halit\Desktop\WEB\UnlockTR\frontend`
-- Frontend GitHub deposu: `C:\GitHub\UnlockTR`
-- Backend GitHub deposu: `C:\GitHub\UnlockTR-Backend`
-
-Frontend kaynakları frontend deposunun köküne kopyalanır. `.git`, `.env`, `node_modules`, `dist` ve önizleme ekran görüntüleri aktarılmaz. Backend bu tasarım tesliminde değiştirilmedi; kendi sürümü 0.1.0 olarak kalır. Bu paket bağımsız frontend sürümü 0.2.3'dır. Push işlemi kullanıcıya bırakılır.
-
-## Doğrulama
-
-0.2.0 için üretim build'i ve biçim kontrolü çalıştırıldı. Playwright ile yalnızca 390px ve 768px genişliklerinde yatay taşma, kategori/motor/arama, NSFW açma, indirme bağlantıları, kayıt/giriş/istek ve admin yayın/moderasyon arayüzleri denetlendi. API yanıtları bu kontrollerde **mock** edildi. Canlı Neon/Resend, gerçek JWT yetkileri veya gerçek dosya indirmeleri bu frontend tesliminde sınanmadı. API kapalıyken gerçek hata görünümü de kontrol edildi. Test oyunları dağıtılan kaynaklara eklenmedi.
-
-Tasarımda geniş görsel alanı ve kategori düzeni için Steam/NexusMods yaklaşımı referans alındı; marka görseli projeye özel üretildi. Açık kaynak lisansı henüz seçilmedi; LICENSE dosyasına bak.
-
-## Üretim API adresi (0.2.1)
-
-Render: https://unlocktr-backend.onrender.com
-Pages VITE_API_URL: `https://unlocktr-backend.onrender.com/api`. VITE değişkeni verilmezse üretim build bu adresi kullanır; yerel geliştirme varsayılanı localhost:3001 olarak kalır. Backend FRONTEND_URL üretimde `https://unlocktr.haking.tr` olmalıdır.
-
-## Cloudflare Workers dağıtım notu (0.2.3)
-
-Build, index.html yanında verify.html ve yapılandırılmış admin yolu için HTML girişi üretir. Workers temiz HTML yolları bu dosyaları /verify ve /founder-console gibi adreslerden sunar. _redirects üretilmez; index.html canonical yönlendirmesinin yolu / adresine taşıması önlenir. Yeni frontend yolları eklenirse build girişleri güncellenmelidir. Root adresine eski yönlendirmeyle ulaşan token bağlantıları da doğrulama ekranını açar. Token URL'den kaldırılıp sadece sayfa belleğinde saklanır; sayfa yenilenirse e-postadaki bağlantı tekrar açılmalıdır.
-
-Düzeltme yerel build ve mock doğrulama API'siyle kontrol edilir. Canlı Cloudflare davranışı commit/push ve deploy sonrasında yeniden doğrulanmalıdır.
+.git ve .env kopyalanmaz; node_modules, dist, preview PNG'leri Git dışında tutulur. Açık kaynak lisansı henüz seçilmedi.

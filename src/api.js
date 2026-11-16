@@ -5,14 +5,7 @@ const API = (
     : "https://unlocktr-backend.onrender.com/api")
 ).replace(/\/$/, "");
 export const ADMIN = import.meta.env.VITE_ADMIN_ROUTE_SLUG || "founder-console";
-export const engines = [
-  "Ren'Py",
-  "Unity",
-  "RPG Maker",
-  "Unreal Engine",
-  "Godot",
-  "Other",
-];
+export const engines = ["Ren'Py", "Unity"];
 export async function api(path, { token, body, method = "GET", signal } = {}) {
   const res = await fetch(API + path, {
     method,
@@ -24,6 +17,11 @@ export async function api(path, { token, body, method = "GET", signal } = {}) {
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
   const data = await res.json();
-  if (!res.ok) throw new Error(data.error || "İşlem başarısız.");
+  if (!res.ok) {
+    const error = new Error(data.error || "İşlem başarısız.");
+    error.status = res.status;
+    error.code = data.code;
+    throw error;
+  }
   return data;
 }
