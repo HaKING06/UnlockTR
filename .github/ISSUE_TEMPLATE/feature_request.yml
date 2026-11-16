@@ -1,0 +1,22 @@
+name: Özellik veya tasarım önerisi
+description: Kullanıcı ihtiyacını ve önerilen davranışı anlat.
+title: "[Feature] "
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Hangi ihtiyaç çözülüyor?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Önerilen davranış veya tasarım
+      description: Referans varsa ekleyin; telifli varlık veya kişisel veri yüklemeyin.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Kapsam ve kabul ölçütleri
+      description: Frontend/backend etkisini, mobil davranışı ve korunacak akışları belirtin.

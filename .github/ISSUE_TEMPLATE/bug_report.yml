@@ -1,0 +1,31 @@
+name: Hata bildirimi
+description: Tekrar üretilebilir bir sorun bildir.
+title: "[Bug] "
+body:
+  - type: markdown
+    attributes:
+      value: "Sır, şifre, token veya gerçek kullanıcı verisi paylaşmayın. Güvenlik sorunları için SECURITY.md dosyasını izleyin."
+  - type: textarea
+    id: problem
+    attributes:
+      label: Sorun ve etkisi
+      description: Beklenen ve gerçek davranışı açıklayın.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Tekrar üretim adımları
+      placeholder: "1. İlgili sayfayı aç..."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Ortam ve sürüm
+      placeholder: "0.4.0 / tarayıcı / viewport / yerel veya canlı"
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Temizlenmiş kanıt ve loglar
+      description: Kişisel verileri ve anahtarları gizleyin; mock kullanıldıysa belirtin.

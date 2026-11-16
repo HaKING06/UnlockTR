@@ -1,40 +1,131 @@
-# UnlockTR Frontend — 0.4.0
+<p align="center">
+  <img src="docs/media/unlocktr-banner.webp" alt="UnlockTR — Her dünyada kendi dilin." width="100%" />
+</p>
 
-React/Vite, Lucide, CSS animasyonları. Repo: C:\GitHub\UnlockTR. Yerel kaynak: C:\Users\halit\Desktop\WEB\UnlockTR\frontend.
+<p align="center">
+  <img alt="Version 0.4.0" src="https://img.shields.io/badge/version-0.4.0-8b5cf6?style=flat-square" />
+  <img alt="Language Turkish" src="https://img.shields.io/badge/language-T%C3%BCrk%C3%A7e-60a5fa?style=flat-square" />
+  <img alt="License All rights reserved" src="https://img.shields.io/badge/license-All_rights_reserved-64748b?style=flat-square" />
+</p>
 
-Node.js 22.12+; `npm ci`, `npm run dev`, `npm run build`, `npm run format:check`.
+<p align="center">
+  <a href="https://unlocktr.haking.tr"><strong>Siteyi keşfet</strong></a> ·
+  <a href="https://unlocktr.haking.tr/vip">VIP</a> ·
+  <a href="https://buymeacoffee.com/haking">Destek ol</a> ·
+  <a href="docs/AI_HANDOFF.md">AI devralma rehberi</a>
+</p>
 
-## Cloudflare Workers Static Assets / Pages
+# UnlockTR · Frontend
 
-Root Directory boş; build `npm run build`; assets/output `dist`.
+**Türkçe yamalar, oyun modları ve oyuncu topluluğu.** UnlockTR; oyunları keşfetme, yama indirme, deneyim paylaşma ve yeni oyun isteme akışlarını aynı platformda toplar.
 
-- VITE_API_URL=https://unlocktr-backend.onrender.com/api
-- VITE_ADMIN_ROUTE_SLUG=founder-console (eski yönetim yolu alias'ı)
+> **Mevcut kod sürümü: 0.4.0.** Bu güncelleme yalnızca dokümantasyon ve tanıtım varlıklarını geliştirir; uygulama davranışını veya sürümü değiştirmez.
 
-Üretim API varsayılanı Render adresidir; yerel varsayılan localhost:3001/api. Render FRONTEND_URL=https://unlocktr.haking.tr olmalıdır. Gizli değerler frontend'e eklenmez.
+## İçindekiler
 
-Vite, her sabit sayfa için HTML girişi üretir: /login, /register, /verify, /forgot-password, /account, /game, /vip, /manage ve eski admin slug. _redirects kullanılmaz. Oyunlar /game?id=UUID üzerinden açılır; doğrudan yenileme ve paylaşma desteklenir. Başlıkları ve sitemap'i olan giriş/kayıt/VIP sayfaları sunulur; Google sitelinks garantisi yoktur. Hesap/yönetim/oyun sorgu girişleri noindex olarak işaretlenir.
+[Öne çıkanlar](#öne-çıkanlar) · [Hızlı başlangıç](#hızlı-başlangıç) · [Sayfalar](#sayfalar) · [Cloudflare](#cloudflare-dağıtımı) · [Dokümanlar](#dokümanlar) · [Katkı](#katkı-ve-güvenlik)
 
-## Uygulama
+## Öne çıkanlar
 
-- src/state.jsx: kalıcı localStorage + sunucu denetimli oturum, gerçek /me kontrolü, kalıcı NSFW tercihi.
-- src/auth-pages.jsx: giriş/kayıt, 6 haneli kod, otomatik giriş, şifre sıfırlama.
-- src/member-pages.jsx: hesap ayarları/silme/şifre değiştirme, VIP ve ayrı oyun sayfası.
-- src/admin-page.jsx: role göre yönetim, oyun düzenleme, yorum moderasyonu, e-postayla üye arama, rol/VIP atama, işlem geçmişi.
-- src/main.jsx: vitrin, katalog, menü, gerçek oyun bağlantıları.
-- src/components.jsx: kapak, istek formu, istek dialog'u.
-- public/images/unlocktr-world.webp: projeye özel üretilmiş görsel; gerçek oyun kapağı değildir.
+| Oyuncular için | Ekip için |
+|---|---|
+| Ren'Py ve Unity oyunları, TR yama/mod etiketleri | Açıklamalı oyun yayın stüdyosu ve düzenleme |
+| Ayrı URL'de oyun, kurulum ve uyumluluk bilgileri | Rol tabanlı kurucu / yardımcı kurucu / moderatör alanı |
+| Reklamlı standart indirme; VIP alternatifleri | Yorum düzenleme, gizleme ve istek durumları |
+| Kodla e-posta doğrulama ve kalıcı oturum | E-postayla üye arama, rol ve süreli VIP atama |
+| NSFW tercihi, dark/light tema, altı kutulu kod | VIP/istek bildirim kuyruğu ve işlem geçmişi |
 
-Backend 0.4.0 önce yayınlanmalıdır; sonra frontend push edilir. Eski ADMIN_SECRET_KEY giriş alanı yoktur. Kurucu gunshalit@gmail.com doğrulanmış hesabıyla giriş yapar. Yönetim linki profil menüsünde görünür.
+VIP üyelik **49 TL/ay** veya **399 TL/yıl** olarak sunulur. Satış [ItemSatış mağazasında](https://www.itemsatis.com/profil/haking06.html), etkinleştirme kurucu tarafından yapılır. Site ödeme bilgisi almaz ve otomatik abonelik başlatmaz. VIP önceliği bir teslim garantisi değildir.
 
-VIP 49 TL/ay ve 399 TL/yıl; ItemSatış mağazasına bağlanır, bu sitede ödeme veya otomatik etkinleştirme yapılmaz. Kurucu manuel atar. Personel görevleri boyunca sınırsız VIP alır. VIP linki sunucudan yalnız yetkili üyeye verilir. NSFW tercihi cihazda/hesapta saklanır; yaş doğrulaması değildir.
+## Teknoloji
 
-Hesap silme ekranı profilin anonimleştirildiğini ve yorumların Silinen kullanıcı olarak kaldığını açıklar. Kurucu hesabı sahiplik devri olmadan silinmez.
+**React 19 · Vite 7 · Lucide React · CSS değişkenleri · Cloudflare Static Assets**
 
-Kontrol: build/format ve 390px/768px mock API Playwright akışları. Gerçek yeni API/Resend teslimatı deploy sonrası sınanmalıdır. Ayrıntılı geçiş notları: RELEASE-0.4.0.md.
+Backend ayrı depodadır: [UnlockTR-Backend](https://github.com/HaKING06/UnlockTR-Backend). Frontend sır veya doğrudan veritabanı bağlantısı içermez.
 
-.git ve .env kopyalanmaz; node_modules, dist, preview PNG'leri Git dışında tutulur. Açık kaynak lisansı henüz seçilmedi.
+## Hızlı başlangıç
 
-## 0.4.0 güncellemesi
+Node.js **22.12+** kullan.
 
-Gelişmiş mod/kurulum formu; yalnız reklamlı standart indirme ve VIP’ye özel Pixeldrain/MediaFire; VIP öncelikli istekler; hazır durum yanıtları ve kalıcı e-posta kuyruğu; altı kutulu kod; kalıcı giriş; e-posta onaylı hesap silme; Gmail ile yeni kayıt; gerçek çerez tercihleri ve Buy Me a Coffee destek sayfası. Ayrıntılar son yayınlama notlarında. Backend ve frontend birlikte güncellenmelidir.
+```powershell
+npm ci
+Copy-Item .env.example .env
+npm run dev
+```
+
+.env içinde yerel API adresini tanımla:
+
+```dotenv
+VITE_API_URL=http://localhost:3001/api
+VITE_ADMIN_ROUTE_SLUG=founder-console
+```
+
+API hazır değilse gerçek bağlantı hatası gösterilir; ürünün içine demo oyun/yorum eklenmez.
+
+| Komut | Amaç |
+|---|---|
+| npm run dev | Yerel geliştirme |
+| npm run build | dist üretim çıktısı |
+| npm run preview | Build önizlemesi |
+| npm run format:check | Biçim kontrolü |
+| npm run format | Kaynak biçimlendirme |
+
+## Sayfalar
+
+| Yol | Amaç |
+|---|---|
+| / | Vitrin, katalog, arama ve filtreler |
+| /game?id=UUID | Oyun, mod kapsamı, indirme ve yorumlar |
+| /login · /register · /verify | Üyelik ve kodla doğrulama |
+| /forgot-password · /account | Hesap kurtarma ve ayarlar |
+| /requests | İstek gönderme ve yanıt geçmişi |
+| /vip · /support | Üyelik ayrıcalıkları ve gönüllü destek |
+| /manage | Yetkiye göre yönetim merkezi |
+| /privacy | Çerez ve hesap depolaması açıklamaları |
+
+Build her sabit yol için gerçek HTML girişi üretir. Workers'ta döngüye neden olan `/* /index.html 200` kuralını ekleme. Yeni sayfa eklenirse vite.config.js girişlerini de güncelle.
+
+## Cloudflare dağıtımı
+
+Bu depo frontend uygulamasının **kendisidir**; Root Directory boş kalır.
+
+| Ayar | Değer |
+|---|---|
+| Build | npm run build |
+| Assets / output | dist |
+| VITE_API_URL | https://unlocktr-backend.onrender.com/api |
+| VITE_ADMIN_ROUTE_SLUG | founder-console veya backend ile aynı alias |
+| Custom domain | unlocktr.haking.tr |
+
+VITE değişkenleri build zamanında okunur; değiştirince yeni build gerekir. Worker runtime secret alanı bunun yerine geçmez. DATABASE_URL, RESEND_API_KEY ve JWT_SECRET yalnız backend'dedir. API değişikliğinde önce Render backend, ardından Cloudflare frontend yayınlanır.
+
+## Dokümanlar
+
+| Belge | Ne zaman okunmalı? |
+|---|---|
+| [AI devralma özeti](docs/AI_HANDOFF.md) | Başka AI veya geliştirici projeyi ilk açtığında |
+| [Mimari ve dosya haritası](docs/ARCHITECTURE.md) | Hangi dosyanın ne yaptığını bulmak için |
+| [Görsel brief](docs/VISUAL_BRIEF.md) | Arayüz iyileştirmesi öncesinde |
+| [Hazır AI görev metni](docs/NEXT_AI_PROMPT.md) | Projeyi yeniden anlatmadan görev vermek için |
+| [Kontrol rehberi](docs/VALIDATION.md) | Değişiklik doğrulaması ve yayın sırası |
+| [Kısa bakım notları](docs/MAINTENANCE_NOTES.md) | Son doküman güncellemesinin kapsamı |
+| [0.4.0 yayın notları](RELEASE-0.4.0.md) | Son kod tesliminin ayrıntıları ve sınırları |
+| [Tanıtım görselleri](docs/media/README.md) | README kapağı ve paylaşım afişleri |
+
+## Doğrulama durumu
+
+Son kod tesliminde backend'in 12 testi ve 390px/768px mock Playwright akışları geçti. Bu doküman tesliminde kod testleri yeniden çalıştırılmadı. Mock UI testi; gerçek e-posta, ödeme veya güncel canlı deploy doğrulaması değildir. Oturum, e-posta teslimi, Google indeksleme ve harici dosya hızları için sınırsız garanti verilmez.
+
+## Tanıtım ve destek
+
+[PNG yatay kapak](docs/media/unlocktr-banner.png) · [PNG kare afiş](docs/media/unlocktr-poster.png) · [Buy Me a Coffee](https://buymeacoffee.com/haking)
+
+<p align="center"><img src="docs/media/unlocktr-poster.webp" width="360" alt="UnlockTR — Oyunun dilini değiştir. Tanıtım afişi." /></p>
+
+Afişler projeye özel üretilmiş illüstrasyonlardır; canlı ekran görüntüsü veya bir oyunun resmi kapağı değildir. Gönüllü destek otomatik VIP vermez.
+
+## Katkı ve güvenlik
+
+[Katkı rehberi](CONTRIBUTING.md) · [Güvenlik politikası](SECURITY.md) · [Topluluk ilkeleri](CODE_OF_CONDUCT.md) · [Değişiklik geçmişi](CHANGELOG.md)
+
+**Lisans:** [LICENSE](LICENSE) hakları saklı tutar. Açık kaynak lisansı henüz seçilmedi; depoyu görebilmek yeniden dağıtım izni anlamına gelmez.

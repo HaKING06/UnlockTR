@@ -2,6 +2,13 @@
 
 ## 0.4.0 — 2026-11-17
 
+### Dokümantasyon bakımı · sürüm korunmuştur
+
+- README kapakları, tanıtım afişleri, AI devralma/mimari/görsel brief belgeleri.
+- Katkı ve güvenlik politikaları, topluluk ilkeleri, issue/PR şablonları.
+- Paket, uygulama ve veritabanı sürümleri değiştirilmedi.
+
+
 - Açıklamalı oyun yayın stüdyosu ve ayrıntılı mod türleri, kurulum/uyumluluk notları.
 - Standart reklamlı, Pixeldrain/MediaFire VIP indirmeleri; VIP öncelikli istek yönetimi.
 - İşlemle atomik e-posta kuyruğu, VIP/ekip/istek bildirimleri, ret şablonları.
