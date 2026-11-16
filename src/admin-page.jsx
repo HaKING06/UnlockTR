@@ -1,3 +1,5 @@
+import { GameEditor } from "./game-editor";
+import { RequestReview } from "./request-page";
 import React, { useEffect, useState } from "react";
 import {
   Gamepad2,
@@ -14,148 +16,6 @@ import {
 import { api, engines } from "./api";
 import { useSession, roleLabel } from "./state";
 import { Field, Notice, PageHeader, Protected } from "./ui";
-const empty = {
-  title: "",
-  description: "",
-  version: "1.0",
-  cover_image_url: "",
-  engine: "Ren'Py",
-  is_adult: false,
-  has_tr_patch: true,
-  has_mod: false,
-  trlink_url: "",
-  pixeldrain_url: "",
-  mediafire_url: "",
-};
-function GameEditor({ id, onDone }) {
-  const { token } = useSession(),
-    [draft, setDraft] = useState(empty),
-    [ready, setReady] = useState(!id),
-    [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false);
-  useEffect(() => {
-    if (!id) return;
-    const c = new AbortController();
-    api("/admin/games/" + id, { token, signal: c.signal })
-      .then((g) => {
-        setDraft(
-          Object.fromEntries(
-            Object.keys(empty).map((k) => [k, g[k] ?? empty[k]]),
-          ),
-        );
-        setReady(true);
-      })
-      .catch((e) => {
-        if (e.name !== "AbortError") setMessage(e.message);
-      });
-    return () => c.abort();
-  }, [id, token]);
-  async function submit(e) {
-    e.preventDefault();
-    setBusy(true);
-    try {
-      const body = { ...draft };
-      for (const k of ["trlink_url", "pixeldrain_url", "mediafire_url"])
-        body[k] = body[k] || null;
-      await api("/admin/games" + (id ? "/" + id : ""), {
-        token,
-        method: id ? "PATCH" : "POST",
-        body,
-      });
-      onDone("Oyun " + (id ? "güncellendi." : "yayınlandı."));
-    } catch (e) {
-      setMessage(e.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-  return (
-    <section className="panel editor-panel">
-      <div className="section-head">
-        <h2>{id ? "Projeyi düzenle" : "Yeni oyun yayınla"}</h2>
-        <button className="secondary" onClick={() => onDone("")}>
-          Listeye dön
-        </button>
-      </div>
-      <Notice>{message}</Notice>
-      {ready && (
-        <form className="admin-grid" onSubmit={submit}>
-          {[
-            ["title", "Oyun adı"],
-            ["version", "Sürüm"],
-            ["cover_image_url", "Kapak görseli HTTPS URL"],
-            ["trlink_url", "TRLink · Standart indirme URL"],
-            ["pixeldrain_url", "Pixeldrain · VIP indirme URL"],
-            ["mediafire_url", "MediaFire · Alternatif URL"],
-          ].map(([key, label]) => (
-            <Field
-              key={key}
-              label={label}
-              value={draft[key]}
-              type={key.includes("url") ? "url" : "text"}
-              required={["title", "version", "cover_image_url"].includes(key)}
-              maxLength={key === "title" ? 150 : key === "version" ? 40 : 2048}
-              onChange={(e) => setDraft({ ...draft, [key]: e.target.value })}
-            />
-          ))}
-          <label className="field">
-            Oyun motoru
-            <select
-              value={draft.engine}
-              onChange={(e) => setDraft({ ...draft, engine: e.target.value })}
-            >
-              {engines.map((v) => (
-                <option key={v}>{v}</option>
-              ))}
-            </select>
-          </label>
-          <div className="checks">
-            {[
-              ["is_adult", "18+ / NSFW"],
-              ["has_tr_patch", "TR Yama"],
-              ["has_mod", "Mod"],
-            ].map(([key, label]) => (
-              <label key={key}>
-                <input
-                  type="checkbox"
-                  checked={draft[key]}
-                  onChange={(e) =>
-                    setDraft({ ...draft, [key]: e.target.checked })
-                  }
-                />
-                {label}
-              </label>
-            ))}
-          </div>
-          <Field
-            label="Oyun açıklaması"
-            textarea
-            rows={7}
-            maxLength={10000}
-            required
-            value={draft.description}
-            onChange={(e) =>
-              setDraft({ ...draft, description: e.target.value })
-            }
-          />
-          <div className="editor-help">
-            <p className="muted">
-              En az bir indirme bağlantısı gerekli. VIP bağlantısı yalnızca
-              aktif VIP üyelere backend tarafından gösterilir.
-            </p>
-            <button className="primary" disabled={busy}>
-              {busy
-                ? "Kaydediliyor…"
-                : id
-                  ? "Değişiklikleri kaydet"
-                  : "Oyunu yayınla"}
-            </button>
-          </div>
-        </form>
-      )}
-    </section>
-  );
-}
 export function AdminPage() {
   const s = useSession(),
     [tab, setTab] = useState("games"),
@@ -170,7 +30,7 @@ export function AdminPage() {
       () => new URLSearchParams(location.search).get("edit") || "",
     );
   const allowed = s.user?.permissions.manage_users
-    ? ["games", "comments", "requests", "users", "audit"]
+    ? ["games", "comments", "requests", "users", "notifications", "audit"]
     : s.user?.permissions.manage_games
       ? ["games", "comments", "requests"]
       : s.user?.permissions.moderate_comments
@@ -210,6 +70,7 @@ export function AdminPage() {
     comments: ["Yorumlar", MessageSquare],
     requests: ["Oyun istekleri", ClipboardList],
     users: ["Üyeler ve VIP", Users],
+    notifications: ["E-posta kuyruğu", ClipboardList],
     audit: ["İşlem geçmişi", ShieldCheck],
   };
   return (
@@ -388,41 +249,27 @@ export function AdminPage() {
                         </form>
                       ))}
                     {active === "requests" &&
-                      data.map((r) => (
-                        <article className="comment" key={r.id}>
-                          <strong>
-                            {r.title} · {r.display_name}
-                          </strong>
-                          <p>{r.description}</p>
-                          {s.user.permissions.manage_games ? (
-                            <label className="field">
-                              İstek durumu
-                              <select
-                                value={r.status}
-                                disabled={busy}
-                                onChange={(e) =>
-                                  mutate("requests/" + r.id, {
-                                    status: e.target.value,
-                                  })
-                                }
-                              >
-                                {[
-                                  ["pending", "Bekliyor"],
-                                  ["reviewing", "İnceleniyor"],
-                                  ["completed", "Tamamlandı"],
-                                  ["declined", "Reddedildi"],
-                                ].map(([value, label]) => (
-                                  <option key={value} value={value}>
-                                    {label}
-                                  </option>
-                                ))}
-                              </select>
-                            </label>
-                          ) : (
+                      data.map((r) =>
+                        s.user.permissions.manage_games ? (
+                          <RequestReview
+                            key={r.id + ":" + (r.revision || 0)}
+                            request={r}
+                            busy={busy}
+                            onSave={(body) => mutate("requests/" + r.id, body)}
+                          />
+                        ) : (
+                          <article className="comment" key={r.id}>
+                            <strong>
+                              {r.title} · {r.display_name}
+                            </strong>
+                            {r.vip_priority && (
+                              <span className="vip-badge">VIP öncelikli</span>
+                            )}
+                            <p>{r.description}</p>
                             <span className="muted">{r.status}</span>
-                          )}
-                        </article>
-                      ))}
+                          </article>
+                        ),
+                      )}
                     {active === "users" &&
                       data.map((u) => (
                         <article key={u.id} className="user-admin-card">
@@ -516,6 +363,35 @@ export function AdminPage() {
                                 )}
                               </div>
                             </div>
+                          )}
+                        </article>
+                      ))}
+                    {active === "notifications" &&
+                      data.map((n) => (
+                        <article key={n.id} className="audit-row">
+                          <strong>{n.recipient}</strong>
+                          <code>{n.kind}</code>
+                          <span className={"status-tag status-" + n.status}>
+                            {n.status} · {n.attempts} deneme
+                          </span>
+                          {n.status === "dead" && (
+                            <button
+                              className="secondary"
+                              disabled={busy}
+                              onClick={async () => {
+                                try {
+                                  await api(
+                                    "/admin/notifications/" + n.id + "/retry",
+                                    { token: s.token, method: "POST" },
+                                  );
+                                  setTick((t) => t + 1);
+                                } catch (e) {
+                                  setMessage(e.message);
+                                }
+                              }}
+                            >
+                              Yeniden dene
+                            </button>
                           )}
                         </article>
                       ))}

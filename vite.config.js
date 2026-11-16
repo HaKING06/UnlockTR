@@ -28,9 +28,15 @@ export default defineConfig(({ mode }) => {
             "game",
             "vip",
             "manage",
+            "requests",
+            "support",
+            "privacy",
             adminSlug,
           ]) {
             const titles = {
+              requests: "Oyun istekleri",
+              support: "Destek ol",
+              privacy: "Çerez ve hesap verileri",
               login: "Giriş yap",
               register: "Hesap oluştur",
               verify: "E-posta doğrulama",

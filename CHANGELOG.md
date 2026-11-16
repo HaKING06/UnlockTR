@@ -1,5 +1,14 @@
 # Frontend changelog
 
+## 0.4.0 — 2026-11-17
+
+- Açıklamalı oyun yayın stüdyosu ve ayrıntılı mod türleri, kurulum/uyumluluk notları.
+- Standart reklamlı, Pixeldrain/MediaFire VIP indirmeleri; VIP öncelikli istek yönetimi.
+- İşlemle atomik e-posta kuyruğu, VIP/ekip/istek bildirimleri, ret şablonları.
+- Sunucuda denetlenen kalıcı giriş, Gmail kayıt kısıtı, e-posta onaylı silme.
+- Altı kutulu OTP, çerez tercihleri, destek/gizlilik sayfaları ve Buy Me a Coffee.
+- Kayıplı olmayan migration ve kapsamlı backend/UI kontrolleri.
+
 ## 0.3.0 — 2026-11-17
 
 - Doğrulanmış kurucu hesabı, yardımcı kurucu/moderatör/üye yetkileri ve normal hesapla yönetim.

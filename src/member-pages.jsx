@@ -1,3 +1,5 @@
+import { AccountDeletion } from "./account-deletion";
+import { modLabel } from "./game-data";
 import React, { useEffect, useState } from "react";
 import {
   Crown,
@@ -159,24 +161,7 @@ export function AccountPage() {
                     isteklerin silinir. Mevcut yorumların “Silinen kullanıcı”
                     adıyla anonim kalır. Bu işlem geri alınamaz.
                   </p>
-                  <form onSubmit={(e) => save(e, "/me", "DELETE")}>
-                    <Field
-                      label="Şifren"
-                      type="password"
-                      name="password"
-                      autoComplete="current-password"
-                      required
-                    />
-                    <Field
-                      label="Onaylamak için SİL yaz"
-                      name="confirmation"
-                      pattern="SİL"
-                      required
-                    />
-                    <button className="danger-button" disabled={busy}>
-                      Hesabımı kalıcı olarak sil
-                    </button>
-                  </form>
+                  <AccountDeletion />
                 </>
               )}
             </section>
@@ -228,7 +213,10 @@ export function VipPage() {
             </p>
             <p className="muted">{desc}</p>
             <ul>
-              <li>Mevcut VIP indirme bağlantılarına erişim</li>
+              <li>Reklamsız Pixeldrain / MediaFire alternatifleri</li>
+              <li>VIP oyun isteklerinde öncelikli değerlendirme</li>
+              <li>İsteğin kurucuya e-posta ile bildirilmesi</li>
+              <li>VIP tanımlama ve istek durumu bildirimleri</li>
               <li>Hesap ayarlarında üyelik süresi takibi</li>
               <li>Üyeliğin kurucu tarafından etkinleştirilmesi</li>
             </ul>
@@ -260,6 +248,7 @@ export function VipPage() {
 export function GamePage() {
   const s = useSession(),
     id = new URLSearchParams(location.search).get("id"),
+    [vipLinks, setVipLinks] = useState([]),
     [game, setGame] = useState(null),
     [comments, setComments] = useState([]),
     [message, setMessage] = useState(""),
@@ -310,7 +299,7 @@ export function GamePage() {
       const d = await api("/games/" + id + "/downloads/vip", {
         token: s.token,
       });
-      location.assign(d.url);
+      setVipLinks(d.links || [{ label: "Pixeldrain", url: d.url }]);
     } catch (e) {
       setMessage(e.message);
     } finally {
@@ -365,6 +354,32 @@ export function GamePage() {
             <h2>Oyun hakkında</h2>
             <p className="description">{game.description}</p>
           </section>
+          {game.has_mod && (
+            <section className="panel mod-public">
+              <h2>Bu paketteki modlar</h2>
+              <div className="tags">
+                {game.mod_types?.map((t) => (
+                  <span key={t} className="badge-mod">
+                    {modLabel(t)}
+                  </span>
+                ))}
+              </div>
+              {game.mod_notes && (
+                <p className="description">{game.mod_notes}</p>
+              )}
+            </section>
+          )}
+          {(game.installation_notes || game.compatibility_notes) && (
+            <section className="panel">
+              <h2>Kurulum ve uyumluluk</h2>
+              {game.installation_notes && (
+                <p className="description">{game.installation_notes}</p>
+              )}
+              {game.compatibility_notes && (
+                <div className="notice">{game.compatibility_notes}</div>
+              )}
+            </section>
+          )}
         </div>
         <aside className="panel download-panel">
           <h2>
@@ -374,10 +389,7 @@ export function GamePage() {
           <p className="muted">
             Oyun sürümünü kontrol et. Bağlantılar harici sağlayıcıda açılır.
           </p>
-          {[
-            ["trlink_url", "Standart indirme", "TRLink · Reklamlı"],
-            ["mediafire_url", "Alternatif indirme", "MediaFire"],
-          ].map(
+          {[["trlink_url", "Standart indirme", "TRLink · Reklamlı"]].map(
             ([key, title, label]) =>
               game[key] && (
                 <a
@@ -399,10 +411,10 @@ export function GamePage() {
             <div className="vip-download">
               <Crown size={24} />
               <h3>VIP hızlı erişim</h3>
-              <p>Pixeldrain alternatif bağlantısı</p>
+              <p>Pixeldrain / MediaFire · Reklamlı yönlendirme olmadan</p>
               {s.user?.vip.active ? (
                 <button disabled={busy} className="primary" onClick={vip}>
-                  VIP bağlantısını aç
+                  Reklamsız bağlantıları göster
                   <ArrowUpRight size={15} />
                 </button>
               ) : (
@@ -413,6 +425,21 @@ export function GamePage() {
               )}
             </div>
           )}
+          {vipLinks.map((link) => (
+            <a
+              key={link.url}
+              className="download-option vip-provider"
+              href={link.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <span>
+                <strong>{link.label}</strong>
+                <small>VIP · Reklamsız alternatif</small>
+              </span>
+              <Download size={18} />
+            </a>
+          ))}
           <small className="muted">
             Dosyaları çalıştırmadan önce güvenlik taraması yap.
           </small>

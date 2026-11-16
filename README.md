@@ -1,4 +1,4 @@
-# UnlockTR Frontend — 0.3.0
+# UnlockTR Frontend — 0.4.0
 
 React/Vite, Lucide, CSS animasyonları. Repo: C:\GitHub\UnlockTR. Yerel kaynak: C:\Users\halit\Desktop\WEB\UnlockTR\frontend.
 
@@ -17,7 +17,7 @@ Vite, her sabit sayfa için HTML girişi üretir: /login, /register, /verify, /f
 
 ## Uygulama
 
-- src/state.jsx: sessionStorage oturumu, gerçek /me kontrolü, kalıcı NSFW tercihi.
+- src/state.jsx: kalıcı localStorage + sunucu denetimli oturum, gerçek /me kontrolü, kalıcı NSFW tercihi.
 - src/auth-pages.jsx: giriş/kayıt, 6 haneli kod, otomatik giriş, şifre sıfırlama.
 - src/member-pages.jsx: hesap ayarları/silme/şifre değiştirme, VIP ve ayrı oyun sayfası.
 - src/admin-page.jsx: role göre yönetim, oyun düzenleme, yorum moderasyonu, e-postayla üye arama, rol/VIP atama, işlem geçmişi.
@@ -25,12 +25,16 @@ Vite, her sabit sayfa için HTML girişi üretir: /login, /register, /verify, /f
 - src/components.jsx: kapak, istek formu, istek dialog'u.
 - public/images/unlocktr-world.webp: projeye özel üretilmiş görsel; gerçek oyun kapağı değildir.
 
-Backend 0.3.0 önce yayınlanmalıdır; sonra frontend push edilir. Eski ADMIN_SECRET_KEY giriş alanı yoktur. Kurucu gunshalit@gmail.com doğrulanmış hesabıyla giriş yapar. Yönetim linki profil menüsünde görünür.
+Backend 0.4.0 önce yayınlanmalıdır; sonra frontend push edilir. Eski ADMIN_SECRET_KEY giriş alanı yoktur. Kurucu gunshalit@gmail.com doğrulanmış hesabıyla giriş yapar. Yönetim linki profil menüsünde görünür.
 
 VIP 49 TL/ay ve 399 TL/yıl; ItemSatış mağazasına bağlanır, bu sitede ödeme veya otomatik etkinleştirme yapılmaz. Kurucu manuel atar. Personel görevleri boyunca sınırsız VIP alır. VIP linki sunucudan yalnız yetkili üyeye verilir. NSFW tercihi cihazda/hesapta saklanır; yaş doğrulaması değildir.
 
 Hesap silme ekranı profilin anonimleştirildiğini ve yorumların Silinen kullanıcı olarak kaldığını açıklar. Kurucu hesabı sahiplik devri olmadan silinmez.
 
-Kontrol: build/format ve 390px/768px mock API Playwright akışları. Gerçek yeni API/Resend teslimatı deploy sonrası sınanmalıdır. Ayrıntılı geçiş notları: RELEASE-0.3.0.md.
+Kontrol: build/format ve 390px/768px mock API Playwright akışları. Gerçek yeni API/Resend teslimatı deploy sonrası sınanmalıdır. Ayrıntılı geçiş notları: RELEASE-0.4.0.md.
 
 .git ve .env kopyalanmaz; node_modules, dist, preview PNG'leri Git dışında tutulur. Açık kaynak lisansı henüz seçilmedi.
+
+## 0.4.0 güncellemesi
+
+Gelişmiş mod/kurulum formu; yalnız reklamlı standart indirme ve VIP’ye özel Pixeldrain/MediaFire; VIP öncelikli istekler; hazır durum yanıtları ve kalıcı e-posta kuyruğu; altı kutulu kod; kalıcı giriş; e-posta onaylı hesap silme; Gmail ile yeni kayıt; gerçek çerez tercihleri ve Buy Me a Coffee destek sayfası. Ayrıntılar son yayınlama notlarında. Backend ve frontend birlikte güncellenmelidir.

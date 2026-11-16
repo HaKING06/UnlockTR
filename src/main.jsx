@@ -1,3 +1,6 @@
+import { CookieNotice, SupportPage, PrivacyPage } from "./site-extras";
+import { RequestPage } from "./request-page";
+import { preferencesAllowed } from "./consent";
 import React, { useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
@@ -27,14 +30,14 @@ import {
   Crown,
   Settings,
 } from "lucide-react";
-import { Modal, RequestForm, Cover } from "./components";
+import { Cover } from "./components";
 import { AuthPage, VerifyPage } from "./auth-pages";
 import { AccountPage, GamePage, VipPage } from "./member-pages";
 import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession } from "./state";
 import { api, ADMIN, engines } from "./api";
 import "./style.css";
-const VERSION = "0.3.0";
+const VERSION = "0.4.0";
 function Brand() {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
@@ -50,7 +53,9 @@ function Brand() {
 }
 function getTheme() {
   try {
-    return localStorage.getItem("theme") === "light" ? "light" : "dark";
+    return preferencesAllowed() && localStorage.getItem("theme") === "light"
+      ? "light"
+      : "dark";
   } catch {
     return "dark";
   }
@@ -120,7 +125,6 @@ function Skeletons() {
 function App() {
   const { token, user, nsfw, showNsfw, logout } = useSession();
   const [theme, setTheme] = useState(getTheme),
-    [modal, setModal] = useState(null),
     [games, setGames] = useState([]),
     [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
@@ -139,7 +143,7 @@ function App() {
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     try {
-      localStorage.setItem("theme", theme);
+      if (preferencesAllowed()) localStorage.setItem("theme", theme);
     } catch {}
   }, [theme]);
   useEffect(() => {
@@ -164,35 +168,37 @@ function App() {
       (filter === "all" || (filter === "patch" ? g.has_tr_patch : g.has_mod)),
   );
   const request = () => {
-    if (user) setModal({ type: "request" });
-    else location.href = "/login?next=" + encodeURIComponent("/?request=1");
+    location.href = user ? "/requests" : "/login?next=%2Frequests";
   };
-  useEffect(() => {
-    if (user && new URLSearchParams(location.search).get("request") === "1")
-      setModal({ type: "request" });
-  }, [user]);
   const routePath = location.pathname.replace(/\/$/, "");
   const adminPage = routePath === "/" + ADMIN || routePath === "/manage";
   const verifyPage =
     routePath === "/verify" ||
     (routePath === "" && new URLSearchParams(location.search).has("token"));
-  const routeContent = verifyPage ? (
-    <VerifyPage />
-  ) : adminPage ? (
-    <AdminPage />
-  ) : routePath === "/login" ? (
-    <AuthPage />
-  ) : routePath === "/register" ? (
-    <AuthPage mode="register" />
-  ) : routePath === "/forgot-password" ? (
-    <AuthPage mode="forgot" />
-  ) : routePath === "/account" ? (
-    <AccountPage />
-  ) : routePath === "/game" ? (
-    <GamePage />
-  ) : routePath === "/vip" ? (
-    <VipPage />
-  ) : null;
+  const routeContent =
+    routePath === "/requests" ? (
+      <RequestPage />
+    ) : routePath === "/support" ? (
+      <SupportPage />
+    ) : routePath === "/privacy" ? (
+      <PrivacyPage />
+    ) : verifyPage ? (
+      <VerifyPage />
+    ) : adminPage ? (
+      <AdminPage />
+    ) : routePath === "/login" ? (
+      <AuthPage />
+    ) : routePath === "/register" ? (
+      <AuthPage mode="register" />
+    ) : routePath === "/forgot-password" ? (
+      <AuthPage mode="forgot" />
+    ) : routePath === "/account" ? (
+      <AccountPage />
+    ) : routePath === "/game" ? (
+      <GamePage />
+    ) : routePath === "/vip" ? (
+      <VipPage />
+    ) : null;
   function category(value) {
     if (location.pathname !== "/") {
       location.href = "/?type=" + value + "#library";
@@ -226,6 +232,9 @@ function App() {
               <Layers size={15} />
               Modlar
             </button>
+            <a href="/support" className="support-nav">
+              Destek ol
+            </a>
             <button onClick={request}>
               İstek oyun
               <Plus size={14} />
@@ -565,6 +574,14 @@ function App() {
             <a href="/login">Giriş yap</a>
             <a href="/register">Hesap oluştur</a>
             <a href="/vip">VIP</a>
+            <a href="/support">Destek ol</a>
+            <button
+              onClick={() =>
+                window.dispatchEvent(new Event("unlocktr-cookie-settings"))
+              }
+            >
+              Çerez tercihleri
+            </button>
             <button onClick={request}>
               Oyun isteği
               <ArrowUpRight size={13} />
@@ -581,11 +598,7 @@ function App() {
           </span>
         </div>
       </footer>
-      {modal && user && (
-        <Modal title="Oyun isteği oluştur" onClose={() => setModal(null)}>
-          <RequestForm token={token} />
-        </Modal>
-      )}
+      <CookieNotice />
     </>
   );
 }

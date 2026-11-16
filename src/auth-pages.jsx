@@ -1,3 +1,4 @@
+import { CodeInput } from "./otp-input";
 import React, { useEffect, useState } from "react";
 import {
   ArrowRight,
@@ -84,7 +85,7 @@ export function AuthPage({ mode = "login" }) {
         </h1>
         <p className="muted">
           {register
-            ? "UnlockTR hesabını oluştur."
+            ? "Gmail adresinle UnlockTR hesabını oluştur."
             : forgot
               ? "E-postana gönderilen kodla şifreni yenile."
               : "Kaldığın yerden devam etmek için giriş yap."}
@@ -114,6 +115,7 @@ export function AuthPage({ mode = "login" }) {
             name="email"
             maxLength={254}
             autoComplete="email"
+            pattern={register ? "[^@]+@gmail[.]com" : undefined}
             required
           />
           {(!forgot || reset) && (
@@ -129,17 +131,7 @@ export function AuthPage({ mode = "login" }) {
               required
             />
           )}
-          {forgot && reset && (
-            <Field
-              label="E-postadaki 6 haneli kod"
-              name="code"
-              inputMode="numeric"
-              pattern="[0-9]{6}"
-              maxLength={6}
-              autoComplete="one-time-code"
-              required
-            />
-          )}
+          {forgot && reset && <CodeInput label="E-postadaki 6 haneli kod" />}
           {register && (
             <p className="muted small">
               Şifren en az 12 karakter olmalı. Kayıt sonrası e-postana gelen
@@ -248,16 +240,7 @@ export function VerifyPage() {
               onChange={(e) => setEmail(e.target.value)}
               required
             />
-            <Field
-              label="Doğrulama kodu"
-              name="code"
-              className="otp-input"
-              autoComplete="one-time-code"
-              inputMode="numeric"
-              pattern="[0-9]{6}"
-              maxLength={6}
-              required
-            />
+            <CodeInput label="Doğrulama kodu" />
           </>
         )}
         <button className="primary" disabled={busy}>

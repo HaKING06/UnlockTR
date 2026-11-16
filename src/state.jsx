@@ -1,9 +1,10 @@
+import { preferencesAllowed } from "./consent";
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { api } from "./api";
 const SessionContext = createContext(null);
 const get = (key) => {
   try {
-    return localStorage.getItem(key);
+    return preferencesAllowed() ? localStorage.getItem(key) : null;
   } catch {
     return null;
   }
@@ -11,20 +12,36 @@ const get = (key) => {
 export function SessionProvider({ children }) {
   const [token, setToken] = useState(() => {
       try {
-        return sessionStorage.getItem("unlocktr-token") || "";
+        return (
+          localStorage.getItem("unlocktr-token") ||
+          sessionStorage.getItem("unlocktr-token") ||
+          ""
+        );
       } catch {
         return "";
       }
     }),
-    [user, setUser] = useState(null),
+    [user, setUser] = useState(() => {
+      try {
+        if (localStorage.getItem("unlocktr-token"))
+          return JSON.parse(localStorage.getItem("unlocktr-profile") || "null");
+      } catch {}
+      return null;
+    }),
     [loading, setLoading] = useState(true);
   const [nsfw, setNsfw] = useState(() => get("unlocktr-nsfw") === "true");
   function setSession(data) {
     setToken(data?.token || "");
     setUser(data?.user || null);
     try {
-      if (data?.token) sessionStorage.setItem("unlocktr-token", data.token);
-      else sessionStorage.removeItem("unlocktr-token");
+      if (data?.token) {
+        localStorage.setItem("unlocktr-token", data.token);
+        localStorage.setItem("unlocktr-profile", JSON.stringify(data.user));
+      } else {
+        localStorage.removeItem("unlocktr-token");
+        localStorage.removeItem("unlocktr-profile");
+      }
+      sessionStorage.removeItem("unlocktr-token");
     } catch {}
   }
   useEffect(() => {
@@ -37,9 +54,13 @@ export function SessionProvider({ children }) {
     api("/me", { token, signal: c.signal })
       .then((u) => {
         setUser(u);
+        try {
+          localStorage.setItem("unlocktr-profile", JSON.stringify(u));
+        } catch {}
         setNsfw(u.show_nsfw);
         try {
-          localStorage.setItem("unlocktr-nsfw", String(u.show_nsfw));
+          if (preferencesAllowed())
+            localStorage.setItem("unlocktr-nsfw", String(u.show_nsfw));
         } catch {}
       })
       .catch((e) => {
@@ -50,10 +71,39 @@ export function SessionProvider({ children }) {
       });
     return () => c.abort();
   }, [token]);
+  useEffect(() => {
+    const sync = (e) => {
+      if (e.key === "unlocktr-token") {
+        setToken(e.newValue || "");
+        if (!e.newValue) setUser(null);
+      }
+    };
+    window.addEventListener("storage", sync);
+    return () => window.removeEventListener("storage", sync);
+  }, []);
+  useEffect(() => {
+    const apply = (e) => {
+      try {
+        if (e.detail.preferences) {
+          localStorage.setItem("unlocktr-nsfw", String(nsfw));
+          localStorage.setItem(
+            "theme",
+            document.documentElement.dataset.theme || "dark",
+          );
+        } else {
+          localStorage.removeItem("unlocktr-nsfw");
+          localStorage.removeItem("theme");
+        }
+      } catch {}
+    };
+    window.addEventListener("unlocktr-consent", apply);
+    return () => window.removeEventListener("unlocktr-consent", apply);
+  }, [nsfw]);
   async function showNsfw(value) {
     setNsfw(value);
     try {
-      localStorage.setItem("unlocktr-nsfw", String(value));
+      if (preferencesAllowed())
+        localStorage.setItem("unlocktr-nsfw", String(value));
     } catch {}
     if (user) {
       try {
