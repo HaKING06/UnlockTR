@@ -1,6 +1,6 @@
 # UnlockTR Frontend
 
-**Frontend version: 0.2.2** — Türkçe oyun yamaları ve modları için React/Vite arayüzü.
+**Frontend version: 0.2.3** — Türkçe oyun yamaları ve modları için React/Vite arayüzü.
 Hedef adres: https://unlocktr.haking.tr
 
 ## Geliştirme
@@ -59,7 +59,7 @@ Kullanıcının 16 Kasım 2026 tarihinde bildirdiği yollar:
 - Frontend GitHub deposu: `C:\GitHub\UnlockTR`
 - Backend GitHub deposu: `C:\GitHub\UnlockTR-Backend`
 
-Frontend kaynakları frontend deposunun köküne kopyalanır. `.git`, `.env`, `node_modules`, `dist` ve önizleme ekran görüntüleri aktarılmaz. Backend bu tasarım tesliminde değiştirilmedi; kendi sürümü 0.1.0 olarak kalır. Bu paket bağımsız frontend sürümü 0.2.2'dır. Push işlemi kullanıcıya bırakılır.
+Frontend kaynakları frontend deposunun köküne kopyalanır. `.git`, `.env`, `node_modules`, `dist` ve önizleme ekran görüntüleri aktarılmaz. Backend bu tasarım tesliminde değiştirilmedi; kendi sürümü 0.1.0 olarak kalır. Bu paket bağımsız frontend sürümü 0.2.3'dır. Push işlemi kullanıcıya bırakılır.
 
 ## Doğrulama
 
@@ -72,8 +72,8 @@ Tasarımda geniş görsel alanı ve kategori düzeni için Steam/NexusMods yakla
 Render: https://unlocktr-backend.onrender.com
 Pages VITE_API_URL: `https://unlocktr-backend.onrender.com/api`. VITE değişkeni verilmezse üretim build bu adresi kullanır; yerel geliştirme varsayılanı localhost:3001 olarak kalır. Backend FRONTEND_URL üretimde `https://unlocktr.haking.tr` olmalıdır.
 
-## Cloudflare Workers dağıtım notu (0.2.2)
+## Cloudflare Workers dağıtım notu (0.2.3)
 
-Cloudflare ekranındaki `/workers/scripts/` deploy adresi Workers Static Assets dağıtımını gösterir. Bu model de frontend için kullanılabilir. Build `npm run build`, assets dizini `dist` olmalıdır; mevcut deploy komutunu koru. Vite artık `dist/_redirects` dosyasını yalnızca `/verify` ve VITE_ADMIN_ROUTE_SLUG yolları için üretir. `/* /index.html 200` kuralı Workers tarafından döngü olarak reddedildiği için kaldırıldı. Özel bir Worker veya sır eklenmedi. Yeni frontend yolları eklenirse build kuralları da güncellenmelidir.
+Build, index.html yanında verify.html ve yapılandırılmış admin yolu için HTML girişi üretir. Workers temiz HTML yolları bu dosyaları /verify ve /founder-console gibi adreslerden sunar. _redirects üretilmez; index.html canonical yönlendirmesinin yolu / adresine taşıması önlenir. Yeni frontend yolları eklenirse build girişleri güncellenmelidir. Root adresine eski yönlendirmeyle ulaşan token bağlantıları da doğrulama ekranını açar. Token URL'den kaldırılıp sadece sayfa belleğinde saklanır; sayfa yenilenirse e-postadaki bağlantı tekrar açılmalıdır.
 
-Bu düzeltme üretim build ve üretilen route/asset dosyalarıyla yerelde kontrol edildi; Cloudflare remote deploy kullanıcı tarafından yapılacaktır.
+Düzeltme yerel build ve mock doğrulama API'siyle kontrol edilir. Canlı Cloudflare davranışı commit/push ve deploy sonrasında yeniden doğrulanmalıdır.

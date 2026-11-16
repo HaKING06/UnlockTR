@@ -171,16 +171,23 @@ export function Auth({ onLogin }) {
   );
 }
 export function Verify() {
+  const [token] = useState(() =>
+    new URLSearchParams(location.search).get("token"),
+  );
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    history.replaceState({}, "", "/verify");
+  }, []);
   const [message, setMessage] = useState(
       "Bağlantını onaylamak için aşağıdaki düğmeye bas.",
     ),
     [busy, setBusy] = useState(false);
   async function verify() {
     setBusy(true);
-    const token = new URLSearchParams(location.search).get("token");
-    history.replaceState({}, "", "/verify");
+
     try {
       const d = await api("/auth/verify", { method: "POST", body: { token } });
+      setDone(true);
       setMessage(d.message);
     } catch (e) {
       setMessage(e.message);
@@ -193,7 +200,11 @@ export function Verify() {
       <ShieldCheck size={38} />
       <h1>E-posta doğrulama</h1>
       <p role="status">{message}</p>
-      <button className="primary" disabled={busy} onClick={verify}>
+      <button
+        className="primary"
+        disabled={busy || done || !token}
+        onClick={verify}
+      >
         E-postamı doğrula
       </button>
       <a href="/">Ana sayfaya dön</a>

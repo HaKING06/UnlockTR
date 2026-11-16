@@ -35,7 +35,7 @@ import {
 } from "./components";
 import { api, ADMIN, engines } from "./api";
 import "./style.css";
-const VERSION = "0.2.2";
+const VERSION = "0.2.3";
 function Brand() {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
@@ -163,8 +163,11 @@ function App() {
   );
   const request = () =>
     setModal(session ? { type: "request" } : { type: "auth", next: "request" });
-  const adminPage = location.pathname === "/" + ADMIN;
-  const verifyPage = location.pathname === "/verify";
+  const routePath = location.pathname.replace(/\/$/, "");
+  const adminPage = routePath === "/" + ADMIN;
+  const verifyPage =
+    routePath === "/verify" ||
+    (routePath === "" && new URLSearchParams(location.search).has("token"));
   function category(value) {
     if (location.pathname !== "/") {
       location.href = "/?type=" + value + "#library";
