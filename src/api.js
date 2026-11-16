@@ -1,5 +1,8 @@
 const API = (
-  import.meta.env.VITE_API_URL || "http://localhost:3001/api"
+  import.meta.env.VITE_API_URL ||
+  (import.meta.env.DEV
+    ? "http://localhost:3001/api"
+    : "https://unlocktr-backend.onrender.com/api")
 ).replace(/\/$/, "");
 export const ADMIN = import.meta.env.VITE_ADMIN_ROUTE_SLUG || "founder-console";
 export const engines = [

@@ -1,5 +1,17 @@
 # Frontend changelog
 
+## 0.2.2 — 2026-11-17
+
+- Workers dağıtımını engelleyen catch-all _redirects döngüsü kaldırıldı.
+- Vite build yalnız /verify ve yapılandırılan admin yolu için kesin rewrite kuralları üretir.
+- JavaScript, CSS ve görsel dosyaları rewrite kapsamından çıkarıldı.
+
+## 0.2.1 — 2026-11-17
+
+- Üretim API varsayılanı gerçek Render adresine bağlandı: unlocktr-backend.onrender.com.
+- Cloudflare Pages ortam değişkeni ve kurulum belgeleri güncellendi.
+- Yerel geliştirme API varsayılanı localhost olarak korundu.
+
 ## 0.2.0 — 2026-11-16
 
 - Sinematik vitrin, özgün WebP arka plan ve yenilenen marka görünümü.

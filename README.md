@@ -1,6 +1,6 @@
 # UnlockTR Frontend
 
-**Frontend version: 0.2.0** — Türkçe oyun yamaları ve modları için React/Vite arayüzü.
+**Frontend version: 0.2.2** — Türkçe oyun yamaları ve modları için React/Vite arayüzü.
 Hedef adres: https://unlocktr.haking.tr
 
 ## Geliştirme
@@ -27,7 +27,7 @@ Bu depo yalnızca frontend içerir; Root Directory **boş / depo kökü**, Build
 
 | Build ortam değişkeni | Değer |
 |---|---|
-| `VITE_API_URL` | Render API adresi, sonunda `/api`; örneğin `https://SERVICE.onrender.com/api` |
+| `VITE_API_URL` | Render API adresi, sonunda `/api`; örneğin `https://unlocktr-backend.onrender.com/api` |
 | `VITE_ADMIN_ROUTE_SLUG` | Backend ile aynı kurucu yol adı |
 
 Bu iki değer herkese açıktır. Değiştirildiğinde yeniden build gerekir. Veritabanı adresi, Resend anahtarı, JWT_SECRET ve ADMIN_SECRET_KEY frontend'e **eklenmez**. Custom domain: `unlocktr.haking.tr`. `public/_redirects` SPA yollarını, `public/_headers` güvenlik başlıklarını sağlar.
@@ -59,10 +59,21 @@ Kullanıcının 16 Kasım 2026 tarihinde bildirdiği yollar:
 - Frontend GitHub deposu: `C:\GitHub\UnlockTR`
 - Backend GitHub deposu: `C:\GitHub\UnlockTR-Backend`
 
-Frontend kaynakları frontend deposunun köküne kopyalanır. `.git`, `.env`, `node_modules`, `dist` ve önizleme ekran görüntüleri aktarılmaz. Backend bu tasarım tesliminde değiştirilmedi; kendi sürümü 0.1.0 olarak kalır. Bu paket bağımsız frontend sürümü 0.2.0'dır. Push işlemi kullanıcıya bırakılır.
+Frontend kaynakları frontend deposunun köküne kopyalanır. `.git`, `.env`, `node_modules`, `dist` ve önizleme ekran görüntüleri aktarılmaz. Backend bu tasarım tesliminde değiştirilmedi; kendi sürümü 0.1.0 olarak kalır. Bu paket bağımsız frontend sürümü 0.2.2'dır. Push işlemi kullanıcıya bırakılır.
 
 ## Doğrulama
 
 0.2.0 için üretim build'i ve biçim kontrolü çalıştırıldı. Playwright ile yalnızca 390px ve 768px genişliklerinde yatay taşma, kategori/motor/arama, NSFW açma, indirme bağlantıları, kayıt/giriş/istek ve admin yayın/moderasyon arayüzleri denetlendi. API yanıtları bu kontrollerde **mock** edildi. Canlı Neon/Resend, gerçek JWT yetkileri veya gerçek dosya indirmeleri bu frontend tesliminde sınanmadı. API kapalıyken gerçek hata görünümü de kontrol edildi. Test oyunları dağıtılan kaynaklara eklenmedi.
 
 Tasarımda geniş görsel alanı ve kategori düzeni için Steam/NexusMods yaklaşımı referans alındı; marka görseli projeye özel üretildi. Açık kaynak lisansı henüz seçilmedi; LICENSE dosyasına bak.
+
+## Üretim API adresi (0.2.1)
+
+Render: https://unlocktr-backend.onrender.com
+Pages VITE_API_URL: `https://unlocktr-backend.onrender.com/api`. VITE değişkeni verilmezse üretim build bu adresi kullanır; yerel geliştirme varsayılanı localhost:3001 olarak kalır. Backend FRONTEND_URL üretimde `https://unlocktr.haking.tr` olmalıdır.
+
+## Cloudflare Workers dağıtım notu (0.2.2)
+
+Cloudflare ekranındaki `/workers/scripts/` deploy adresi Workers Static Assets dağıtımını gösterir. Bu model de frontend için kullanılabilir. Build `npm run build`, assets dizini `dist` olmalıdır; mevcut deploy komutunu koru. Vite artık `dist/_redirects` dosyasını yalnızca `/verify` ve VITE_ADMIN_ROUTE_SLUG yolları için üretir. `/* /index.html 200` kuralı Workers tarafından döngü olarak reddedildiği için kaldırıldı. Özel bir Worker veya sır eklenmedi. Yeni frontend yolları eklenirse build kuralları da güncellenmelidir.
+
+Bu düzeltme üretim build ve üretilen route/asset dosyalarıyla yerelde kontrol edildi; Cloudflare remote deploy kullanıcı tarafından yapılacaktır.

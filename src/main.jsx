@@ -35,7 +35,7 @@ import {
 } from "./components";
 import { api, ADMIN, engines } from "./api";
 import "./style.css";
-const VERSION = "0.2.0";
+const VERSION = "0.2.2";
 function Brand() {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
