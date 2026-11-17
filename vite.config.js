@@ -45,6 +45,11 @@ export default defineConfig(({ mode }) => {
             "manage",
             "requests",
             "support",
+            "about",
+            "advertise",
+            "help",
+            "terms",
+            "content-policy",
             "privacy",
             "mail",
             "wallet",
@@ -54,6 +59,11 @@ export default defineConfig(({ mode }) => {
             adminSlug,
           ]) {
             const titles = {
+              about: "Hakkımızda",
+              advertise: "Reklam ve iş birliği",
+              help: "Yardım merkezi",
+              terms: "Kullanım koşulları",
+              "content-policy": "İçerik ve telif",
               favorites: "Favorilerim",
               reports: "Proje raporları",
               wallet: "UCoin cüzdanı",
@@ -73,6 +83,15 @@ export default defineConfig(({ mode }) => {
             };
             const title = (titles[route] || "Yönetim merkezi") + " · UTRZONE";
             const descriptions = {
+              about:
+                "UTRZONE nedir? Underground Translation & Reworks kimliğimizi, kurucumuzu ve Türkçe yama platformumuzun amacını tanı.",
+              advertise:
+                "UTRZONE reklam ve iş birliği seçenekleri. Banner, sponsorlu tanıtım ve satış ortaklığı teklifleri için bizimle iletişime geçin.",
+              help: "UTRZONE yardım merkezi: yama kurulumu, desteklenen sürümler, VIP, UCoin ve hesap soruları.",
+              terms:
+                "UTRZONE platform kullanım ilkeleri; hesap, içerik ve erişim koşulları.",
+              "content-policy":
+                "UTRZONE içerik standartları ve hak sahibi bildirimleri için iletişim yolu.",
               login:
                 "UTRZONE hesabına giriş yap; favorilerini, VIP üyeliğini ve oyun isteklerini yönet.",
               register:

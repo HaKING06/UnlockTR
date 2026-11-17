@@ -1,3 +1,4 @@
+import { RetryImage } from "./retry-image";
 import { reorderImages, promoteCover } from "./gallery-order";
 import { Select } from "./select";
 import { useConfirm } from "./confirm-dialog";
@@ -43,7 +44,7 @@ const empty = {
 };
 export function GameEditor({ id, onDone, onDirtyChange }) {
   const confirm = useConfirm();
-  const { token } = useSession(),
+  const { token, nsfw } = useSession(),
     [draft, setDraft] = useState(empty),
     [ready, setReady] = useState(!id),
     [message, setMessage] = useState(""),
@@ -52,6 +53,8 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
     [attempt, setAttempt] = useState(0),
     [coverFailed, setCoverFailed] = useState(false),
     [savedTitle, setSavedTitle] = useState("");
+  const [revealPreviews, setRevealPreviews] = useState(false);
+  const previewRestricted = draft.is_adult && !nsfw && !revealPreviews;
   useEffect(() => {
     onDirtyChange?.(dirty);
     return () => onDirtyChange?.(false);
@@ -130,6 +133,7 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
   }
   async function submit(e) {
     e.preventDefault();
+    if (busy) return;
     setBusy(true);
     try {
       const body = {
@@ -171,7 +175,7 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
           Listeye dön
         </button>
       </div>
-      <Notice>{message}</Notice>
+      <Notice>{!ready && message}</Notice>
       {!ready && (
         <div className="panel" role="status">
           {message ? (
@@ -187,7 +191,34 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
         </div>
       )}
       {ready && (
-        <form onSubmit={submit}>
+        <form onSubmit={submit} className="editor-form">
+          <div className="editor-savebar">
+            <div>
+              <strong>{draft.title.trim() || "Yeni oyun"}</strong>
+              <span role="status">
+                {busy
+                  ? "Kaydediliyor…"
+                  : dirty
+                    ? "Kaydedilmemiş değişiklikler"
+                    : "Değişiklik yok"}
+              </span>
+            </div>
+            <div className="editor-save-actions">
+              <button
+                type="button"
+                className="secondary"
+                onClick={leave}
+                disabled={busy}
+              >
+                Vazgeç
+              </button>
+              <button type="submit" className="primary" disabled={busy}>
+                <Save size={16} />
+                {busy ? "Kaydediliyor…" : id ? "Kaydet" : "Yayınla"}
+              </button>
+            </div>
+            <Notice>{message}</Notice>
+          </div>
           <div className="editor-layout">
             <div>
               <section className="panel editor-section">
@@ -236,6 +267,11 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                     placeholder="https://utr.haking.tr/games/oyun-adi/cover.webp"
                   />
                 </div>
+                <EditorImagePreview
+                  url={draft.cover_image_url}
+                  label="Kapak önizlemesi"
+                  restricted={previewRestricted}
+                />
                 <section className="editor-gallery">
                   <h4>
                     Görsel galerisi{" "}
@@ -246,92 +282,110 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                     görüntü için en az 1600px genişlikte kaynak önerilir; küçük
                     görseli büyütmek ayrıntı kazandırmaz.
                   </p>
+                  {draft.is_adult && !nsfw && (
+                    <button
+                      type="button"
+                      className="secondary small-button"
+                      onClick={() => setRevealPreviews((v) => !v)}
+                    >
+                      {revealPreviews
+                        ? "Önizlemeleri gizle"
+                        : "18+ önizlemeleri göster"}
+                    </button>
+                  )}
                   {draft.gallery_images.map((url, index) => (
                     <div className="gallery-url-row" key={index}>
-                      <Field
-                        label={`${index + 1}. görsel HTTPS adresi`}
-                        type="url"
-                        value={url}
-                        required
-                        maxLength={2048}
-                        onChange={(e) =>
-                          change(
-                            "gallery_images",
-                            draft.gallery_images.map((v, i) =>
-                              i === index ? e.target.value : v,
-                            ),
-                          )
-                        }
+                      <EditorImagePreview
+                        url={url}
+                        label={`${index + 1}. görsel önizlemesi`}
+                        restricted={previewRestricted}
                       />
-                      <div className="gallery-row-actions">
-                        <button
-                          type="button"
-                          className="secondary small-button"
-                          aria-label={`${index + 1}. görseli yukarı taşı`}
-                          disabled={index === 0}
-                          onClick={() =>
+                      <div className="gallery-entry-fields">
+                        <Field
+                          label={`${index + 1}. görsel HTTPS adresi`}
+                          type="url"
+                          value={url}
+                          required
+                          maxLength={2048}
+                          onChange={(e) =>
                             change(
                               "gallery_images",
-                              reorderImages(
-                                draft.gallery_images,
-                                index,
-                                index - 1,
+                              draft.gallery_images.map((v, i) =>
+                                i === index ? e.target.value : v,
                               ),
                             )
                           }
-                        >
-                          <ArrowUp size={14} /> Yukarı
-                        </button>
-                        <button
-                          type="button"
-                          className="secondary small-button"
-                          aria-label={`${index + 1}. görseli aşağı taşı`}
-                          disabled={index === draft.gallery_images.length - 1}
-                          onClick={() =>
-                            change(
-                              "gallery_images",
-                              reorderImages(
-                                draft.gallery_images,
-                                index,
-                                index + 1,
-                              ),
-                            )
-                          }
-                        >
-                          <ArrowDown size={14} /> Aşağı
-                        </button>
-                        <button
-                          type="button"
-                          className="secondary small-button"
-                          disabled={!url}
-                          onClick={() => {
-                            setDirty(true);
-                            setDraft((d) => ({
-                              ...d,
-                              ...promoteCover(
-                                d.cover_image_url,
-                                d.gallery_images,
-                                index,
-                              ),
-                            }));
-                          }}
-                        >
-                          Kapak yap
-                        </button>
-                        <button
-                          type="button"
-                          className="text-danger"
-                          onClick={() =>
-                            change(
-                              "gallery_images",
-                              draft.gallery_images.filter(
-                                (_, i) => i !== index,
-                              ),
-                            )
-                          }
-                        >
-                          Kaldır
-                        </button>
+                        />
+                        <div className="gallery-row-actions">
+                          <button
+                            type="button"
+                            className="secondary small-button"
+                            aria-label={`${index + 1}. görseli yukarı taşı`}
+                            disabled={index === 0}
+                            onClick={() =>
+                              change(
+                                "gallery_images",
+                                reorderImages(
+                                  draft.gallery_images,
+                                  index,
+                                  index - 1,
+                                ),
+                              )
+                            }
+                          >
+                            <ArrowUp size={14} /> Yukarı
+                          </button>
+                          <button
+                            type="button"
+                            className="secondary small-button"
+                            aria-label={`${index + 1}. görseli aşağı taşı`}
+                            disabled={index === draft.gallery_images.length - 1}
+                            onClick={() =>
+                              change(
+                                "gallery_images",
+                                reorderImages(
+                                  draft.gallery_images,
+                                  index,
+                                  index + 1,
+                                ),
+                              )
+                            }
+                          >
+                            <ArrowDown size={14} /> Aşağı
+                          </button>
+                          <button
+                            type="button"
+                            className="secondary small-button"
+                            disabled={!url}
+                            onClick={() => {
+                              setDirty(true);
+                              setDraft((d) => ({
+                                ...d,
+                                ...promoteCover(
+                                  d.cover_image_url,
+                                  d.gallery_images,
+                                  index,
+                                ),
+                              }));
+                            }}
+                          >
+                            Kapak yap
+                          </button>
+                          <button
+                            type="button"
+                            className="text-danger"
+                            onClick={() =>
+                              change(
+                                "gallery_images",
+                                draft.gallery_images.filter(
+                                  (_, i) => i !== index,
+                                ),
+                              )
+                            }
+                          >
+                            Kaldır
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))}
@@ -579,7 +633,7 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                 <img
                   className={
                     "editor-cover-preview" +
-                    (draft.is_adult ? " restricted" : "")
+                    (previewRestricted ? " restricted" : "")
                   }
                   src={draft.cover_image_url}
                   alt="Kapak önizlemesi"
@@ -637,14 +691,6 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                   VIP sağlayıcısı
                 </li>
               </ul>
-              <button className="primary" disabled={busy}>
-                <Save size={16} />
-                {busy
-                  ? "Kaydediliyor…"
-                  : id
-                    ? "Değişiklikleri kaydet"
-                    : "Oyunu yayınla"}
-              </button>
               <small>
                 * işaretli alanlar zorunludur. Yayın öncesinde bağlantıları ve
                 paket sürümünü kontrol et.
@@ -657,5 +703,33 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
         <GameDelete id={id} title={savedTitle} onDeleted={onDone} />
       )}
     </section>
+  );
+}
+
+function EditorImagePreview({ url, label, restricted }) {
+  let valid = false;
+  try {
+    valid = new URL(url).protocol === "https:";
+  } catch {}
+  return (
+    <figure
+      className={
+        "editor-media-preview" + (restricted ? " preview-sensitive" : "")
+      }
+    >
+      {valid ? (
+        <RetryImage
+          key={url}
+          src={url}
+          alt={label}
+          loading="lazy"
+          decoding="async"
+          referrerPolicy="no-referrer"
+        />
+      ) : (
+        <span>Görsel bağlantısı ekle</span>
+      )}
+      <figcaption>{restricted ? "18+ · Önizleme gizli" : label}</figcaption>
+    </figure>
   );
 }

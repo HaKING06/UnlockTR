@@ -22,6 +22,11 @@ export function useClientNavigation(adminSlug) {
       "/account",
       "/vip",
       "/support",
+      "/about",
+      "/advertise",
+      "/help",
+      "/terms",
+      "/content-policy",
       "/privacy",
       "/requests",
       "/mail",
@@ -69,7 +74,16 @@ export function useClientNavigation(adminSlug) {
     };
   }, [adminSlug]);
   useEffect(() => {
-    document.title = "UTRZONE — Oyunun dilini değiştir.";
+    const title = {
+      "/about": "Hakkımızda",
+      "/advertise": "Reklam ve iş birliği",
+      "/help": "Yardım merkezi",
+      "/terms": "Kullanım koşulları",
+      "/content-policy": "İçerik ve telif",
+    }[location.pathname.replace(/\/$/, "")];
+    document.title = title
+      ? title + " · UTRZONE"
+      : "UTRZONE — Oyunun dilini değiştir.";
     document.querySelector(".user-menu[open]")?.removeAttribute("open");
     const main = document.getElementById("main");
     main?.setAttribute("tabindex", "-1");

@@ -1,3 +1,10 @@
+import {
+  AboutPage,
+  AdvertisePage,
+  HelpPage,
+  TermsPage,
+  ContentPolicyPage,
+} from "./platform-pages";
 import { useClientNavigation, navigate } from "./navigation";
 import { Select } from "./select";
 import { FavoritesPage, FavoriteButton } from "./social-ui";
@@ -49,7 +56,7 @@ import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
 import "./refinements.css";
-const VERSION = "0.11.0";
+const VERSION = "0.11.1";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UTRZONE ana sayfa">
@@ -57,8 +64,8 @@ function Brand({ compact = false }) {
         className={compact ? "brand-compact" : "brand-wide"}
         src={
           compact
-            ? "/brand/compact.webp?v=0.11.0"
-            : "/brand/horizontal.webp?v=0.11.0"
+            ? "/brand/compact.webp?v=0.11.1"
+            : "/brand/horizontal.webp?v=0.11.1"
         }
         alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
@@ -66,7 +73,7 @@ function Brand({ compact = false }) {
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.webp?v=0.11.0"
+        src="/brand/compact.webp?v=0.11.1"
         alt="UTR · UTRZONE"
         width="190"
         height="36"
@@ -91,7 +98,7 @@ function GameCard({ game }) {
         <Cover game={game} />
         <img
           className="card-brand-bug"
-          src="/brand/mark.webp?v=0.11.0"
+          src="/brand/mark.webp?v=0.11.1"
           alt=""
           width="58"
           height="28"
@@ -157,7 +164,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.webp?v=0.11.0"
+            src="/brand/mark.webp?v=0.11.1"
             alt=""
             width="90"
             height="36"
@@ -278,7 +285,17 @@ function App() {
     routePath === "/verify" ||
     (routePath === "" && new URLSearchParams(location.search).has("token"));
   const routeContent =
-    routePath === "/favorites" ? (
+    routePath === "/about" ? (
+      <AboutPage />
+    ) : routePath === "/advertise" ? (
+      <AdvertisePage />
+    ) : routePath === "/help" ? (
+      <HelpPage />
+    ) : routePath === "/terms" ? (
+      <TermsPage />
+    ) : routePath === "/content-policy" ? (
+      <ContentPolicyPage />
+    ) : routePath === "/favorites" ? (
       <FavoritesPage />
     ) : routePath === "/reports" ? (
       <StaffReports />
@@ -715,7 +732,7 @@ function App() {
               <div className="community-visual" aria-hidden="true">
                 <span />
                 <img
-                  src="/brand/mark.webp?v=0.11.0"
+                  src="/brand/mark.webp?v=0.11.1"
                   alt=""
                   width="120"
                   height="50"
@@ -738,23 +755,42 @@ function App() {
         )}
       </main>
       <footer>
-        <div className="footer-main">
-          <Brand compact />
-          <p>
-            Underground Translation & Reworks
-            <br />
-            Yeraltı Çeviri & Yeniden Yapımlar
-          </p>
-          <div className="footer-links">
-            <a href="/#library">Kütüphane</a>
-            {user ? (
-              <a href="/account">Hesabım</a>
-            ) : (
-              <a href="/login">Topluluğa katıl</a>
-            )}
-            <a href="/vip">VIP</a>
+        <div className="footer-directory">
+          <div className="footer-identity">
+            <Brand compact />
+            <p>Underground Translation & Reworks</p>
+            <p>
+              Türkçe yamalar, oyun modları ve yeni hikâyeleri birlikte keşfeden
+              bir topluluk.
+            </p>
+            <a href="/about" className="footer-story">
+              Hikâyemizi keşfet <ArrowUpRight size={14} />
+            </a>
+          </div>
+          <nav aria-label="Platform bağlantıları">
+            <h2>Platform</h2>
+            <a href="/#library">Oyun kütüphanesi</a>
+            <a href="/?type=patch#library">Türkçe yamalar</a>
+            <a href="/?type=mod#library">Oyun modları</a>
+            <a href="/vip">VIP üyelik</a>
             <a href="/wallet">UCoin & günlük ödüller</a>
+          </nav>
+          <nav aria-label="Topluluk bağlantıları">
+            <h2>Topluluk</h2>
+            <a href={user ? "/account" : "/login"}>
+              {user ? "Hesabım" : "Giriş yap"}
+            </a>
+            <a href="/requests">Oyun isteği oluştur</a>
+            <a href="/help">Yardım merkezi</a>
             <a href="/support">Destek & iletişim</a>
+            <a href="/advertise">Reklam & iş birliği</a>
+          </nav>
+          <nav aria-label="Bilgi ve politika bağlantıları">
+            <h2>Bilgi & İlkeler</h2>
+            <a href="/about">Hakkımızda</a>
+            <a href="/terms">Kullanım koşulları</a>
+            <a href="/content-policy">İçerik & telif</a>
+            <a href="/privacy">Gizlilik & hesap verileri</a>
             <button
               onClick={() =>
                 window.dispatchEvent(new Event("utrzone-cookie-settings"))
@@ -762,11 +798,7 @@ function App() {
             >
               Çerez tercihleri
             </button>
-            <button onClick={request}>
-              Oyun isteği
-              <ArrowUpRight size={13} />
-            </button>
-          </div>
+          </nav>
         </div>
         <div className="footer-bottom">
           <span>

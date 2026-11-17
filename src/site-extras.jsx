@@ -205,8 +205,8 @@ export function PrivacyPage() {
         açılan projeler hizmetin çalışması için saklanır. Hesap silinince cüzdan
         ve erişimler kaldırılır; işlem defterindeki hesap bağlantısı ayrılır.
         Coin devredilemez ve nakde çevrilemez. Erken erişim açma işlemlerinde
-        otomatik coin iadesi yapılmaz; satın alımı olan projeler kalıcı
-        silinemez. Yasal hakların saklıdır.
+        otomatik coin iadesi yapılmaz; kaldırılan projelerde indirme erişimi
+        kapanır, satış kayıtları korunur. Yasal hakların saklıdır.
       </p>
       <h2>Hesabını silme</h2>
       <p>
