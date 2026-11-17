@@ -35,7 +35,7 @@ export function AuthPage({ mode = "login" }) {
           : "/auth/login";
       const d = await api(path, { method: "POST", body });
       if (register) {
-        sessionStorage.setItem("unlocktr-pending-email", body.email);
+        sessionStorage.setItem("utrzone-pending-email", body.email);
         location.href = "/verify?next=" + encodeURIComponent(nextPath());
       } else if (!forgot) {
         setSession(d);
@@ -47,7 +47,7 @@ export function AuthPage({ mode = "login" }) {
     } catch (e) {
       setMessage(e.message);
       if (e.code === "EMAIL_UNVERIFIED") {
-        sessionStorage.setItem("unlocktr-pending-email", body.email);
+        sessionStorage.setItem("utrzone-pending-email", body.email);
         setMessage(
           "E-postanı doğrulamalısın. Doğrulama sayfasından yeni kod isteyebilirsin.",
         );
@@ -62,7 +62,7 @@ export function AuthPage({ mode = "login" }) {
         <div>
           <img
             className="auth-brand-mark"
-            src="/brand/mark.svg"
+            src="/brand/mark.webp"
             alt="UTR"
             width="200"
             height="80"
@@ -94,7 +94,7 @@ export function AuthPage({ mode = "login" }) {
         </h1>
         <p className="muted">
           {register
-            ? "Gmail adresinle UnlockTR hesabını oluştur."
+            ? "Gmail adresinle UTRZONE hesabını oluştur."
             : forgot
               ? "E-postana gönderilen kodla şifreni yenile."
               : "Kaldığın yerden devam etmek için giriş yap."}
@@ -173,7 +173,7 @@ export function VerifyPage() {
   const { setSession } = useSession();
   const [email, setEmail] = useState(() => {
       try {
-        return sessionStorage.getItem("unlocktr-pending-email") || "";
+        return sessionStorage.getItem("utrzone-pending-email") || "";
       } catch {
         return "";
       }
@@ -203,7 +203,7 @@ export function VerifyPage() {
           : { email, code: new FormData(e.currentTarget).get("code") },
       });
       setSession(d);
-      sessionStorage.removeItem("unlocktr-pending-email");
+      sessionStorage.removeItem("utrzone-pending-email");
       location.href = nextPath();
     } catch (e) {
       setMessage(e.message);

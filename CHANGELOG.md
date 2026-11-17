@@ -1,5 +1,9 @@
 # Frontend changelog
 
+## 0.8.0 · 2026-11-17
+
+UTRZONE kimliği ve alan adı; özgün paftadan raster logo/ikonlar; mobil istek kartı ve footer; kurumsal e-posta adresi; kaldırılan projelerde iadesiz erişim kapatma ve satış arşivi. [Yayın notları](RELEASE-0.8.0.md).
+
 ## 0.7.0 · 2026-11-17
 
 Site içi onaylar; kurucu/yardımcı kurucu coin geçmişi ve proje raporları; favoriler, bağlantı ölçümleri ve VIP sürüm bildirimleri; onaylı erken erişim ve toplu e-posta. Otomatik coin iadesi kaldırıldı, satılmış proje silinmez. [Şema, doğrulama ve yayın notları](RELEASE-0.7.0.md).
@@ -60,7 +64,7 @@ UTR kırmızı/grafit kimliği, responsive marka varlıkları, giriş yönlendir
 
 ## 0.2.1 — 2026-11-17
 
-- Üretim API varsayılanı gerçek Render adresine bağlandı: unlocktr-backend.onrender.com.
+- Üretim API varsayılanı gerçek Render adresine bağlandı: utrzone-backend.onrender.com.
 - Cloudflare Pages ortam değişkeni ve kurulum belgeleri güncellendi.
 - Yerel geliştirme API varsayılanı localhost olarak korundu.
 

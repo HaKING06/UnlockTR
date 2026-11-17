@@ -78,7 +78,7 @@ export function CoinAdmin() {
         },
       });
       setMessage(d.message);
-      window.dispatchEvent(new Event("unlocktr-coins"));
+      window.dispatchEvent(new Event("utrzone-coins"));
       setTarget(null);
       setReference(crypto.randomUUID());
       setTick((t) => t + 1);

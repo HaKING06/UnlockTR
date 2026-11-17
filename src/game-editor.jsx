@@ -227,7 +227,7 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                     maxLength={2048}
                     required
                     onChange={(e) => change("cover_image_url", e.target.value)}
-                    placeholder="https://…"
+                    placeholder="https://utr.haking.tr/games/oyun-adi/cover.webp"
                   />
                 </div>
                 <Field
@@ -241,8 +241,9 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                   placeholder="Oyunun konusu, çevirinin kapsamı ve önemli notlar…"
                 />
                 <p className="field-help">
-                  Görsel dosyası yüklenmez; harici kapak adresi kullanılır.
-                  Açıklama düz metindir.
+                  Görsel arşivinde hazırladığın https://utr.haking.tr/games/…
+                  kapak bağlantısını yapıştır. HTTPS adresi doğrudan görsel
+                  dosyasına açılmalıdır. Açıklama düz metindir.
                 </p>
               </section>
               <section className="panel editor-section">

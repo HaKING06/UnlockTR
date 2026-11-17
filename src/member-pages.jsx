@@ -75,7 +75,7 @@ export function AccountPage() {
             )}
           </div>
           <section className="panel identity-panel">
-            <span className="eyebrow">UNLOCKTR KİMLİĞİN</span>
+            <span className="eyebrow">UTRZONE KİMLİĞİN</span>
             <h2>{roleLabel[s.user.role]} olarak buradasın.</h2>
             <p className="muted">
               {
@@ -235,7 +235,7 @@ export function VipPage() {
   return (
     <section className="vip-page">
       <PageHeader
-        eyebrow="UNLOCKTR VIP"
+        eyebrow="UTRZONE VIP"
         title="Deneyimin bir adım ötesi."
         description="Reklamsız alternatif indirme bağlantılarına eriş, projeye destek ol."
       />
@@ -299,10 +299,10 @@ export function VipPage() {
         <h3>Nasıl etkinleştirilir?</h3>
         <p className="muted">
           Satış ve ödeme ItemSatış üzerinden yürütülür. Mağazadaki güncel ilan
-          koşullarını kontrol et; ödeme sonrası UnlockTR hesap e-postanı
-          satıcıya ilet. Kurucu üyeliğini elle tanımlar. Bu sitede kart bilgisi
-          alınmaz ve otomatik abonelik başlatılmaz. Ücretsiz VIP atamaları da
-          yalnızca kurucu tarafından yapılabilir.
+          koşullarını kontrol et; ödeme sonrası UTRZONE hesap e-postanı satıcıya
+          ilet. Kurucu üyeliğini elle tanımlar. Bu sitede kart bilgisi alınmaz
+          ve otomatik abonelik başlatılmaz. Ücretsiz VIP atamaları da yalnızca
+          kurucu tarafından yapılabilir.
         </p>
       </div>
     </section>
@@ -331,7 +331,7 @@ export function GamePage() {
       .then(([g, cm]) => {
         setGame(g);
         setComments(cm);
-        document.title = g.title + " · UnlockTR";
+        document.title = g.title + " · UTRZONE";
       })
       .catch((e) => {
         if (e.name !== "AbortError") setError(e.message);
@@ -343,8 +343,8 @@ export function GamePage() {
       if (e.detail.gameId === id)
         setGame((g) => (g ? { ...g, download_count: e.detail.count } : g));
     };
-    window.addEventListener("unlocktr-download", update);
-    return () => window.removeEventListener("unlocktr-download", update);
+    window.addEventListener("utrzone-download", update);
+    return () => window.removeEventListener("utrzone-download", update);
   }, [id]);
   async function comment(e) {
     e.preventDefault();

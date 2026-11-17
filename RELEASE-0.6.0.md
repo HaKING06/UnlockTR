@@ -1,4 +1,4 @@
-# UnlockTR 0.6.0 · UCoin ve erken erişim
+# UTRZONE 0.6.0 · UCoin ve erken erişim
 
 ## Önemli: yayın sırası
 Bu sürüm **migrations/0.6.0.sql** gerektirir. Canlı veritabanına bu çalışma sırasında migration uygulanmadı.
@@ -40,7 +40,7 @@ Katalog ve erken erişim detay yanıtlarında kilitli indirme URL'leri dönmez. 
 - Coin yükleme ve proje kaldırma iadeleri için logolu bildirim e-postası kuyruğa alınır. E-posta gecikse bile bakiye işlemi kaybolmaz.
 
 ## Referans ve tasarım
-RWAZONE ana sayfası açık Chrome penceresinden incelendi; bakiye görünürlüğü, kategoriler ve erişim etiketlerinin anlaşılır olması fikir olarak alındı. Kaynak kodu, marka veya yerleşim birebir kopyalanmadı. UnlockTR'nin UTR grafit/kırmızı kimliği korundu. Yeni ekranlar ana menü/hesap/yönetim akışına entegre edildi. Kurumsal e-posta bağlantısına Mail ikonu eklendi.
+RWAZONE ana sayfası açık Chrome penceresinden incelendi; bakiye görünürlüğü, kategoriler ve erişim etiketlerinin anlaşılır olması fikir olarak alındı. Kaynak kodu, marka veya yerleşim birebir kopyalanmadı. UTRZONE'nin UTR grafit/kırmızı kimliği korundu. Yeni ekranlar ana menü/hesap/yönetim akışına entegre edildi. Kurumsal e-posta bağlantısına Mail ikonu eklendi.
 
 ## Doğrulama ve sınırlar
 Backend 23 test: PGlite + Supertest ve sahte mail göndericisi. Migration tekrar uygulanabilirlik, eski anonim satırlar, kayıt/doğrulama/silme, günlük tekrar, seri/VIP, idempotent yükleme, iki kez erişim alma, fiyat/rol reddi, indirme URL koruması, genel erişim tarihinin dolması, proje silme/iade, bildirim kaçışlama ve migration health kontrolünü kapsar. Test adaptörü transaction'ları seri çalıştırır; gerçek PostgreSQL pool'unda ayrı bağlantı ve satır kilitleri kullanılır. Bu bir yüksek eşzamanlı trafik benchmark'ı değildir.

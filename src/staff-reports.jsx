@@ -81,7 +81,11 @@ export function StaffReports() {
                 <div className="report-title">
                   <span>
                     <small>
-                      {g.early_access_active ? "ERKEN ERİŞİM" : "GENEL ERİŞİM"}
+                      {g.deleted_at
+                        ? "KALDIRILDI · SATIŞ ARŞİVİ"
+                        : g.early_access_active
+                          ? "ERKEN ERİŞİM"
+                          : "GENEL ERİŞİM"}
                     </small>
                     <h2>{g.title}</h2>
                     <small>
@@ -89,9 +93,11 @@ export function StaffReports() {
                       {new Date(g.updated_at).toLocaleDateString("tr-TR")}
                     </small>
                   </span>
-                  <a href={"/manage?edit=" + g.id} className="secondary">
-                    Projeyi yönet <ArrowUpRight size={14} />
-                  </a>
+                  {!g.deleted_at && (
+                    <a href={"/manage?edit=" + g.id} className="secondary">
+                      Projeyi yönet <ArrowUpRight size={14} />
+                    </a>
+                  )}
                 </div>
                 <div className="report-metrics">
                   <div>

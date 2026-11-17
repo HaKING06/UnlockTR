@@ -1,4 +1,4 @@
-# UnlockTR 0.5.2 · Kullanılabilirlik ve büyüyen katalog
+# UTRZONE 0.5.2 · Kullanılabilirlik ve büyüyen katalog
 
 ## Düzeltilen hatalar
 - Üst çubuğun backdrop-filter katmanı nedeniyle hesap menüsünün hero/cam paneller arkasında kalması: header için konumlu bağımsız üst katman. Menü dış tıklama ve Escape ile kapanır; uzun menü dar ekranda kaydırılır.
@@ -22,4 +22,4 @@ Filtreler tüm veritabanını kapsar. Her yanıt en fazla 24 oyun döndürür; k
 - Canlı Render/Neon/Resend üzerinde veri değiştirilmedi. Canlı performans veya gerçek e-posta teslimi bu kontrollerin parçası değildir.
 
 ## Yayın sırası
-Önce UnlockTR-Backend push / Render deploy, ardından UnlockTR frontend push / Cloudflare build. API filtre desteği için backend'in güncellenmesi gerekir. Yeni environment değişkeni veya SQL migration yoktur. Mevcut 0.4.0 migration önkoşulu devam eder. Commit/push/deploy bu teslimde yapılmadı.
+Önce UTRZONE-Backend push / Render deploy, ardından UTRZONE frontend push / Cloudflare build. API filtre desteği için backend'in güncellenmesi gerekir. Yeni environment değişkeni veya SQL migration yoktur. Mevcut 0.4.0 migration önkoşulu devam eder. Commit/push/deploy bu teslimde yapılmadı.

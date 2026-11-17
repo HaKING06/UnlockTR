@@ -1,6 +1,6 @@
 # Topluluk ilkeleri
 
-UnlockTR katkılarında ve tartışmalarında saygılı, açık ve yapıcı iletişim beklenir. Teknik kararları kanıt ve kullanıcı ihtiyacı üzerinden tartış; kişileri hedef alma.
+UTRZONE katkılarında ve tartışmalarında saygılı, açık ve yapıcı iletişim beklenir. Teknik kararları kanıt ve kullanıcı ihtiyacı üzerinden tartış; kişileri hedef alma.
 
 - Taciz, tehdit, ayrımcılık ve kişisel bilgi ifşası kabul edilmez.
 - Şifre, doğrulama kodu, API anahtarı ve özel kullanıcı verisi paylaşma.

@@ -66,7 +66,7 @@ export function DownloadButton({
       if (tab) tab.location.replace(d.url);
       else location.assign(d.url);
       window.dispatchEvent(
-        new CustomEvent("unlocktr-download", {
+        new CustomEvent("utrzone-download", {
           detail: { gameId, count: d.count },
         }),
       );

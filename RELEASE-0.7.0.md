@@ -1,4 +1,4 @@
-# UnlockTR 0.7.0 · 17 Kasım 2026
+# UTRZONE 0.7.0 · 17 Kasım 2026
 
 Coin yönetimi, proje raporları, favoriler ve izinli iletişim araçları.
 

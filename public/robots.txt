@@ -9,4 +9,4 @@ Disallow: /mail
 Disallow: /manage
 Disallow: /verify
 Disallow: /forgot-password
-Sitemap: https://unlocktr.haking.tr/sitemap.xml
+Sitemap: https://utrzone.haking.tr/sitemap.xml

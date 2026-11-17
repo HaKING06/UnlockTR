@@ -36,7 +36,7 @@ export async function api(path, { token, body, method = "GET", signal } = {}) {
 }
 
 // Only public catalog data is cached: never member details or VIP URLs.
-const CATALOG_KEY = "unlocktr-public-catalog-v2";
+const CATALOG_KEY = "utrzone-public-catalog-v2";
 export function readCatalog() {
   try {
     const item = JSON.parse(localStorage.getItem(CATALOG_KEY) || "null");

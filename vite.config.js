@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
     plugins: [
       react(),
       {
-        name: "unlocktr-cloudflare-routes",
+        name: "utrzone-cloudflare-routes",
         writeBundle(options) {
           // Real HTML entries avoid Cloudflare's /index.html canonical redirect.
           const directory = options.dir || "dist";
@@ -25,7 +25,10 @@ export default defineConfig(({ mode }) => {
             resolve(directory, "warmup.js"),
             `fetch(${JSON.stringify(apiOrigin + "/health")},{cache:"no-store",signal:AbortSignal.timeout(90000)}).catch(function(){});`,
           );
-          const shell = readFileSync(resolve(directory, "index.html"), "utf8");
+          const shell = readFileSync(
+            resolve(directory, "index.html"),
+            "utf8",
+          ).replace(/<link[^>]+rel="canonical"[^>]+>/g, "");
           for (const route of [
             "verify",
             "login",
@@ -63,7 +66,7 @@ export default defineConfig(({ mode }) => {
               manage: "Yönetim merkezi",
               "forgot-password": "Şifremi unuttum",
             };
-            const title = (titles[route] || "Yönetim merkezi") + " · UnlockTR";
+            const title = (titles[route] || "Yönetim merkezi") + " · UTRZONE";
             const noindex = !["login", "register", "vip"].includes(route);
             const routeShell = ["login", "register"].includes(route)
               ? shell
@@ -74,7 +77,7 @@ export default defineConfig(({ mode }) => {
                 "</head>",
                 (noindex
                   ? '<meta name="robots" content="noindex,nofollow"/>'
-                  : '<link rel="canonical" href="https://unlocktr.haking.tr/' +
+                  : '<link rel="canonical" href="https://utrzone.haking.tr/' +
                     route +
                     '"/>') + "</head>",
               );

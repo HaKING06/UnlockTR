@@ -8,6 +8,7 @@ export function GameDelete({ id, title, onDeleted }) {
     [confirm, setConfirm] = useState(""),
     [password, setPassword] = useState(""),
     [open, setOpen] = useState(false),
+    [acknowledged, setAcknowledged] = useState(false),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState("");
   async function remove(e) {
@@ -18,9 +19,13 @@ export function GameDelete({ id, title, onDeleted }) {
       const d = await api("/admin/games/" + id, {
         token,
         method: "DELETE",
-        body: { confirmation: confirm, password },
+        body: {
+          confirmation: confirm,
+          password,
+          accepted_removal: acknowledged,
+        },
       });
-      window.dispatchEvent(new Event("unlocktr-coins"));
+      window.dispatchEvent(new Event("utrzone-coins"));
       onDeleted(d.message);
     } catch (e) {
       setMessage(e.message);
@@ -35,9 +40,9 @@ export function GameDelete({ id, title, onDeleted }) {
         <Trash2 size={18} /> Projeyi sil
       </h3>
       <p className="muted">
-        Oyun ve yorumları kalıcı olarak silinir. Satın alımı olan projelerde
-        mevcut erişimleri korumak için silme kapalıdır; otomatik coin iadesi
-        yapılmaz. Bu işlem geri alınamaz.
+        Oyun siteden kaldırılır; satın alanlar dahil herkesin indirme erişimi
+        kapanır. Coin iadesi yapılmaz. Satış ve harcama geçmişi özel raporlarda
+        korunur. Bu işlem geri alınamaz.
       </p>
       {!open ? (
         <button
@@ -68,9 +73,20 @@ export function GameDelete({ id, title, onDeleted }) {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
+          <label className="confirm-ack">
+            <input
+              type="checkbox"
+              checked={acknowledged}
+              onChange={(e) => setAcknowledged(e.target.checked)}
+            />
+            <span>
+              Satın alanların erişiminin de kapanacağını ve coin iadesi
+              yapılmayacağını anlıyorum.
+            </span>
+          </label>
           <button
             className="danger-button"
-            disabled={busy || confirm !== title || !password}
+            disabled={busy || confirm !== title || !password || !acknowledged}
           >
             Projeyi kalıcı olarak sil
           </button>
@@ -82,6 +98,7 @@ export function GameDelete({ id, title, onDeleted }) {
               setOpen(false);
               setPassword("");
               setConfirm("");
+              setAcknowledged(false);
             }}
           >
             Vazgeç

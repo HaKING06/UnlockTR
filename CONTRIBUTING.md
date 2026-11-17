@@ -1,6 +1,6 @@
 # Katkı rehberi
 
-UnlockTR'ye katkı vermeden önce mevcut mimariyi ve lisans notunu incele. Bu depo açık kaynak lisansı altında yayımlanmış değildir; katkı kabulü veya depoya erişim, otomatik kullanım/dağıtım hakkı vermez.
+UTRZONE'ye katkı vermeden önce mevcut mimariyi ve lisans notunu incele. Bu depo açık kaynak lisansı altında yayımlanmış değildir; katkı kabulü veya depoya erişim, otomatik kullanım/dağıtım hakkı vermez.
 
 ## Başlamadan önce
 

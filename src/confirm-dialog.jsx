@@ -57,7 +57,7 @@ export function ConfirmProvider({ children }) {
                 <span className="confirm-emblem">
                   <ShieldCheck size={23} />
                 </span>
-                <span>UNLOCKTR · İŞLEM ONAYI</span>
+                <span>UTRZONE · İŞLEM ONAYI</span>
                 <button
                   className="icon"
                   aria-label="Onayı kapat"

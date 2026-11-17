@@ -1,13 +1,13 @@
-# UnlockTR 0.5.0 · UTR kimliği
+# UTRZONE 0.5.0 · UTR kimliği
 
 ## Yeni deneyim
 - Grafit / koyu kırmızı palet, metal UTR markası, kare favicon, responsive logo ve cam yüzeyler; açık tema ve 18+ gizlilik tercihleri korunur.
 - Giriş ve doğrulama sonrası varsayılan ana sayfa; güvenli next bağlantısı varsa önceki akışa dönüş. Oturumu açık üye giriş ekranını atlar.
-- Footer hesap durumuna göre değişir. Destek ve geri bildirim: unlocktr@haking.tr.
+- Footer hesap durumuna göre değişir. Destek ve geri bildirim: utrzone@haking.tr.
 - Oyun sayfasında yetkili yorum düzenleme/gizleme; backend yetki kontrolü ve audit kaydı korunur.
 - İstek durumuna uygun hazır yanıtlar ve mesaj önizlemesi. İnceleme, çalışma kabulü veya teslim sözü anlamına gelmez.
 - Kurucu/yardımcı kurucu için /mail posta stüdyosu; alıcı, konu, mesaj, önizleme ve açık gönderim onayı. Sunucu HTML escape, rol kontrolü, kullanıcı başına saatte 20 gönderim ve taslak tekrarını önleme uygular.
-- Tüm e-posta şablonları yeni kimlikle ve PNG logo ile güncellendi; yanıt adresi unlocktr@haking.tr.
+- Tüm e-posta şablonları yeni kimlikle ve PNG logo ile güncellendi; yanıt adresi utrzone@haking.tr.
 
 ## Performans
 HTML başında harici async warmup.js sağlık isteğini erkenden başlatır; CSP inline script için gevşetilmez. Build çıktısı VITE_API_URL kullanır. Son başarılı herkese açık katalog 24 saat yerelde tutulur ve açılışta yenilenir; VIP adresleri ve kullanıcı bilgileri bu önbelleğe girmez. Ana sayfa dışındaki sayfalarda gereksiz katalog isteği yapılmaz. Kapaklar lazy + async decode, yeni hero yaklaşık 119 KB WebP.

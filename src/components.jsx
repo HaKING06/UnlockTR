@@ -19,7 +19,7 @@ export function Cover({ game }) {
       ) : (
         <div className="cover-fallback">
           <img src="/brand/mark.webp" alt="UTR" width="110" height="55" />
-          <span>UNLOCKTR</span>
+          <span>UTRZONE</span>
         </div>
       )}
       {game.is_adult && !reveal && (

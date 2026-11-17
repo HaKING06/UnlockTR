@@ -2,7 +2,7 @@
 
 ## Amaç
 
-UnlockTR'yi profesyonel bir oyun yama/mod platformu olarak geliştirmek. Steam/Nexus tarzı güçlü hiyerarşiden ilham alınabilir; başka sitenin markasını, kodunu veya görsellerini kopyalama. Mevcut uygulamayı iyileştir, sıfırdan başka bir ürün kurma.
+UTRZONE'yi profesyonel bir oyun yama/mod platformu olarak geliştirmek. Steam/Nexus tarzı güçlü hiyerarşiden ilham alınabilir; başka sitenin markasını, kodunu veya görsellerini kopyalama. Mevcut uygulamayı iyileştir, sıfırdan başka bir ürün kurma.
 
 ## Korunacak kimlik
 

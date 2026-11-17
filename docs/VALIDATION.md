@@ -24,7 +24,7 @@ PGlite + Supertest testleri gerçek Neon veya Resend teslim testi değildir. 0.5
 1. Backend değiştiyse önce backend commit/push ve Render sonucu. /api/health kod sürümünü kontrol et; health tek başına tüm tablo/akışları kanıtlamaz.
 2. Ardından frontend commit/push ve Cloudflare build/deploy.
 3. VITE değişkeni değişirse yeniden build gerekir. Runtime Worker secret alanı Vite build env yerine geçmez.
-4. Asıl origin unlocktr.haking.tr ile test et; pages.dev/localhost CORS ayarı aynı değildir.
+4. Asıl origin utrzone.haking.tr ile test et; pages.dev/localhost CORS ayarı aynı değildir.
 5. Rol/VIP/gönderim testini yetkili test hesaplarıyla yap. Sahte satış veya gerçek kullanıcı içeriği üretme.
 
 ## Sürüm ve raporlama
@@ -34,3 +34,7 @@ Güncel uygulama sürümü 0.5.0. Bu sürüm yeni schema migration gerektirmez. 
 ## 0.7.0 · 2026-11-17
 
 29 backend testi, frontend production build ve format kontrolü geçti. İzole yerel Express/PGlite ile 390/768 px Playwright kontrolü: giriş, coin geçmişi/ekleme, favori, satın alma onayı, özel raporlar, mail alıcı önizleme/onayı, tema ve menü; taşma görülmedi. Harici indirme sayfası fixture; gerçek mail/ödeme yok. Neon migration iki kez test dalında, sonra mevcut veriyi karşılaştırarak production üzerinde uygulandı. Ayrıntı: ../RELEASE-0.7.0.md.
+
+## 0.8.0 · UTRZONE
+
+31 backend testi, frontend build ve format kontrolü. 390/768px izole yerel API ile vitrin, giriş/kayıt, istek kartı, hesap yönlendirmesi, mail önizleme, onaylı kaldırma ve rapor kontrolü; taşma görülmedi. Örnek kapak 404 fallback kontrolü; gerçek mail/ödeme/yıkıcı canlı işlem yok. Neon migration test dalında iki kez, sonra production üzerinde veri korunumu kontrolüyle uygulandı. Ayrıntılar ../RELEASE-0.8.0.md.

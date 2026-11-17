@@ -1,4 +1,4 @@
-# Mimari · 0.7.0
+# Mimari · 0.8.0
 
 ```mermaid
 flowchart LR
@@ -89,4 +89,4 @@ backend/src/coins.js: cüzdan, günlük ödül, erken erişim. transaction.js: p
 | backend/src/admin-economy.js | Coin geçmişi, kalıcı satış raporları, korumalı proje silme |
 | backend/migrations/0.7.0.sql | Şema, early_access_sales ve eski backend uyum trigger'ı |
 
-/favorites ve /reports HTML girişleri eklendi. Satışlar kullanıcı silinmesinde anonim kalır; game_unlocks erişim hakkı, early_access_sales kalıcı rapor kaydıdır. Satın alma tek transaction içinde bakiye/ledger/erişim/onay kaydeder. Satılmış oyun silinmez. Favori ve indirme sayıları public, alıcı/harcama detayları yalnız yetkili ekip içindir. Ölçüm dosyanın tamamlanmasını doğrulamaz. Migration komutu 0.6.0 ve 0.7.0 dahil bütün geçişleri uygular.
+/favorites ve /reports HTML girişleri eklendi. Satışlar kullanıcı silinmesinde anonim kalır; game_unlocks erişim hakkı, early_access_sales kalıcı rapor kaydıdır. Satın alma tek transaction içinde bakiye/ledger/erişim/onay kaydeder. Satılmış oyun kaldırılabilir; bütün erişim yolları kapanır, satış raporu korunur. Favori ve indirme sayıları public, alıcı/harcama detayları yalnız yetkili ekip içindir. Ölçüm dosyanın tamamlanmasını doğrulamaz. Migration komutu 0.6.0 ve 0.7.0 dahil bütün geçişleri uygular.

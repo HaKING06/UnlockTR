@@ -161,12 +161,12 @@ export function MailPage() {
               <aside>
                 <div className="mail-preview">
                   <div className="mail-preview-top">
-                    <img src="/brand/horizontal.svg" alt="UnlockTR" />
+                    <img src="/brand/horizontal.webp" alt="UTRZONE" />
                     <span>ÖNİZLEME</span>
                   </div>
                   <small>
                     {audiences.find((x) => x[0] === audience)[1]} ·
-                    unlocktr@haking.tr
+                    utrzone@haking.tr
                   </small>
                   <h2>{subject || "Mesajının konusu"}</h2>
                   <p>
@@ -174,9 +174,7 @@ export function MailPage() {
                       "Sade, anlaşılır ve faydalı bir mesaj yaz. Duyurunun kim için olduğunu ilk cümlede belirt."}
                   </p>
                   <hr />
-                  <small>
-                    UnlockTR Ekibi · Yanıtlar destek adresine gelir.
-                  </small>
+                  <small>UTRZONE Ekibi · Yanıtlar destek adresine gelir.</small>
                 </div>
                 <p className="muted small">
                   <ShieldCheck size={13} /> Yalnız kurucu ve yardımcı kurucular.

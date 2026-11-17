@@ -10,8 +10,8 @@ export function CookieNotice() {
     );
   useEffect(() => {
     const show = () => setOpen(true);
-    window.addEventListener("unlocktr-cookie-settings", show);
-    return () => window.removeEventListener("unlocktr-cookie-settings", show);
+    window.addEventListener("utrzone-cookie-settings", show);
+    return () => window.removeEventListener("utrzone-cookie-settings", show);
   }, []);
   function save(value) {
     setConsent(saveConsent(value));
@@ -76,7 +76,7 @@ export function SupportPage() {
     <section className="support-page">
       <PageHeader
         eyebrow="BİRLİKTE DAHA FAZLASI"
-        title="Birlikte daha iyi bir UnlockTR."
+        title="Birlikte daha iyi bir UTRZONE."
         description="Bir sorunun mu var, bir fikrin mi? Seni dinliyoruz. Topluluğun katkısıyla daha iyi bir yama platformu kuruyoruz."
       />
       <div className="panel contact-support">
@@ -89,9 +89,9 @@ export function SupportPage() {
         </p>
         <a
           className="primary"
-          href="mailto:unlocktr@haking.tr?subject=UnlockTR%20Destek"
+          href="mailto:utrzone@haking.tr?subject=UTRZONE%20Destek"
         >
-          unlocktr@haking.tr · Bize yaz
+          utrzone@haking.tr · Bize yaz
         </a>
         <a className="secondary" href="/requests">
           Oyun isteği oluştur
@@ -160,7 +160,7 @@ export function PrivacyPage() {
       </p>
       <h2>Tercihlerin</h2>
       <p>
-        unlocktr_consent çerezi seçimini 180 gün hatırlar. İzin verdiğinde tema
+        utrzone_consent çerezi seçimini 180 gün hatırlar. İzin verdiğinde tema
         ve misafir 18+ görünüm tercihi cihazında saklanır. Üye tercihleri
         hesabınla ilişkilidir. Analitik ve reklam takip kodu eklemiyoruz. Harici
         indirme, ItemSatış veya Buy Me a Coffee sayfaları kendi politikalarını
@@ -169,7 +169,7 @@ export function PrivacyPage() {
       <button
         className="secondary"
         onClick={() =>
-          window.dispatchEvent(new Event("unlocktr-cookie-settings"))
+          window.dispatchEvent(new Event("utrzone-cookie-settings"))
         }
       >
         Çerez tercihlerimi değiştir

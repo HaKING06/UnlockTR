@@ -11,7 +11,7 @@ import { api } from "./api";
 import { useSession } from "./state";
 import { Protected, PageHeader, Notice } from "./ui";
 export const coinsChanged = () =>
-  window.dispatchEvent(new Event("unlocktr-coins"));
+  window.dispatchEvent(new Event("utrzone-coins"));
 export function WalletLink() {
   const { user, token } = useSession();
   const [balance, setBalance] = useState(null);
@@ -25,10 +25,10 @@ export function WalletLink() {
         })
         .catch(() => {});
     load();
-    window.addEventListener("unlocktr-coins", load);
+    window.addEventListener("utrzone-coins", load);
     return () => {
       current = false;
-      window.removeEventListener("unlocktr-coins", load);
+      window.removeEventListener("utrzone-coins", load);
     };
   }, [token, !!user]);
   return (
@@ -74,7 +74,7 @@ export function WalletPage() {
     <Protected user={s.user} loading={s.loading}>
       <section className="wallet-page">
         <PageHeader
-          eyebrow="UNLOCKTR UCOIN"
+          eyebrow="UTRZONE UCOIN"
           title="Her gün yeni bir adım."
           description="Günlük ödülünü topla, erken erişim için biriktir. Cüzdanın ve açtığın projeler tek yerde."
         />
@@ -232,8 +232,8 @@ export function WalletPage() {
               <p className="muted small">
                 Mağazadaki ilan ve güncel fiyatı kontrol et. Ödeme sonrası hesap
                 e-postanı ve sipariş numaranı satıcıya ilet. UCoin devredilemez,
-                nakde çevrilemez ve yalnız UnlockTR içerik erişiminde
-                kullanılır. Silinen hesabın coinleri yeni hesaba taşınmaz.
+                nakde çevrilemez ve yalnız UTRZONE içerik erişiminde kullanılır.
+                Silinen hesabın coinleri yeni hesaba taşınmaz.
               </p>
             </section>
             <section className="panel">

@@ -9,7 +9,7 @@ export function Field({ label, textarea = false, ...props }) {
   );
 }
 export function PageHeader({
-  eyebrow = "UNLOCKTR",
+  eyebrow = "UTRZONE",
   title,
   description,
   children,

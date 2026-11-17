@@ -1,4 +1,4 @@
-/* UnlockTR frontend 0.5.0 · UTR graphite / crimson */
+/* UTRZONE frontend 0.5.0 · UTR graphite / crimson */
 :root {
   font-family: Inter, "Segoe UI", system-ui, sans-serif;
   font-synthesis: none;
@@ -5907,5 +5907,273 @@ body {
   }
   .topbar .wallet-nav {
     padding: 6px 5px;
+  }
+}
+
+/* UTRZONE 0.8 · brand, compact layouts and glass surfaces */
+:root {
+  --bg: #111111;
+  --text: #f4f4f5;
+  --muted: #a1a1aa;
+}
+.brand-wide {
+  width: 284px;
+  height: 63px;
+}
+.brand-compact {
+  width: 218px;
+  height: 43px;
+}
+.brand img {
+  border-radius: 3px;
+}
+.panel,
+.game-card,
+.auth-sheet,
+.download-panel {
+  background-color: rgb(0 0 0 / 40%);
+  border-color: rgb(255 255 255 / 10%);
+  backdrop-filter: blur(16px);
+}
+.auth-layout {
+  isolation: isolate;
+}
+.auth-sheet {
+  background: rgb(17 17 17 / 67%);
+}
+.auth-brand-mark {
+  width: 200px;
+  height: auto;
+}
+.community {
+  display: grid;
+  grid-template-columns: 94px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 25px;
+  padding: 32px;
+}
+.community .community-visual {
+  width: 94px;
+  height: 74px;
+  margin: 0;
+}
+.community-visual > span {
+  display: none;
+}
+.community-visual > img {
+  width: 94px;
+  height: auto;
+  object-fit: contain;
+}
+.community-visual > svg:last-child {
+  top: -5px;
+  right: -4px;
+  width: 14px;
+  height: 14px;
+  padding: 5px;
+  transform: none;
+  border-radius: 6px;
+  background: #7f1d1d;
+}
+.community-copy {
+  min-width: 0;
+}
+.community .eyebrow {
+  font-size: 10px;
+  letter-spacing: 1.6px;
+  margin-bottom: 10px;
+}
+.community h2 {
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.25;
+  margin-bottom: 10px;
+}
+.community p {
+  font-size: 13px;
+  line-height: 1.8;
+}
+.community > .primary {
+  margin: 0;
+  min-height: 48px;
+  white-space: normal;
+}
+.footer-main > p {
+  font-size: 11px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+}
+.game-delete .confirm-ack {
+  margin: 16px 0;
+}
+.report-title > span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.cover.restricted > img {
+  filter: blur(24px);
+  transform: scale(1.1);
+}
+[data-theme="light"] {
+  --bg: #f4f4f5;
+  --text: #18181b;
+  --muted: #52525b;
+}
+[data-theme="light"] .brand img {
+  filter: none;
+}
+[data-theme="light"] .panel,
+[data-theme="light"] .game-card,
+[data-theme="light"] .auth-sheet,
+[data-theme="light"] .download-panel {
+  background-color: #ffffffd9;
+  border-color: #18181b18;
+}
+@media (max-width: 1000px) {
+  .topbar {
+    gap: 16px;
+  }
+  .topbar .brand-wide {
+    display: none;
+  }
+  .topbar .brand .brand-mobile {
+    display: block;
+    width: 190px;
+    height: auto;
+  }
+  .community {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 18px;
+    padding: 26px;
+  }
+  .community .community-visual,
+  .community-visual > img {
+    width: 72px;
+    height: auto;
+  }
+  .community > .primary {
+    grid-column: 2;
+    justify-self: start;
+    margin: 0;
+  }
+}
+@media (max-width: 600px) {
+  .community {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    padding: 24px;
+    text-align: left;
+  }
+  .community .community-visual {
+    width: 82px;
+    height: 44px;
+  }
+  .community-visual > img {
+    width: 82px;
+    height: auto;
+  }
+  .community-copy {
+    grid-column: 1;
+  }
+  .community h2 {
+    font-size: 24px;
+    letter-spacing: -0.7px;
+    max-width: 100%;
+  }
+  .community p {
+    font-size: 13px;
+  }
+  .community p br {
+    display: none;
+  }
+  .community > .primary {
+    grid-column: 1;
+    width: 100%;
+    justify-content: center;
+    margin: 0;
+  }
+  .topbar .brand .brand-mobile {
+    width: 145px;
+    height: auto;
+  }
+  .brand-compact {
+    width: 180px;
+    height: auto;
+  }
+  .topbar .brand {
+    min-width: 0;
+  }
+  .auth-layout {
+    border-radius: 14px;
+  }
+  .auth-sheet {
+    padding: 28px 20px;
+  }
+  .auth-sheet h1 {
+    font-size: 30px;
+    line-height: 1.15;
+  }
+  .confirm-ack {
+    align-items: flex-start;
+  }
+  .confirm-ack input {
+    margin-top: 3px;
+    flex-shrink: 0;
+  }
+  .report-title {
+    align-items: stretch;
+  }
+  .report-title .secondary {
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .footer-main {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+  }
+  .footer-main > p {
+    justify-self: start;
+    text-align: left;
+    padding: 0;
+    margin: 0;
+    border: 0;
+  }
+  .footer-links {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 600px) {
+  .topbar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    gap: 10px 8px;
+    align-items: center;
+  }
+  .topbar > .brand {
+    grid-column: 1;
+    grid-row: 1;
+    width: auto;
+    min-width: 0;
+  }
+  .topbar .brand .brand-mobile {
+    width: 138px;
+    max-width: 100%;
+  }
+  .topbar > .account {
+    grid-column: 2;
+    grid-row: 1;
+    margin: 0;
+    gap: 4px;
+  }
+  .topbar > nav {
+    grid-column: 1/-1;
+    grid-row: 2;
+    width: 100%;
+    margin: 0;
+    min-width: 0;
   }
 }

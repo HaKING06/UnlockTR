@@ -1,3 +1,3 @@
-# Güncel küçük görev notu · 0.7.0
+# Küçük görev notu · UTRZONE 0.8.0
 
-Ana geliştirme devredilmiyor; yalnız kullanıcının verdiği küçük işi yap. Grafik/kırmızı kimlik ve dark/light tema korunur. Kurucu/yardımcı kurucu coin ve proje raporu yönetir; moderatör bu yetkilere sahip değildir. Favoriler, indirme bağlantısı ölçümü ve bildirim tercihleri eklendi. Satın alma onayı, kalıcı satış raporu ve toplu mail tekrar korumasını görsel görev kapsamında değiştirme. Ayrıntılar ../RELEASE-0.7.0.md.
+Ana geliştirme devredilmiyor; yalnız verilen küçük işi yap. Yeni alan adı utrzone.haking.tr, e-posta utrzone@haking.tr, mevcut API hostname'i değişmedi. Kullanıcının paftasından raster markalar kullanılır. Görseller utr.haking.tr üzerinde; temel marka varlıkları frontend'de de bulunur. Proje kaldırma satılmış oyunlarda da mümkündür; erişim kapanır, otomatik iade yoktur, satış arşivi korunur. Rol, bakiye, onay ve e-posta tekrar korumalarını görsel işte değiştirme. Yayın adımları ../RELEASE-0.8.0.md.

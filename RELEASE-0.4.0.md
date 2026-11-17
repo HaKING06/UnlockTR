@@ -1,4 +1,4 @@
-# UnlockTR 0.4.0 — yayınlama notları
+# UTRZONE 0.4.0 — yayınlama notları
 
 ## Değişiklikler
 
@@ -17,7 +17,7 @@
 - Hesap silme için şifre + e-postaya gönderilen, silme amacına bağlı 6 haneli kod + SİL onayı gerekir. Profil anonimleştirme davranışı korunur. Kurucu hesabı yine panelden silinemez.
 - Kalıcı giriş: JWT belirteci localStorage'da, sunucuda hash'li rastgele session ID kaydı. 30 gün hareketsizlik veya en fazla 90 gün sonunda tekrar giriş gerekir. Her istekte DB oturumu, token sürümü ve rol kontrol edilir. Çıkış/şifre değişimi/sıfırlama/silme oturumları iptal eder. Cihazdaki token JS tarafından erişilebilir; mevcut ayrı-origin dağıtımda HttpOnly çerez kullanılmaz. Güçlü CSP korunur; bu bir güvenlik denetimi sertifikası değildir.
 - Eski sessionStorage tokenları geçişte okunur; yeni kalıcı oturum için yayın sonrası bir kez çıkış/giriş gerekir. F5 ve tarayıcıyı kapatıp açmak yeni oturumu silmez. Ortak cihazda çıkış yap.
-- Gerçek çerez tercih paneli: Kabul et, Sadece gerekli, Tercihler. Görünüm tercihleri izinle cihazda saklanır; oturum/güvenlik depolaması gerekli işlevdir. Karar unlocktr_consent çerezinde 180 gün saklanır; footer'dan değiştirilebilir. Analitik veya reklam takip kodu eklenmedi. /privacy teknik veri/depolama akışını açıklar; yasal uygunluk garantisi değildir.
+- Gerçek çerez tercih paneli: Kabul et, Sadece gerekli, Tercihler. Görünüm tercihleri izinle cihazda saklanır; oturum/güvenlik depolaması gerekli işlevdir. Karar utrzone_consent çerezinde 180 gün saklanır; footer'dan değiştirilebilir. Analitik veya reklam takip kodu eklenmedi. /privacy teknik veri/depolama akışını açıklar; yasal uygunluk garantisi değildir.
 
 ## Neon
 

@@ -46,21 +46,21 @@ import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.7.0";
+const VERSION = "0.8.0";
 function Brand({ compact = false }) {
   return (
-    <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
+    <a href="/" className="brand" aria-label="UTRZONE ana sayfa">
       <img
         className={compact ? "brand-compact" : "brand-wide"}
-        src={compact ? "/brand/compact.svg" : "/brand/horizontal.svg"}
-        alt="UTR · UnlockTR Mods & Patches"
+        src={compact ? "/brand/compact.webp" : "/brand/horizontal.webp"}
+        alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
         height="48"
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.svg"
-        alt="UTR · UnlockTR"
+        src="/brand/compact.webp"
+        alt="UTR · UTRZONE"
         width="190"
         height="36"
       />
@@ -150,7 +150,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.svg"
+            src="/brand/mark.webp"
             alt=""
             width="90"
             height="36"
@@ -431,11 +431,11 @@ function App() {
             <div className="page-intro">
               <p>
                 <span className="dot" />
-                UNLOCKTR · YAMA KÜTÜPHANESİ
+                UTRZONE · YAMA KÜTÜPHANESİ
               </p>
               <span>Türkçe yama & mod platformu</span>
             </div>
-            <section className="hero" aria-label="UnlockTR dünyasını keşfet">
+            <section className="hero" aria-label="UTRZONE dünyasını keşfet">
               <div className="hero-image" />
               <div className="hero-shade" />
               <div className="hero-copy">
@@ -475,7 +475,7 @@ function App() {
                   <strong>DAHA AZ SINIR.</strong>
                 </span>
                 <span className="hero-index">
-                  01 <i>/ UNLOCKTR</i>
+                  01 <i>/ UTRZONE</i>
                 </span>
               </div>
             </section>
@@ -696,16 +696,15 @@ function App() {
             <section className="community">
               <div className="community-visual" aria-hidden="true">
                 <span />
-                <img src="/brand/mark.svg" alt="" width="120" height="50" />
+                <img src="/brand/mark.webp" alt="" width="120" height="50" />
                 <Plus size={17} />
               </div>
               <div className="community-copy">
                 <span className="eyebrow">BİRLİKTE DAHA FAZLASI</span>
                 <h2>Sıradaki yamayı birlikte seçelim.</h2>
                 <p>
-                  Türkçe oynamak istediğin oyunu paylaş.
-                  <br />
-                  UnlockTR’nin bir sonraki adımına sen de yön ver.
+                  Türkçe oynamak istediğin oyunu paylaş. <br />
+                  UTRZONE’nin bir sonraki adımına sen de yön ver.
                 </p>
               </div>
               <button className="primary" onClick={request}>
@@ -720,9 +719,9 @@ function App() {
         <div className="footer-main">
           <Brand compact />
           <p>
-            Her oyunda yeni bir dünya.
+            Underground Translation & Reworks
             <br />
-            Her dünyada kendi dilin.
+            Yeraltı Çeviri & Yeniden Yapımlar
           </p>
           <div className="footer-links">
             <a href="/#library">Kütüphane</a>
@@ -736,7 +735,7 @@ function App() {
             <a href="/support">Destek & iletişim</a>
             <button
               onClick={() =>
-                window.dispatchEvent(new Event("unlocktr-cookie-settings"))
+                window.dispatchEvent(new Event("utrzone-cookie-settings"))
               }
             >
               Çerez tercihleri
@@ -749,7 +748,7 @@ function App() {
         </div>
         <div className="footer-bottom">
           <span>
-            © {new Date().getFullYear()} UnlockTR. Oyuncular için tasarlandı.
+            © {new Date().getFullYear()} UTRZONE. Oyuncular için tasarlandı.
           </span>
           <span>
             <Globe2 size={13} />

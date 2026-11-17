@@ -1,4 +1,4 @@
-# UnlockTR 0.3.0 — yayınlama ve kontrol
+# UTRZONE 0.3.0 — yayınlama ve kontrol
 
 ## Yapılanlar
 
@@ -30,7 +30,7 @@ Yeni kurulum için backend'de npm run db:migrate hem schema.sql hem migrations/0
 2. Render'da backend deploy'unu bekle. /api/health sürümü **0.3.0** olmalı.
 3. Render Environment'e `FOUNDER_EMAIL=gunshalit@gmail.com` eklemek önerilir; kodda aynı varsayılan vardır. Mevcut DATABASE_URL, RESEND_API_KEY, JWT_SECRET ve FRONTEND_URL korunur. ADMIN_SECRET_KEY artık kullanılmaz ve kaldırılabilir. JWT_SECRET'i sırf bu geçiş için değiştirmek gerekmez.
 4. Sonra C:\GitHub\UnlockTR → commit ve push. Cloudflare build/deploy tamamlanmalı.
-5. FRONTEND_URL=https://unlocktr.haking.tr, VITE_API_URL=https://unlocktr-backend.onrender.com/api. VITE_ADMIN_ROUTE_SLUG eski panel bağlantısının da çalışması için korunabilir; yeni ana yönetim yolu /manage.
+5. FRONTEND_URL=https://utrzone.haking.tr, VITE_API_URL=https://unlocktr-backend.onrender.com/api. VITE_ADMIN_ROUTE_SLUG eski panel bağlantısının da çalışması için korunabilir; yeni ana yönetim yolu /manage.
 6. Sitede yeniden giriş yap. Yeni oturum modeli sessionStorage kullanır; sekmeyi yenileyince oturum sürer, tarayıcı oturumu kapanınca tekrar giriş gerekir. Tüm tokenlar 2 saat geçerlidir. Gizli admin anahtarı girilmez.
 7. Profil menüsü → Yönetim merkezi. Üyeler ve VIP sekmesinde üye e-postası ara; rol veya VIP ata. Kurucu yetkileri doğrulanmış FOUNDER_EMAIL'e bağlıdır; farklı bir hesaba kurucu atanmaz.
 

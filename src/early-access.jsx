@@ -43,7 +43,7 @@ export function EarlyAccess({ game, onAccess }) {
           access.price +
           " UCoin bakiyenden düşülecek.",
         detail:
-          "İşlem uygulama üzerinden geri alınamaz; otomatik coin iadesi yapılmaz. Yasal hakların saklıdır.",
+          "İşlem uygulama üzerinden geri alınamaz; otomatik coin iadesi yapılmaz. Proje sonradan yayından kaldırılırsa indirme erişimi kapanır. Yasal hakların saklıdır.",
         acknowledgement:
           "Bedeli kontrol ettim; coin harcamasını ve anında erişim açılmasını onaylıyorum.",
         confirmLabel: access.price + " UCoin harca ve aç",

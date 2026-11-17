@@ -13,8 +13,8 @@ export function SessionProvider({ children }) {
   const [token, setToken] = useState(() => {
       try {
         return (
-          localStorage.getItem("unlocktr-token") ||
-          sessionStorage.getItem("unlocktr-token") ||
+          localStorage.getItem("utrzone-token") ||
+          sessionStorage.getItem("utrzone-token") ||
           ""
         );
       } catch {
@@ -23,13 +23,13 @@ export function SessionProvider({ children }) {
     }),
     [user, setUser] = useState(() => {
       try {
-        if (localStorage.getItem("unlocktr-token"))
-          return JSON.parse(localStorage.getItem("unlocktr-profile") || "null");
+        if (localStorage.getItem("utrzone-token"))
+          return JSON.parse(localStorage.getItem("utrzone-profile") || "null");
       } catch {}
       return null;
     }),
     [loading, setLoading] = useState(true);
-  const [nsfw, setNsfw] = useState(() => get("unlocktr-nsfw") === "true");
+  const [nsfw, setNsfw] = useState(() => get("utrzone-nsfw") === "true");
   const [favoriteIds, setFavoriteIds] = useState([]);
   useEffect(() => {
     if (!token) {
@@ -60,13 +60,13 @@ export function SessionProvider({ children }) {
     if (data?.user) setNsfw(!!data.user.show_nsfw);
     try {
       if (data?.token) {
-        localStorage.setItem("unlocktr-token", data.token);
-        localStorage.setItem("unlocktr-profile", JSON.stringify(data.user));
+        localStorage.setItem("utrzone-token", data.token);
+        localStorage.setItem("utrzone-profile", JSON.stringify(data.user));
       } else {
-        localStorage.removeItem("unlocktr-token");
-        localStorage.removeItem("unlocktr-profile");
+        localStorage.removeItem("utrzone-token");
+        localStorage.removeItem("utrzone-profile");
       }
-      sessionStorage.removeItem("unlocktr-token");
+      sessionStorage.removeItem("utrzone-token");
     } catch {}
   }
   useEffect(() => {
@@ -80,12 +80,12 @@ export function SessionProvider({ children }) {
       .then((u) => {
         setUser(u);
         try {
-          localStorage.setItem("unlocktr-profile", JSON.stringify(u));
+          localStorage.setItem("utrzone-profile", JSON.stringify(u));
         } catch {}
         setNsfw(u.show_nsfw);
         try {
           if (preferencesAllowed())
-            localStorage.setItem("unlocktr-nsfw", String(u.show_nsfw));
+            localStorage.setItem("utrzone-nsfw", String(u.show_nsfw));
         } catch {}
       })
       .catch((e) => {
@@ -98,7 +98,7 @@ export function SessionProvider({ children }) {
   }, [token]);
   useEffect(() => {
     const sync = (e) => {
-      if (e.key === "unlocktr-token") {
+      if (e.key === "utrzone-token") {
         setToken(e.newValue || "");
         if (!e.newValue) setUser(null);
       }
@@ -110,25 +110,25 @@ export function SessionProvider({ children }) {
     const apply = (e) => {
       try {
         if (e.detail.preferences) {
-          localStorage.setItem("unlocktr-nsfw", String(nsfw));
+          localStorage.setItem("utrzone-nsfw", String(nsfw));
           localStorage.setItem(
             "theme",
             document.documentElement.dataset.theme || "dark",
           );
         } else {
-          localStorage.removeItem("unlocktr-nsfw");
+          localStorage.removeItem("utrzone-nsfw");
           localStorage.removeItem("theme");
         }
       } catch {}
     };
-    window.addEventListener("unlocktr-consent", apply);
-    return () => window.removeEventListener("unlocktr-consent", apply);
+    window.addEventListener("utrzone-consent", apply);
+    return () => window.removeEventListener("utrzone-consent", apply);
   }, [nsfw]);
   async function showNsfw(value) {
     setNsfw(value);
     try {
       if (preferencesAllowed())
-        localStorage.setItem("unlocktr-nsfw", String(value));
+        localStorage.setItem("utrzone-nsfw", String(value));
     } catch {}
     if (user) {
       try {
