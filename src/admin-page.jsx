@@ -1,7 +1,7 @@
 import { Select } from "./select";
 import { useConfirm } from "./confirm-dialog";
 import { GameEditor } from "./game-editor";
-import { RequestReview } from "./request-page";
+import { RequestQueue } from "./request-queue";
 import React, { useEffect, useState } from "react";
 import {
   Gamepad2,
@@ -43,7 +43,7 @@ export function AdminPage() {
   const active = allowed.includes(tab) ? tab : allowed[0];
   const data = result && result.tab === active ? result.data : null;
   useEffect(() => {
-    if (!active || !s.token) return;
+    if (!active || !s.token || active === "requests") return;
     const c = new AbortController();
     setResult(null);
     api(
@@ -225,7 +225,9 @@ export function AdminPage() {
                     </button>
                   </form>
                 )}
-                {!data ? (
+                {active === "requests" ? (
+                  <RequestQueue />
+                ) : !data ? (
                   <p className="muted" role="status">
                     Yükleniyor…
                   </p>
@@ -315,28 +317,6 @@ export function AdminPage() {
                           </div>
                         </form>
                       ))}
-                    {active === "requests" &&
-                      data.map((r) =>
-                        s.user.permissions.manage_games ? (
-                          <RequestReview
-                            key={r.id + ":" + (r.revision || 0)}
-                            request={r}
-                            busy={busy}
-                            onSave={(body) => mutate("requests/" + r.id, body)}
-                          />
-                        ) : (
-                          <article className="comment" key={r.id}>
-                            <strong>
-                              {r.title} · {r.display_name}
-                            </strong>
-                            {r.vip_priority && (
-                              <span className="vip-badge">VIP öncelikli</span>
-                            )}
-                            <p>{r.description}</p>
-                            <span className="muted">{r.status}</span>
-                          </article>
-                        ),
-                      )}
                     {active === "users" &&
                       data.map((u) => (
                         <article key={u.id} className="user-admin-card">

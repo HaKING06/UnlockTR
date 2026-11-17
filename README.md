@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/media/utrzone-banner.webp" alt="UTRZONE — Underground Translation & Reworks" width="100%" /></p>
 <p align="center"><strong>Oyunun dilini değiştir. Kendi deneyimini kur.</strong><br />Türkçe yamalar · Ren’Py & Unity modları · Oyuncu topluluğu</p>
 <p align="center"><a href="https://utrzone.haking.tr">Platformu keşfet</a> · <a href="https://utrzone.haking.tr/register">Topluluğa katıl</a> · <a href="https://utrzone.haking.tr/vip">VIP ayrıcalıkları</a></p>
-<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.1-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
+<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.2-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
 
 ## Deneyim
 

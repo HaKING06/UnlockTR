@@ -1,5 +1,5 @@
 import { Select } from "./select";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { Crown, Plus, Clock3 } from "lucide-react";
 import { api } from "./api";
 import { useSession } from "./state";
@@ -167,6 +167,11 @@ export function RequestPage() {
 export function RequestReview({ request, busy, onSave }) {
   const [status, setStatus] = useState(request.status),
     [reply, setReply] = useState(request.admin_reply || "");
+  const [saving, setSaving] = useState(false);
+  const submitted = useRef(false);
+  const changed =
+    status !== request.status ||
+    reply.trim() !== (request.admin_reply || "").trim();
   const defaults = {
     pending:
       "İsteğin sıraya alındı. Ekip kapasitesine göre tekrar ele alınacak; durum değiştiğinde seni bilgilendireceğiz.",
@@ -204,81 +209,89 @@ export function RequestReview({ request, busy, onSave }) {
   return (
     <form
       className="comment request-review"
-      onSubmit={(e) => {
+      onSubmit={async (e) => {
         e.preventDefault();
-        onSave({ status, reply });
+        if (busy || submitted.current || !changed) return;
+        submitted.current = true;
+        setSaving(true);
+        try {
+          await onSave({ status, reply });
+        } finally {
+          submitted.current = false;
+          setSaving(false);
+        }
       }}
     >
-      <div className="section-head">
-        <strong>
-          {request.title} · {request.display_name}
-        </strong>
-        {request.vip_priority && (
-          <span className="vip-badge">
-            <Crown size={12} />
-            VIP öncelikli
-          </span>
+      <fieldset disabled={busy || saving}>
+        <p>{request.description}</p>
+        <small className="muted">
+          {request.platform} · {request.request_type}
+        </small>
+        <div className="form-two">
+          <label className="field">
+            İstek durumu
+            <Select
+              disabled={busy || saving}
+              value={status}
+              onChange={(e) => {
+                setStatus(e.target.value);
+                setReply(defaults[e.target.value]);
+              }}
+            >
+              {Object.entries(statuses).map(([v, l]) => (
+                <option key={v} value={v}>
+                  {l}
+                </option>
+              ))}
+            </Select>
+          </label>
+          <label className="field">
+            Hazır yanıt
+            <Select
+              value=""
+              disabled={busy || saving}
+              onChange={(e) => {
+                if (e.target.value !== "") {
+                  const preset = presets[Number(e.target.value)];
+                  setReply(preset[2]);
+                  setStatus(preset[1]);
+                }
+                e.target.value = "";
+              }}
+            >
+              <option value="">Bir şablon seç</option>
+              {presets.map(([label], index) => (
+                <option key={label} value={index}>
+                  {label}
+                </option>
+              ))}
+            </Select>
+          </label>
+        </div>
+        <Field
+          label="Kullanıcıya gönderilecek yanıt (boşsa duruma uygun varsayılan kullanılır)"
+          textarea
+          rows={4}
+          maxLength={2000}
+          value={reply}
+          onChange={(e) => setReply(e.target.value)}
+        />
+        <div className="request-reply">
+          <strong>E-posta önizlemesi · {statuses[status]}</strong>
+          <p>{reply || defaults[status]}</p>
+          <small>
+            Kaydedildiğinde üyeye e-posta bildirimi kuyruğa eklenir.
+          </small>
+        </div>
+        <button className="primary" disabled={busy || saving || !changed}>
+          {busy || saving ? "Kaydediliyor…" : "Durumu kaydet ve bildir"}
+        </button>
+        {!changed && (
+          <small className="request-unchanged">
+            Durum veya yanıt değiştiğinde kaydedebilirsin.
+          </small>
         )}
-      </div>
-      <p>{request.description}</p>
-      <small className="muted">
-        {request.platform} · {request.request_type}
-      </small>
-      <div className="form-two">
-        <label className="field">
-          İstek durumu
-          <Select
-            value={status}
-            onChange={(e) => {
-              setStatus(e.target.value);
-              setReply(defaults[e.target.value]);
-            }}
-          >
-            {Object.entries(statuses).map(([v, l]) => (
-              <option key={v} value={v}>
-                {l}
-              </option>
-            ))}
-          </Select>
-        </label>
-        <label className="field">
-          Hazır yanıt
-          <Select
-            defaultValue=""
-            onChange={(e) => {
-              if (e.target.value !== "") {
-                const preset = presets[Number(e.target.value)];
-                setReply(preset[2]);
-                setStatus(preset[1]);
-              }
-              e.target.value = "";
-            }}
-          >
-            <option value="">Bir şablon seç</option>
-            {presets.map(([label], index) => (
-              <option key={label} value={index}>
-                {label}
-              </option>
-            ))}
-          </Select>
-        </label>
-      </div>
-      <Field
-        label="Kullanıcıya gönderilecek yanıt (boşsa duruma uygun varsayılan kullanılır)"
-        textarea
-        rows={4}
-        maxLength={2000}
-        value={reply}
-        onChange={(e) => setReply(e.target.value)}
-      />
-      <div className="request-reply">
-        <strong>E-posta önizlemesi · {statuses[status]}</strong>
-        <p>{reply || defaults[status]}</p>
-        <small>Kaydedildiğinde üyeye durum bildirimi gönderilir.</small>
-      </div>
-      <button className="secondary" disabled={busy}>
-        Durumu kaydet ve bildir
-      </button>
+      </fieldset>
     </form>
   );
 }
