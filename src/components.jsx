@@ -1,10 +1,24 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Gamepad2, Eye, EyeOff } from "lucide-react";
 import { useSession } from "./state";
 export function Cover({ game, detail = false, onSize }) {
   const { nsfw: reveal, showNsfw } = useSession();
   const onReveal = () => showNsfw(true);
   const [failed, setFailed] = useState(false);
+  const [attempt, setAttempt] = useState(0);
+  useEffect(() => {
+    if (!failed || attempt >= 2) return;
+    const timer = setTimeout(
+      () => {
+        setAttempt((v) => v + 1);
+        setFailed(false);
+      },
+      2000 * (attempt + 1),
+    );
+    return () => clearTimeout(timer);
+  }, [failed, attempt]);
+  const imageUrl = new URL(game.cover_image_url, window.location.origin);
+  if (attempt) imageUrl.searchParams.set("utr_retry", String(attempt));
   return (
     <div
       className={
@@ -15,9 +29,9 @@ export function Cover({ game, detail = false, onSize }) {
     >
       {!failed ? (
         <img
-          src={game.cover_image_url}
+          src={imageUrl.href}
           alt={game.is_adult ? "Yetişkin içerik kapağı" : game.title}
-          loading="lazy"
+          loading={detail ? "eager" : "lazy"}
           decoding="async"
           referrerPolicy="no-referrer"
           onLoad={(e) =>

@@ -1,16 +1,23 @@
 <p align="center"><img src="docs/media/utrzone-banner.webp" alt="UTRZONE — Underground Translation & Reworks" width="100%" /></p>
+<p align="center"><strong>Oyunun dilini değiştir. Kendi deneyimini kur.</strong><br />Türkçe yamalar · Ren’Py & Unity modları · Oyuncu topluluğu</p>
+<p align="center"><a href="https://utrzone.haking.tr">Platformu keşfet</a> · <a href="https://utrzone.haking.tr/register">Topluluğa katıl</a> · <a href="https://utrzone.haking.tr/vip">VIP ayrıcalıkları</a></p>
+<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.0-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
 
-# UTRZONE
+## Deneyim
 
-Türkçe oyun yamaları, modlar ve oyuncu topluluğu. **Sürüm 0.10.0** · React / Vite
+UTRZONE, **Underground Translation & Reworks**: Türkçe yama ve modları düzenli bir katalogda bir araya getirir. Kömür grisi ve kırmızı marka kimliği; masaüstü, mobil ve uygulama görünümünde ortak bir deneyim sunar.
 
-[Siteyi keşfet](https://utrzone.haking.tr) · [VIP](https://utrzone.haking.tr/vip) · [Destek](https://buymeacoffee.com/haking)
+| Keşfet | Katıl | Destekle |
+| :--- | :--- | :--- |
+| Aranabilir Ren’Py ve Unity kataloğu | Favoriler, yorumlar ve oyun istekleri | VIP ve UCoin üyelik deneyimi |
+| Otomatik ve elle kontrollü görsel galerisi | E-posta ile doğrulanmış hesaplar | Günlük ödüller ve erken erişim |
+| Açık / koyu tema, yetişkin kapak filtresi | Hesap ve bildirim tercihleri | Reklamsız VIP indirme bağlantıları |
 
-Ren'Py ve Unity kataloğu; çoklu görsel galerisi, favoriler, oyun istekleri, UCoin erken erişim ve rol tabanlı yönetim. Karanlık tema varsayılandır; açık tema ve yetişkin kapak görünürlüğü kullanıcı tarafından seçilir. VIP ve erken erişim izinleri API üzerinde denetlenir.
+Kataloğu gezmek için üyelik gerekmez. Üyelik, rol, VIP ve erken erişim izinleri sunucuda denetlenir.
 
-## Yerel geliştirme
+## Geliştirmeye başla
 
-Node.js 22.12+ gerekir.
+**Node.js 22.12+** kullanın. Bu deponun kökü frontend uygulamasıdır.
 
 ```powershell
 npm ci
@@ -18,9 +25,14 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-.env içindeki VITE_API_URL yerel backend için http://localhost:3001/api olur. Gerçek anahtarları frontend'e koymayın; VITE_ değişkenleri tarayıcıya açıktır.
+| Değişken | Açıklama |
+| :--- | :--- |
+| `VITE_API_URL` | Yerel: `http://localhost:3001/api`; üretim: `https://unlocktr-backend.onrender.com/api` |
+| `VITE_ADMIN_ROUTE_SLUG` | Yönetim girişinin URL parçası; bir güvenlik anahtarı değildir |
 
-## Kontroller
+`VITE_` değişkenleri tarayıcıya açıktır. Veritabanı ve Resend anahtarları yalnız backend ortamında tutulur.
+
+## Doğrulama ve yayın
 
 ```powershell
 npm test
@@ -28,10 +40,12 @@ npm run build
 npm run format:check
 ```
 
-## Cloudflare yayını
+Cloudflare Workers Static Assets: **build** `npm run build`, **çıktı** `dist`, **deploy** `npx wrangler deploy`. Mevcut projenin ayarlarını koruyun. Özel alan adı: **utrzone.haking.tr**.
 
-Depo kökü frontend uygulamasıdır. Build komutu npm run build, çıktı dizini dist. Mevcut Workers Static Assets yayını korunur. Üretim VITE_API_URL değeri https://unlocktr-backend.onrender.com/api; VITE_ADMIN_ROUTE_SLUG varsayılanı founder-console. Özel alan adı utrzone.haking.tr.
+Build, doğrudan açılan uygulama rotaları için HTML girişleri üretir. HTML ile fingerprintli dosyalar farklı önbellek politikaları kullanır. API ayrı bir Render servisinde çalışır; ücretsiz servisin ilk uyanışı gecikebilir.
 
-HTML ve fingerprintli varlıkların önbellek politikaları ayrı uygulanır. Sunucuya doğrudan açılan sayfalar için build gerçek HTML girişlerini üretir. API ve üye izinleri ayrı [backend deposundadır](https://github.com/HaKING06/UnlockTR-Backend). Görseller https://utr.haking.tr üzerinden de sunulabilir.
+## Proje ailesi
 
-[Katkı rehberi](CONTRIBUTING.md) · [Güvenlik](SECURITY.md) · [Topluluk ilkeleri](CODE_OF_CONDUCT.md) · [Lisans](LICENSE)
+[Backend API](https://github.com/HaKING06/UnlockTR-Backend) · [Görsel arşivi](https://github.com/HaKING06/UnlockTR-Images) · [İletişim](mailto:utrzone@haking.tr) · [Destek ol](https://buymeacoffee.com/haking)
+
+[Katkı rehberi](CONTRIBUTING.md) · [Güvenlik bildirimi](SECURITY.md) · [Topluluk ilkeleri](CODE_OF_CONDUCT.md) · [Lisans](LICENSE)

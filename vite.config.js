@@ -72,12 +72,25 @@ export default defineConfig(({ mode }) => {
               "forgot-password": "Şifremi unuttum",
             };
             const title = (titles[route] || "Yönetim merkezi") + " · UTRZONE";
-            const noindex = !["login", "register", "vip"].includes(route);
+            const descriptions = {
+              login:
+                "UTRZONE hesabına giriş yap; favorilerini, VIP üyeliğini ve oyun isteklerini yönet.",
+              register:
+                "UTRZONE topluluğuna katıl. Türkçe oyun yamalarını keşfet, favorilerini kaydet ve oyun isteği oluştur.",
+              vip: "UTRZONE VIP ayrıcalıklarını, reklamsız indirme ve günlük UCoin avantajlarını keşfet.",
+              support:
+                "UTRZONE ile iletişime geç, önerilerini paylaş ve Türkçe yama çalışmalarını destekle.",
+            };
+            const noindex = !Object.hasOwn(descriptions, route);
             const routeShell = ["login", "register"].includes(route)
               ? shell
               : shell.replace(/<link[^>]+rel="preload"[^>]+>/g, "");
             const page = routeShell
               .replace(/<title>.*?<\/title>/s, "<title>" + title + "</title>")
+              .replace(
+                /<meta\s+name="description"\s+content="[^"]*"\s*\/?\s*>/g,
+                `<meta name="description" content="${descriptions[route] || "UTRZONE hesap ve yönetim alanı."}" />`,
+              )
               .replace(
                 "</head>",
                 (noindex

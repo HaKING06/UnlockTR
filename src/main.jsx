@@ -49,7 +49,7 @@ import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
 import "./refinements.css";
-const VERSION = "0.10.0";
+const VERSION = "0.11.0";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UTRZONE ana sayfa">
@@ -57,8 +57,8 @@ function Brand({ compact = false }) {
         className={compact ? "brand-compact" : "brand-wide"}
         src={
           compact
-            ? "/brand/compact.webp?v=0.10.0"
-            : "/brand/horizontal.webp?v=0.10.0"
+            ? "/brand/compact.webp?v=0.11.0"
+            : "/brand/horizontal.webp?v=0.11.0"
         }
         alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
@@ -66,7 +66,7 @@ function Brand({ compact = false }) {
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.webp?v=0.10.0"
+        src="/brand/compact.webp?v=0.11.0"
         alt="UTR · UTRZONE"
         width="190"
         height="36"
@@ -91,7 +91,7 @@ function GameCard({ game }) {
         <Cover game={game} />
         <img
           className="card-brand-bug"
-          src="/brand/mark.webp?v=0.10.0"
+          src="/brand/mark.webp?v=0.11.0"
           alt=""
           width="58"
           height="28"
@@ -157,7 +157,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.webp?v=0.10.0"
+            src="/brand/mark.webp?v=0.11.0"
             alt=""
             width="90"
             height="36"
@@ -715,7 +715,7 @@ function App() {
               <div className="community-visual" aria-hidden="true">
                 <span />
                 <img
-                  src="/brand/mark.webp?v=0.10.0"
+                  src="/brand/mark.webp?v=0.11.0"
                   alt=""
                   width="120"
                   height="50"
