@@ -1,51 +1,16 @@
-<p align="center">
-  <img src="docs/media/utrzone-banner.webp" alt="UTRZONE — Her dünyada kendi dilin." width="100%" />
-</p>
+<p align="center"><img src="docs/media/utrzone-banner.webp" alt="UTRZONE — Underground Translation & Reworks" width="100%" /></p>
 
-<p align="center">
-  <img alt="Version 0.9.0" src="https://img.shields.io/badge/version-0.9.0-dc2626?style=flat-square" />
-  <img alt="Language Turkish" src="https://img.shields.io/badge/language-T%C3%BCrk%C3%A7e-60a5fa?style=flat-square" />
-  <img alt="License All rights reserved" src="https://img.shields.io/badge/license-All_rights_reserved-64748b?style=flat-square" />
-</p>
+# UTRZONE
 
-<p align="center">
-  <a href="https://utrzone.haking.tr"><strong>Siteyi keşfet</strong></a> ·
-  <a href="https://utrzone.haking.tr/vip">VIP</a> ·
-  <a href="https://buymeacoffee.com/haking">Destek ol</a> ·
-  <a href="docs/AI_HANDOFF.md">Küçük görevler için proje notu</a>
-</p>
+Türkçe oyun yamaları, modlar ve oyuncu topluluğu. **Sürüm 0.10.0** · React / Vite
 
-# UTRZONE · Frontend
+[Siteyi keşfet](https://utrzone.haking.tr) · [VIP](https://utrzone.haking.tr/vip) · [Destek](https://buymeacoffee.com/haking)
 
-**Türkçe yamalar, oyun modları ve oyuncu topluluğu.** UTRZONE; oyunları keşfetme, yama indirme, deneyim paylaşma ve yeni oyun isteme akışlarını aynı platformda toplar.
+Ren'Py ve Unity kataloğu; çoklu görsel galerisi, favoriler, oyun istekleri, UCoin erken erişim ve rol tabanlı yönetim. Karanlık tema varsayılandır; açık tema ve yetişkin kapak görünürlüğü kullanıcı tarafından seçilir. VIP ve erken erişim izinleri API üzerinde denetlenir.
 
-> **Mevcut sürüm: 0.9.0.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
+## Yerel geliştirme
 
-## İçindekiler
-
-[Öne çıkanlar](#öne-çıkanlar) · [Hızlı başlangıç](#hızlı-başlangıç) · [Sayfalar](#sayfalar) · [Cloudflare](#cloudflare-dağıtımı) · [Dokümanlar](#dokümanlar) · [Katkı](#katkı-ve-güvenlik)
-
-## Öne çıkanlar
-
-| Oyuncular için | Ekip için |
-|---|---|
-| Ren'Py ve Unity oyunları, TR yama/mod etiketleri | Açıklamalı oyun yayın stüdyosu ve düzenleme |
-| Ayrı URL'de oyun, kurulum ve uyumluluk bilgileri | Rol tabanlı kurucu / yardımcı kurucu / moderatör alanı |
-| Reklamlı standart indirme; VIP alternatifleri | Yorum düzenleme, gizleme ve istek durumları |
-| Kodla e-posta doğrulama ve kalıcı oturum | E-postayla üye arama, rol ve süreli VIP atama |
-| NSFW tercihi, dark/light tema, altı kutulu kod | VIP/istek bildirim kuyruğu ve işlem geçmişi |
-
-VIP üyelik **49 TL/ay** veya **399 TL/yıl** olarak sunulur. Satış [ItemSatış mağazasında](https://www.itemsatis.com/profil/haking06.html), etkinleştirme kurucu tarafından yapılır. Site ödeme bilgisi almaz ve otomatik abonelik başlatmaz. VIP önceliği bir teslim garantisi değildir.
-
-## Teknoloji
-
-**React 19 · Vite 7 · Lucide React · CSS değişkenleri · Cloudflare Static Assets**
-
-Backend ayrı depodadır: [UTRZONE-Backend](https://github.com/HaKING06/UnlockTR-Backend). Frontend sır veya doğrudan veritabanı bağlantısı içermez.
-
-## Hızlı başlangıç
-
-Node.js **22.12+** kullan.
+Node.js 22.12+ gerekir.
 
 ```powershell
 npm ci
@@ -53,107 +18,20 @@ Copy-Item .env.example .env
 npm run dev
 ```
 
-.env içinde yerel API adresini tanımla:
+.env içindeki VITE_API_URL yerel backend için http://localhost:3001/api olur. Gerçek anahtarları frontend'e koymayın; VITE_ değişkenleri tarayıcıya açıktır.
 
-```dotenv
-VITE_API_URL=http://localhost:3001/api
-VITE_ADMIN_ROUTE_SLUG=founder-console
+## Kontroller
+
+```powershell
+npm test
+npm run build
+npm run format:check
 ```
 
-API hazır değilse gerçek bağlantı hatası gösterilir; ürünün içine demo oyun/yorum eklenmez.
+## Cloudflare yayını
 
-| Komut | Amaç |
-|---|---|
-| npm run dev | Yerel geliştirme |
-| npm run build | dist üretim çıktısı |
-| npm run preview | Build önizlemesi |
-| npm run format:check | Biçim kontrolü |
-| npm run format | Kaynak biçimlendirme |
+Depo kökü frontend uygulamasıdır. Build komutu npm run build, çıktı dizini dist. Mevcut Workers Static Assets yayını korunur. Üretim VITE_API_URL değeri https://unlocktr-backend.onrender.com/api; VITE_ADMIN_ROUTE_SLUG varsayılanı founder-console. Özel alan adı utrzone.haking.tr.
 
-## Sayfalar
+HTML ve fingerprintli varlıkların önbellek politikaları ayrı uygulanır. Sunucuya doğrudan açılan sayfalar için build gerçek HTML girişlerini üretir. API ve üye izinleri ayrı [backend deposundadır](https://github.com/HaKING06/UnlockTR-Backend). Görseller https://utr.haking.tr üzerinden de sunulabilir.
 
-| Yol | Amaç |
-|---|---|
-| / | Vitrin, katalog, arama ve filtreler |
-| /game?id=UUID | Oyun, mod kapsamı, indirme ve yorumlar |
-| /login · /register · /verify | Üyelik ve kodla doğrulama |
-| /forgot-password · /account | Hesap kurtarma ve ayarlar |
-| /requests | İstek gönderme ve yanıt geçmişi |
-| /vip · /support | Üyelik ayrıcalıkları ve gönüllü destek |
-| /manage | Yetkiye göre yönetim merkezi |
-| /privacy | Çerez ve hesap depolaması açıklamaları |
-
-Build her sabit yol için gerçek HTML girişi üretir. Workers'ta döngüye neden olan `/* /index.html 200` kuralını ekleme. Yeni sayfa eklenirse vite.config.js girişlerini de güncelle.
-
-## Cloudflare dağıtımı
-
-Bu depo frontend uygulamasının **kendisidir**; Root Directory boş kalır.
-
-| Ayar | Değer |
-|---|---|
-| Build | npm run build |
-| Assets / output | dist |
-| VITE_API_URL | https://unlocktr-backend.onrender.com/api |
-| VITE_ADMIN_ROUTE_SLUG | founder-console veya backend ile aynı alias |
-| Custom domain | utrzone.haking.tr |
-
-VITE değişkenleri build zamanında okunur; değiştirince yeni build gerekir. Worker runtime secret alanı bunun yerine geçmez. DATABASE_URL, RESEND_API_KEY ve JWT_SECRET yalnız backend'dedir. API değişikliğinde önce Render backend, ardından Cloudflare frontend yayınlanır.
-
-## Dokümanlar
-
-| Belge | Ne zaman okunmalı? |
-|---|---|
-| [Kısa proje özeti](docs/AI_HANDOFF.md) | Sınırlı bir bakım işi için gerekli bağlam |
-| [Mimari ve dosya haritası](docs/ARCHITECTURE.md) | Hangi dosyanın ne yaptığını bulmak için |
-| [Görsel brief](docs/VISUAL_BRIEF.md) | Arayüz iyileştirmesi öncesinde |
-| [Hazır AI görev metni](docs/NEXT_AI_PROMPT.md) | Projeyi yeniden anlatmadan görev vermek için |
-| [Kontrol rehberi](docs/VALIDATION.md) | Değişiklik doğrulaması ve yayın sırası |
-| [Kısa bakım notları](docs/MAINTENANCE_NOTES.md) | Son doküman güncellemesinin kapsamı |
-| [0.5.0 yayın notları](RELEASE-0.5.0.md) | Son kod tesliminin ayrıntıları ve sınırları |
-| [Tanıtım görselleri](docs/media/README.md) | README kapağı ve paylaşım afişleri |
-
-## Doğrulama durumu
-
-0.5.0 için backend 13 testi geçti. 390px/768px Playwright kontrolleri mock API ile yapıldı; canlı Resend teslimi ve üretim performansı ölçülmedi.
-
-## Tanıtım ve destek
-
-[PNG yatay kapak](docs/media/utrzone-banner.png) · [PNG kare afiş](docs/media/utrzone-poster.png) · [Buy Me a Coffee](https://buymeacoffee.com/haking)
-
-<p align="center"><img src="docs/media/utrzone-poster.webp" width="360" alt="UTRZONE — Oyunun dilini değiştir. Tanıtım afişi." /></p>
-
-Afişler projeye özel üretilmiş illüstrasyonlardır; canlı ekran görüntüsü veya bir oyunun resmi kapağı değildir. Gönüllü destek otomatik VIP vermez.
-
-## Katkı ve güvenlik
-
-[Katkı rehberi](CONTRIBUTING.md) · [Güvenlik politikası](SECURITY.md) · [Topluluk ilkeleri](CODE_OF_CONDUCT.md) · [Değişiklik geçmişi](CHANGELOG.md)
-
-**Lisans:** [LICENSE](LICENSE) hakları saklı tutar. Açık kaynak lisansı henüz seçilmedi; depoyu görebilmek yeniden dağıtım izni anlamına gelmez.
-
-## 0.5.0 güncellemesi
-
-[UTR kimliği ve yayın adımları](RELEASE-0.5.0.md). Yeni SQL migration veya secret gerekmez. Destek: [utrzone@haking.tr](mailto:utrzone@haking.tr). Kurucu ve yardımcı kurucular yönetimden **Kurumsal e-posta** ekranına erişebilir.
-
-### 0.5.1 · Orijinal marka ikonu
-
-Favicon ve uygulama ikonları kullanıcı marka paftasındaki kare U ikonundan kırpılarak üretildi; yeniden çizilmedi. ICO, PNG, Apple touch icon ve uygulama manifesti eklendi. Manifest çevrimdışı çalışma garantisi içermez; service worker eklenmedi. Backend 0.5.0 olarak kaldı.
-
-## 0.5.2 bakım sürümü
-
-[Hatalar, katalog iyileştirmeleri ve yayın adımları](RELEASE-0.5.2.md). Hesap menüsü katmanı, tam katalog filtreleri, sayfalama, profil kaydı ve yayın stüdyosu düzeltildi. 15 backend testi ve 390px/768px mock UI kontrolleri geçti. Yeni SQL migration veya secret gerekmez.
-
-## 0.6.0 · UCoin ve erken erişim
-
-Önceki sürüm günlük ödüller, erken erişim ve coin cüzdanını getirdi. [Tarihsel yayın notları](RELEASE-0.6.0.md). Proje silme/iade davranışı 0.7.0 ile değiştirilmiştir; güncel kurallar aşağıdaki notlardadır.
-
-## 0.7.0 güncellemesi
-
-Favoriler ve herkese açık sayaçlar; site içi satın alma/işlem onayı; özel proje raporları; kurucu ve yardımcı kurucu için coin geçmişi; tekli/toplu kurumsal e-posta ve bildirim tercihleri. Yeni ortam değişkeni yok. Şema Neon üzerinde hazırlandı; önce backend, sonra frontend yayınlanır. [Kurallar, doğrulama ve yayın notları](RELEASE-0.7.0.md).
-
-## 0.8.0 · UTRZONE
-
-UTRZONE · **Underground Translation & Reworks** (Yeraltı Çeviri & Yeniden Yapımlar). Yeni site: https://utrzone.haking.tr; iletişim: utrzone@haking.tr. Yeni paftadan raster logolar/favicon, güncel e-postalar, mobil istek kartı ve footer. Satılmış projeler de iadesiz kaldırılabilir; indirme erişimi kapanır, satış raporu korunur. [Yayın ayarları ve doğrulama](RELEASE-0.8.0.md). Mevcut Render servis ve GitHub checkout isimleri bağlantı uyumluluğu için değişmedi.
-
-## 0.9.0 · Arayüz ve galeri
-
-Klavye destekli site listeleri, şeffaf logolar, doğru oranlı galeri ve 12 ek görsel; gizli yayın, özel rapor filtreleri ve onaylı kalıcı yorum silme. Açılış + 5 dakikalık API sağlık isteği ve sekme tekrar önleme. 34 backend + 3 frontend testi. [Kurallar, sınırlar ve yayın notları](RELEASE-0.9.0.md).
+[Katkı rehberi](CONTRIBUTING.md) · [Güvenlik](SECURITY.md) · [Topluluk ilkeleri](CODE_OF_CONDUCT.md) · [Lisans](LICENSE)

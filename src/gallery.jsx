@@ -9,6 +9,7 @@ export function GameGallery({ game }) {
     ...new Set([game.cover_image_url, ...(game.gallery_images || [])]),
   ];
   const [index, setIndex] = useState(0);
+  const [sizes, setSizes] = useState({});
   const viewer = useRef(null);
   const selected = images[index] || images[0];
   const restricted = game.is_adult && !nsfw;
@@ -16,11 +17,23 @@ export function GameGallery({ game }) {
     setIndex((i) => (i + step + images.length) % images.length);
   return (
     <section className="game-gallery" aria-label="Oyun görselleri">
-      <div className="gallery-stage">
+      <div
+        className={
+          "gallery-stage " +
+          (sizes[selected]?.width < 960 ? "compact-media" : "")
+        }
+      >
         <Cover
           key={selected}
           game={{ ...game, cover_image_url: selected }}
           detail
+          onSize={(size) =>
+            setSizes((old) =>
+              old[selected]?.width === size.width
+                ? old
+                : { ...old, [selected]: size },
+            )
+          }
         />
         {!restricted && (
           <button

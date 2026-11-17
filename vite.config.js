@@ -87,6 +87,12 @@ export default defineConfig(({ mode }) => {
                     '"/>') + "</head>",
               );
             writeFileSync(resolve(directory, route + ".html"), page);
+            const headerPath = resolve(directory, "_headers");
+            writeFileSync(
+              headerPath,
+              readFileSync(headerPath, "utf8") +
+                `\n/${route}\n  Cache-Control: no-store\n`,
+            );
           }
         },
       },

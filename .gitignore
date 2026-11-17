@@ -6,3 +6,12 @@ dist/
 *.log
 .playwright-mcp/
 preview-*.png
+
+# Local planning, validation and detailed release history (not public repository content)
+/RELEASE-*.md
+/CHANGELOG.md
+/AGENTS.md
+/DEPLOYMENT.md
+/docs/*.md
+/docs/local/
+/public/brand/README.md

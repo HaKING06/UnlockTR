@@ -1,3 +1,4 @@
+import { useClientNavigation, navigate } from "./navigation";
 import { Select } from "./select";
 import { FavoritesPage, FavoriteButton } from "./social-ui";
 import { StaffReports } from "./staff-reports";
@@ -48,7 +49,7 @@ import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
 import "./refinements.css";
-const VERSION = "0.9.0";
+const VERSION = "0.10.0";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UTRZONE ana sayfa">
@@ -56,8 +57,8 @@ function Brand({ compact = false }) {
         className={compact ? "brand-compact" : "brand-wide"}
         src={
           compact
-            ? "/brand/compact.webp?v=0.9.0"
-            : "/brand/horizontal.webp?v=0.9.0"
+            ? "/brand/compact.webp?v=0.10.0"
+            : "/brand/horizontal.webp?v=0.10.0"
         }
         alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
@@ -65,7 +66,7 @@ function Brand({ compact = false }) {
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.webp?v=0.9.0"
+        src="/brand/compact.webp?v=0.10.0"
         alt="UTR · UTRZONE"
         width="190"
         height="36"
@@ -90,7 +91,7 @@ function GameCard({ game }) {
         <Cover game={game} />
         <img
           className="card-brand-bug"
-          src="/brand/mark.webp?v=0.9.0"
+          src="/brand/mark.webp?v=0.10.0"
           alt=""
           width="58"
           height="28"
@@ -156,7 +157,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.webp?v=0.9.0"
+            src="/brand/mark.webp?v=0.10.0"
             alt=""
             width="90"
             height="36"
@@ -171,6 +172,7 @@ function Skeletons() {
   );
 }
 function App() {
+  const routeKey = useClientNavigation(ADMIN);
   const { token, user, nsfw, showNsfw, logout } = useSession();
   const [theme, setTheme] = useState(getTheme),
     [games, setGames] = useState(() =>
@@ -252,14 +254,23 @@ function App() {
         if (e.name !== "AbortError") setStatus("error");
       });
     return () => controller.abort();
-  }, [search, page, retry, filter, engine]);
+  }, [search, page, retry, filter, engine, routeKey]);
+  useEffect(() => {
+    if (location.pathname === "/") {
+      const type = new URLSearchParams(location.search).get("type");
+      if (["patch", "mod"].includes(type)) {
+        setFilter(type);
+        setPage(1);
+      }
+    }
+  }, [routeKey]);
   const shown = games.filter(
     (g) =>
       (engine === "all" || g.engine === engine) &&
       (filter === "all" || (filter === "patch" ? g.has_tr_patch : g.has_mod)),
   );
   const request = () => {
-    location.href = user ? "/requests" : "/login?next=%2Frequests";
+    navigate(user ? "/requests" : "/login?next=%2Frequests");
   };
   const routePath = location.pathname.replace(/\/$/, "");
   const adminPage = routePath === "/" + ADMIN || routePath === "/manage";
@@ -302,7 +313,7 @@ function App() {
     ) : null;
   function category(value) {
     if (location.pathname !== "/") {
-      location.href = "/?type=" + value + "#library";
+      navigate("/?type=" + value + "#library");
       return;
     }
     setPage(1);
@@ -432,7 +443,8 @@ function App() {
         </header>
       </div>
       <main id="main">
-        {routeContent || (
+        {(routeContent &&
+          React.cloneElement(routeContent, { key: routeKey })) || (
           <>
             <div className="page-intro">
               <p>
@@ -703,7 +715,7 @@ function App() {
               <div className="community-visual" aria-hidden="true">
                 <span />
                 <img
-                  src="/brand/mark.webp?v=0.9.0"
+                  src="/brand/mark.webp?v=0.10.0"
                   alt=""
                   width="120"
                   height="50"

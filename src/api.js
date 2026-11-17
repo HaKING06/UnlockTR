@@ -1,3 +1,4 @@
+import { requestWithRetry } from "./request";
 const API = (
   import.meta.env.VITE_API_URL ||
   (import.meta.env.DEV
@@ -7,7 +8,7 @@ const API = (
 export const ADMIN = import.meta.env.VITE_ADMIN_ROUTE_SLUG || "founder-console";
 export const engines = ["Ren'Py", "Unity"];
 export async function api(path, { token, body, method = "GET", signal } = {}) {
-  const res = await fetch(API + path, {
+  const res = await requestWithRetry(API + path, {
     method,
     signal,
     headers: {

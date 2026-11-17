@@ -467,3 +467,39 @@
     margin: 0;
   }
 }
+
+/* 0.10: small artwork gets a fitted frame, never a wide empty letterbox. */
+.gallery-stage.compact-media {
+  width: fit-content;
+  max-width: 100%;
+  margin-inline: auto;
+}
+.gallery-stage.compact-media .cover.detail-cover {
+  min-height: 0;
+}
+.compact-media .gallery-expand {
+  position: static;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid var(--line);
+  border-radius: 0;
+  justify-content: center;
+  padding: 11px;
+}
+.gallery-url-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 6px;
+  padding: 14px 0;
+  border-top: 1px solid var(--line);
+}
+.gallery-row-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 7px;
+}
+#main:focus {
+  outline: none;
+}

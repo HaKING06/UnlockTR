@@ -1,3 +1,4 @@
+import { reorderImages, promoteCover } from "./gallery-order";
 import { Select } from "./select";
 import { useConfirm } from "./confirm-dialog";
 import { GameDelete } from "./game-delete";
@@ -11,6 +12,8 @@ import {
   Eye,
   Crown,
   FileText,
+  ArrowUp,
+  ArrowDown,
 } from "lucide-react";
 import { api, engines } from "./api";
 import { useSession } from "./state";
@@ -155,7 +158,7 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
     }
   }
   return (
-    <section className="game-editor">
+    <section className="game-editor" data-unsaved={dirty ? "true" : "false"}>
       <div className="section-head">
         <div>
           <p className="eyebrow">YAYIN STÜDYOSU</p>
@@ -260,18 +263,76 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                           )
                         }
                       />
-                      <button
-                        type="button"
-                        className="text-danger"
-                        onClick={() =>
-                          change(
-                            "gallery_images",
-                            draft.gallery_images.filter((_, i) => i !== index),
-                          )
-                        }
-                      >
-                        Kaldır
-                      </button>
+                      <div className="gallery-row-actions">
+                        <button
+                          type="button"
+                          className="secondary small-button"
+                          aria-label={`${index + 1}. görseli yukarı taşı`}
+                          disabled={index === 0}
+                          onClick={() =>
+                            change(
+                              "gallery_images",
+                              reorderImages(
+                                draft.gallery_images,
+                                index,
+                                index - 1,
+                              ),
+                            )
+                          }
+                        >
+                          <ArrowUp size={14} /> Yukarı
+                        </button>
+                        <button
+                          type="button"
+                          className="secondary small-button"
+                          aria-label={`${index + 1}. görseli aşağı taşı`}
+                          disabled={index === draft.gallery_images.length - 1}
+                          onClick={() =>
+                            change(
+                              "gallery_images",
+                              reorderImages(
+                                draft.gallery_images,
+                                index,
+                                index + 1,
+                              ),
+                            )
+                          }
+                        >
+                          <ArrowDown size={14} /> Aşağı
+                        </button>
+                        <button
+                          type="button"
+                          className="secondary small-button"
+                          disabled={!url}
+                          onClick={() => {
+                            setDirty(true);
+                            setDraft((d) => ({
+                              ...d,
+                              ...promoteCover(
+                                d.cover_image_url,
+                                d.gallery_images,
+                                index,
+                              ),
+                            }));
+                          }}
+                        >
+                          Kapak yap
+                        </button>
+                        <button
+                          type="button"
+                          className="text-danger"
+                          onClick={() =>
+                            change(
+                              "gallery_images",
+                              draft.gallery_images.filter(
+                                (_, i) => i !== index,
+                              ),
+                            )
+                          }
+                        >
+                          Kaldır
+                        </button>
+                      </div>
                     </div>
                   ))}
                   <button
