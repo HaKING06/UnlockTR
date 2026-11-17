@@ -38,7 +38,7 @@ import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.5.0";
+const VERSION = "0.5.1";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">

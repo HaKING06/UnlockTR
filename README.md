@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version 0.5.0" src="https://img.shields.io/badge/version-0.5.0-8b5cf6?style=flat-square" />
+  <img alt="Version 0.5.1" src="https://img.shields.io/badge/version-0.5.1-8b5cf6?style=flat-square" />
   <img alt="Language Turkish" src="https://img.shields.io/badge/language-T%C3%BCrk%C3%A7e-60a5fa?style=flat-square" />
   <img alt="License All rights reserved" src="https://img.shields.io/badge/license-All_rights_reserved-64748b?style=flat-square" />
 </p>
@@ -19,7 +19,7 @@
 
 **Türkçe yamalar, oyun modları ve oyuncu topluluğu.** UnlockTR; oyunları keşfetme, yama indirme, deneyim paylaşma ve yeni oyun isteme akışlarını aynı platformda toplar.
 
-> **Mevcut sürüm: 0.5.0.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
+> **Mevcut sürüm: 0.5.1.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
 
 ## İçindekiler
 
@@ -133,3 +133,7 @@ Afişler projeye özel üretilmiş illüstrasyonlardır; canlı ekran görüntü
 ## 0.5.0 güncellemesi
 
 [UTR kimliği ve yayın adımları](RELEASE-0.5.0.md). Yeni SQL migration veya secret gerekmez. Destek: [unlocktr@haking.tr](mailto:unlocktr@haking.tr). Kurucu ve yardımcı kurucular yönetimden **Kurumsal e-posta** ekranına erişebilir.
+
+### 0.5.1 · Orijinal marka ikonu
+
+Favicon ve uygulama ikonları kullanıcı marka paftasındaki kare U ikonundan kırpılarak üretildi; yeniden çizilmedi. ICO, PNG, Apple touch icon ve uygulama manifesti eklendi. Manifest çevrimdışı çalışma garantisi içermez; service worker eklenmedi. Backend 0.5.0 olarak kaldı.
