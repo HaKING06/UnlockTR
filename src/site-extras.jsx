@@ -76,9 +76,31 @@ export function SupportPage() {
     <section className="support-page">
       <PageHeader
         eyebrow="BİRLİKTE DAHA FAZLASI"
-        title="Bir kahve, yeni bir hikâye."
-        description="UnlockTR'nin çeviri ve mod çalışmalarına destek ol."
+        title="Birlikte daha iyi bir UnlockTR."
+        description="Bir sorunun mu var, bir fikrin mi? Seni dinliyoruz. Topluluğun katkısıyla daha iyi bir yama platformu kuruyoruz."
       />
+      <div className="panel contact-support">
+        <span className="eyebrow">DESTEK & GERİ BİLDİRİM</span>
+        <h2>Burada ne görmek istersin?</h2>
+        <p>
+          Yeni bir özellik, daha iyi bir oyun deneyimi veya karşılaştığın bir
+          sorun… Fikrini bizimle paylaş. Oyun taleplerini takip edebilmemiz için
+          oyun isteği sayfasını kullanabilirsin.
+        </p>
+        <a
+          className="primary"
+          href="mailto:unlocktr@haking.tr?subject=UnlockTR%20Destek"
+        >
+          unlocktr@haking.tr · Bize yaz
+        </a>
+        <a className="secondary" href="/requests">
+          Oyun isteği oluştur
+        </a>
+        <p className="muted small">
+          Hata bildirirken oyun adını, cihazını ve karşılaştığın durumu belirt.
+          Şifreni veya doğrulama kodunu paylaşma.
+        </p>
+      </div>
       <div className="support-grid">
         <article className="panel support-card">
           <Coffee size={43} />
@@ -129,6 +151,12 @@ export function PrivacyPage() {
         90 güne ulaşan oturum yeniden giriş ister. Çıkış, şifre sıfırlama ve
         hesap silme mevcut oturumları geçersiz kılar. Ortak bilgisayarda işin
         bitince çıkış yap.
+      </p>
+      <h2>Kütüphane önbelleği</h2>
+      <p>
+        Daha hızlı açılış için yalnızca herkese açık oyun listesi bu cihazda en
+        fazla 24 saat saklanır. Site açıldığında liste yenilenir. VIP indirme
+        adresleri bu önbelleğe dahil değildir.
       </p>
       <h2>Tercihlerin</h2>
       <p>

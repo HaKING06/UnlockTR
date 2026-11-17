@@ -26,7 +26,7 @@ Türkçe metin, dark/light tema, klavye odağı, NSFW tercihi ve prefers-reduced
 - Değişen alanı, kontrol sonucunu ve doğrulanmamış canlı davranışı belirt.
 - UI değişikliğinde kişisel veri içermeyen ilgili ekran görüntüsünü ekle.
 - Mock API sonuçlarını gerçek servis testinden ayır.
-- Kullanıcı açıkça sabit sürüm istediyse sürümü koru; bu doküman teslimi 0.4.0'da kalır.
+- Kullanıcı açıkça sabit sürüm istediyse sürümü koru; bu doküman teslimi 0.5.0'da kalır.
 - Lisansı, rol kararlarını, VIP fiyatını veya ödeme modelini ayrıca yetki verilmeden değiştirme.
 
 İş akışı şablonları .github altında bulunur. Güvenlik açığı için açık issue'ya hassas ayrıntı koyma; SECURITY.md rehberini izle.

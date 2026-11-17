@@ -1,3 +1,4 @@
+import { MailPage } from "./mail-page";
 import { CookieNotice, SupportPage, PrivacyPage } from "./site-extras";
 import { RequestPage } from "./request-page";
 import { preferencesAllowed } from "./consent";
@@ -35,19 +36,26 @@ import { AuthPage, VerifyPage } from "./auth-pages";
 import { AccountPage, GamePage, VipPage } from "./member-pages";
 import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession } from "./state";
-import { api, ADMIN, engines } from "./api";
+import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.4.0";
-function Brand() {
+const VERSION = "0.5.0";
+function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
-      <span className="brand-icon">
-        <Gamepad2 size={24} strokeWidth={2.4} />
-      </span>
-      <span>
-        unlock<span className="brand-tr">TR</span>
-        <small>OYUNUN SINIRLARINI KALDIR</small>
-      </span>
+      <img
+        className={compact ? "brand-compact" : "brand-wide"}
+        src={compact ? "/brand/compact.svg" : "/brand/horizontal.svg"}
+        alt="UTR · UnlockTR Mods & Patches"
+        width={compact ? 240 : 290}
+        height="48"
+      />
+      <img
+        className="brand-mobile"
+        src="/brand/compact.svg"
+        alt="UTR · UnlockTR"
+        width="190"
+        height="36"
+      />
     </a>
   );
 }
@@ -66,6 +74,13 @@ function GameCard({ game }) {
     <article className="game-card">
       <div className="card-art">
         <Cover game={game} />
+        <img
+          className="card-brand-bug"
+          src="/brand/mark.webp"
+          alt=""
+          width="58"
+          height="28"
+        />
         {(!game.is_adult || reveal) && (
           <div className="card-image-label">
             <span>{game.engine}</span>
@@ -113,6 +128,13 @@ function Skeletons() {
     <div className="game-grid" role="status" aria-label="Oyunlar yükleniyor">
       {[1, 2, 3].map((i) => (
         <div className="skeleton-card" key={i}>
+          <img
+            className="loading-mark"
+            src="/brand/mark.svg"
+            alt=""
+            width="90"
+            height="36"
+          />
           <div />
           <span />
           <span />
@@ -125,7 +147,7 @@ function Skeletons() {
 function App() {
   const { token, user, nsfw, showNsfw, logout } = useSession();
   const [theme, setTheme] = useState(getTheme),
-    [games, setGames] = useState([]),
+    [games, setGames] = useState(() => readCatalog()?.games || []),
     [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
     [filter, setFilter] = useState(() =>
@@ -147,6 +169,7 @@ function App() {
     } catch {}
   }, [theme]);
   useEffect(() => {
+    if (location.pathname !== "/") return;
     const controller = new AbortController();
     setStatus("loading");
     api("/games?q=" + encodeURIComponent(search) + "&page=" + page, {
@@ -154,6 +177,7 @@ function App() {
     })
       .then((d) => {
         setGames((g) => (page === 1 ? d.games : [...g, ...d.games]));
+        if (page === 1 && !search) saveCatalog(d);
         setMore(d.has_more);
         setStatus("ready");
       })
@@ -176,7 +200,9 @@ function App() {
     routePath === "/verify" ||
     (routePath === "" && new URLSearchParams(location.search).has("token"));
   const routeContent =
-    routePath === "/requests" ? (
+    routePath === "/mail" ? (
+      <MailPage />
+    ) : routePath === "/requests" ? (
       <RequestPage />
     ) : routePath === "/support" ? (
       <SupportPage />
@@ -233,7 +259,7 @@ function App() {
               Modlar
             </button>
             <a href="/support" className="support-nav">
-              Destek ol
+              Destek
             </a>
             <button onClick={request}>
               İstek oyun
@@ -286,6 +312,9 @@ function App() {
                       <ShieldCheck size={14} />
                       Yönetim merkezi
                     </a>
+                  )}
+                  {user.permissions.manage_games && (
+                    <a href="/mail">Kurumsal e-posta</a>
                   )}
                   <button onClick={() => logout().catch(() => {})}>
                     <LogOut size={14} />
@@ -410,6 +439,23 @@ function App() {
                   En yeni eklenenler
                 </span>
               </div>
+              {status === "loading" && (
+                <p className="catalog-progress" role="status">
+                  Kütüphane güncelleniyor…{" "}
+                  {games.length > 0
+                    ? "Son görüntülenen oyunlar aşağıda."
+                    : "Oyunları senin için hazırlıyoruz."}
+                </p>
+              )}
+              {status === "error" && games.length > 0 && (
+                <p className="notice" role="status">
+                  Son görüntülenen kütüphane gösteriliyor. Güncel bilgiler için{" "}
+                  <button onClick={() => setRetry((r) => r + 1)}>
+                    tekrar dene
+                  </button>
+                  .
+                </p>
+              )}
               <div className="toolbar">
                 <div className="tabs" aria-label="İçerik türü">
                   {[
@@ -467,7 +513,7 @@ function App() {
                   </div>
                 </div>
               </div>
-              {status === "error" ? (
+              {status === "error" && games.length === 0 ? (
                 <div className="empty">
                   <div className="empty-icon">
                     <WifiOff size={28} />
@@ -487,7 +533,7 @@ function App() {
                     Tekrar dene
                   </button>
                 </div>
-              ) : status === "loading" && page === 1 ? (
+              ) : status === "loading" && page === 1 && games.length === 0 ? (
                 <Skeletons />
               ) : shown.length === 0 ? (
                 <div className="empty">
@@ -541,7 +587,7 @@ function App() {
             <section className="community">
               <div className="community-visual" aria-hidden="true">
                 <span />
-                <Gamepad2 size={64} strokeWidth={1.2} />
+                <img src="/brand/mark.svg" alt="" width="120" height="50" />
                 <Plus size={17} />
               </div>
               <div className="community-copy">
@@ -563,7 +609,7 @@ function App() {
       </main>
       <footer>
         <div className="footer-main">
-          <Brand />
+          <Brand compact />
           <p>
             Her oyunda yeni bir dünya.
             <br />
@@ -571,10 +617,13 @@ function App() {
           </p>
           <div className="footer-links">
             <a href="/#library">Kütüphane</a>
-            <a href="/login">Giriş yap</a>
-            <a href="/register">Hesap oluştur</a>
+            {user ? (
+              <a href="/account">Hesabım</a>
+            ) : (
+              <a href="/login">Topluluğa katıl</a>
+            )}
             <a href="/vip">VIP</a>
-            <a href="/support">Destek ol</a>
+            <a href="/support">Destek & iletişim</a>
             <button
               onClick={() =>
                 window.dispatchEvent(new Event("unlocktr-cookie-settings"))

@@ -66,6 +66,30 @@ export function AccountPage() {
               </span>
             )}
           </div>
+          <section className="panel identity-panel">
+            <span className="eyebrow">UNLOCKTR KİMLİĞİN</span>
+            <h2>{roleLabel[s.user.role]} olarak buradasın.</h2>
+            <p className="muted">
+              {
+                {
+                  founder:
+                    "Tüm yönetim araçlarına, ekip rollerine ve VIP atamalarına erişebilirsin.",
+                  cofounder:
+                    "Oyunları yayınlayabilir, yorumları ve oyun isteklerini yönetebilirsin.",
+                  moderator:
+                    "Topluluk yorumlarını düzenleyebilir ve uygunsuz yorumları gizleyebilirsin.",
+                  member:
+                    "Oyunları keşfedebilir, yorum paylaşabilir ve oyun isteği oluşturabilirsin.",
+                }[s.user.role]
+              }
+            </p>
+            <div className="tags">
+              <span>E-posta doğrulandı</span>
+              <span>
+                {s.user.vip.active ? "VIP erişimi etkin" : "Standart üyelik"}
+              </span>
+            </div>
+          </section>
           <Notice>{message}</Notice>
           <div className="settings-grid">
             <section className="panel">
@@ -293,6 +317,29 @@ export function GamePage() {
       setBusy(false);
     }
   }
+  async function moderate(event, item, hide = false) {
+    event.preventDefault();
+    setBusy(true);
+    try {
+      const body = hide
+        ? undefined
+        : {
+            body: new FormData(event.currentTarget).get("body"),
+            is_deleted: false,
+          };
+      await api("/admin/comments/" + item.id, {
+        token: s.token,
+        method: hide ? "DELETE" : "PATCH",
+        body,
+      });
+      setComments(await api("/games/" + id + "/comments"));
+      setMessage(hide ? "Yorum gizlendi." : "Yorum güncellendi.");
+    } catch (error) {
+      setMessage(error.message);
+    } finally {
+      setBusy(false);
+    }
+  }
   async function vip() {
     setBusy(true);
     try {
@@ -466,6 +513,35 @@ export function GamePage() {
               {c.edited_at && <span className="muted small">Düzenlendi</span>}
             </div>
             <p>{c.body}</p>
+            {s.user?.permissions.moderate_comments && (
+              <details className="inline-moderation">
+                <summary>Yorumu yönet · Yetkili işlem</summary>
+                <form onSubmit={(e) => moderate(e, c)}>
+                  <Field
+                    label="Yorum metni"
+                    textarea
+                    name="body"
+                    defaultValue={c.body}
+                    maxLength={2000}
+                    required
+                    rows={3}
+                  />
+                  <div className="moderation-actions">
+                    <button className="secondary" disabled={busy}>
+                      Değişiklikleri kaydet
+                    </button>
+                    <button
+                      type="button"
+                      className="danger-button"
+                      disabled={busy}
+                      onClick={(e) => moderate(e, c, true)}
+                    >
+                      Yorumu gizle
+                    </button>
+                  </div>
+                </form>
+              </details>
+            )}
           </article>
         ))}
         {s.user ? (

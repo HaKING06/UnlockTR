@@ -7,8 +7,9 @@
 - Paketler, kaynaklar ve public varlıklar frontend deposuna kopyalanır; `.env`, node_modules, dist, test ekran görüntüleri ve `.git` kopyalanmaz.
 - Geniş UI değişikliklerini 390px ve 768px ile doğrula; mock API kontrollerini canlı backend testlerinden açıkça ayır.
 
-## AI devralma belgeleri
+## Küçük görevlerde kapsam
 
-- Önce docs/AI_HANDOFF.md ve docs/ARCHITECTURE.md dosyalarını oku.
-- Görsel görevde docs/VISUAL_BRIEF.md; hazır görev metni docs/NEXT_AI_PROMPT.md içindedir.
-- Son doküman/afiş teslimi sürümü 0.4.0 olarak korur; runtime veya lisans değişikliği içermez.
+- Proje başka bir AI'a devredilmiyor. Ana geliştirme mevcut kullanıcı/Codex akışında sürer.
+- Yardımcı AI yalnız kullanıcının belirttiği küçük, sınırları belli işi yapmalı; kendi başına yeniden tasarım, mimari göç veya geniş sürüm çalışması başlatmamalı.
+- Güncel sürüm 0.5.0. UTR grafit/kırmızı kimliği ve rol denetimleri korunmalı.
+- İlgili dosyalar için docs/ARCHITECTURE.md ve görsel görevde docs/VISUAL_BRIEF.md referanstır.

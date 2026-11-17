@@ -6,7 +6,7 @@ UnlockTR'yi profesyonel bir oyun yama/mod platformu olarak geliştirmek. Steam/N
 
 ## Korunacak kimlik
 
-- Midnight/navy yüzeyler, elektrik moru ve soğuk mavi vurgular; VIP için ölçülü altın.
+- Grafit #111111 yüzeyler, kan kırmızısı #dc2626 vurgular, metalik gümüş UTR markası; VIP için ölçülü altın.
 - Sinematik portal görseli, kontrollü ışık, okunabilir tipografi, geniş fakat işlevsel boşluklar.
 - Dark varsayılan, light destekli. Renkler src/style.css içindeki CSS değişkenlerinden yönetilir.
 - Türkçe arayüz ve doğru Türkçe karakterler. Sahte istatistik, geri sayım veya gerçek olmayan yorum ekleme.
@@ -36,4 +36,4 @@ UnlockTR'yi profesyonel bir oyun yama/mod platformu olarak geliştirmek. Steam/N
 
 ## Görseller
 
-README afişleri docs/media içindedir; bunlar ürünün gerçek ekran görüntüsü değildir ve mevcut public/images/unlocktr-world.webp dosyasını değiştirmez. Yeni görsellerde telifli oyun karakterleri, doğrulanmamış hizmet vaatleri ve sürüm/fiyat gibi hızla eskiyen metinlerden kaçın.
+README afişleri docs/media içindedir; bunlar ürünün gerçek ekran görüntüsü değildir ve mevcut public/images/utr-world.webp dosyasından ayrı tanıtım varlıklarıdır. Yeni görsellerde telifli oyun karakterleri, doğrulanmamış hizmet vaatleri ve sürüm/fiyat gibi hızla eskiyen metinlerden kaçın.

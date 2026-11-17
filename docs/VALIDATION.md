@@ -17,7 +17,7 @@ npm ci
 npm test
 ```
 
-PGlite + Supertest testleri gerçek Neon veya Resend teslim testi değildir. Son 0.4.0 kod tesliminde 12 test geçti. Migration: önce geçici Neon branch/test DB, sonra kontrollü canlı geçiş. Gerçek DATABASE_URL ve anahtarları dosya/çıktıda paylaşma.
+PGlite + Supertest testleri gerçek Neon veya Resend teslim testi değildir. 0.5.0 tesliminde 13 test geçti. Migration: önce geçici Neon branch/test DB, sonra kontrollü canlı geçiş. Gerçek DATABASE_URL ve anahtarları dosya/çıktıda paylaşma.
 
 ## Yayın sırası
 
@@ -29,4 +29,4 @@ PGlite + Supertest testleri gerçek Neon veya Resend teslim testi değildir. Son
 
 ## Sürüm ve raporlama
 
-Bu doküman/afiş teslimi 0.4.0 sürümünü korur; paket ve uygulama davranışı değişmez. Sonraki gerçek kod tesliminde kullanıcı talimatına uygun sürüm kararı ver. Test etmediğin canlı davranışı başarılı gibi sunma. Güvenlik/erişilebilirlik/Google sıralaması için kanıtsız garanti verme.
+Güncel uygulama sürümü 0.5.0. Bu sürüm yeni schema migration gerektirmez. Sonraki gerçek kod tesliminde kullanıcı talimatına uygun sürüm kararı ver. Test etmediğin canlı davranışı başarılı gibi sunma. Güvenlik/erişilebilirlik/Google sıralaması için kanıtsız garanti verme.

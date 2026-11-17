@@ -1,5 +1,9 @@
 # Frontend changelog
 
+## 0.5.0 · 2026-11-17
+
+UTR kırmızı/grafit kimliği, responsive marka varlıkları, giriş yönlendirmesi, erken API uyandırma ve katalog önbelleği, oyun sayfasında yorum yönetimi, istek yanıt önizlemeleri, destek iletişimi ve yetkili kurumsal e-posta stüdyosu. Ayrıntılar: [0.5.0 yayın notları](RELEASE-0.5.0.md).
+
 ## 0.4.0 — 2026-11-17
 
 ### Dokümantasyon bakımı · sürüm korunmuştur

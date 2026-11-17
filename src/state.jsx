@@ -134,9 +134,12 @@ export function SessionProvider({ children }) {
   );
 }
 export const useSession = () => useContext(SessionContext);
-export function nextPath(fallback = "/account") {
+export function nextPath(fallback = "/") {
   const next = new URLSearchParams(location.search).get("next");
-  return next?.startsWith("/") && !next.startsWith("//") && !next.includes("\\")
+  return next?.startsWith("/") &&
+    !next.startsWith("//") &&
+    !next.includes("\\") &&
+    !/^\/(login|register|verify)(?:[/?#]|$)/.test(next)
     ? next
     : fallback;
 }

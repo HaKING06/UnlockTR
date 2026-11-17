@@ -1,4 +1,4 @@
-# Mimari · 0.4.0
+# Mimari · 0.5.0
 
 ```mermaid
 flowchart LR
@@ -64,3 +64,10 @@ users, games, comments, requests; email_verifications (eski link uyumluluğu), a
 Frontend ve backend ayrı depodur. API önce, frontend sonra yayınlanır. Üretim sırları yalnız Render'dadır. Workers static assets dağıtımı yapıldığından Pages varsayımlarını körlemesine uygulama. CORS tek FRONTEND_URL origin'ine bağlıdır.
 
 Kuyruk aynı Node sürecinde 30 saniyelik taramayla çalışır. SKIP LOCKED, en fazla 5 deneme ve sabit idempotency anahtarı kullanır. Sent sağlayıcının kabulünü ifade eder; inbox teslim webhook'u yoktur. Uyuyan Render süreci bildirimleri geciktirebilir. Rate limit tek instance belleğindedir. Harici VIP URL paylaşımını önleyen DRM bulunmaz.
+
+## 0.5.0 ekleri
+
+- frontend/src/mail-page.jsx: yalnız kurucu ve yardımcı kurucu için /mail ekranı. backend POST /api/admin/mail: manage_games izni, kullanıcı başına 20/saat ve mevcut outbox.
+- backend/src/mail-layout.js: tüm e-postalar için kaçışlanmış içerik taşıyan ortak kurumsal HTML çerçevesi.
+- public/brand: responsive SVG, WebP marka izi ve e-posta için PNG. public/warmup.js build sırasında VITE_API_URL ile üretilir.
+- src/api.js: yalnız herkese açık katalog için 24 saat yerel önbellek; açılışta tekrar doğrulama.

@@ -1,0 +1,1 @@
+if (location.hostname !== "localhost" && location.hostname !== "127.0.0.1") fetch("https://unlocktr-backend.onrender.com/api/health", {cache:"no-store", signal:AbortSignal.timeout(90000)}).catch(function(){});

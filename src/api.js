@@ -25,3 +25,26 @@ export async function api(path, { token, body, method = "GET", signal } = {}) {
   }
   return data;
 }
+
+// Only public catalog data is cached: never member details or VIP URLs.
+const CATALOG_KEY = "unlocktr-public-catalog-v1";
+export function readCatalog() {
+  try {
+    const item = JSON.parse(localStorage.getItem(CATALOG_KEY) || "null");
+    return item &&
+      Date.now() - item.savedAt < 24 * 60 * 60 * 1000 &&
+      Array.isArray(item.data?.games)
+      ? item.data
+      : null;
+  } catch {
+    return null;
+  }
+}
+export function saveCatalog(data) {
+  try {
+    localStorage.setItem(
+      CATALOG_KEY,
+      JSON.stringify({ savedAt: Date.now(), data }),
+    );
+  } catch {}
+}

@@ -166,16 +166,40 @@ export function RequestPage() {
 export function RequestReview({ request, busy, onSave }) {
   const [status, setStatus] = useState(request.status),
     [reply, setReply] = useState(request.admin_reply || "");
-  const presets = {
-    no_time:
-      "Şu an bu oyun için uygun bir çalışma takvimi oluşturamıyoruz. İleride tekrar istekte bulunabilirsin.",
-    no_copy:
-      "Oyunun kullanılabilir bir kopyası elimizde yok. Uygun bir sürüme eriştiğimizde tekrar değerlendirebiliriz.",
-    technical:
-      "Mevcut sürümde teknik uyumluluk sorunu var. Uygun bir araç veya sürüm bulunduğunda tekrar değerlendirebiliriz.",
+  const defaults = {
+    pending:
+      "İsteğin sıraya alındı. Ekip kapasitesine göre tekrar ele alınacak; durum değiştiğinde seni bilgilendireceğiz.",
+    reviewing:
+      "İsteğini inceliyoruz. Oyun sürümünü, teknik uygunluğunu ve çalışma kapsamını değerlendiriyoruz. Henüz yayın tarihi veya çalışma onayı verilmedi.",
     preparing:
-      "Güzel haber! İsteğin için hazırlık aşamasına geçtik. Hazır olduğunda paylaşacağız.",
+      "İsteğin uygun bulundu ve hazırlık aşamasına alındı. Gerekli dosyalar ve çalışma planı hazırlanıyor.",
+    completed:
+      "Çalışma tamamlandı. Güncel içerikleri oyun kütüphanemizde inceleyebilirsin.",
+    declined:
+      "Şu an bu oyun için uygun bir çalışma takvimi oluşturamıyoruz. İleride tekrar istekte bulunabilirsin.",
   };
+  const presets = [
+    ["Sırada · Ekip kapasitesi bekleniyor", "pending", defaults.pending],
+    ["İnceleme · Sürüm ve uygunluk kontrolü", "reviewing", defaults.reviewing],
+    [
+      "İnceleme · Ek bilgi gerekli",
+      "reviewing",
+      "Tam oyun adı, sürüm ve resmî oyun bağlantısıyla destek sayfamızdan bize ulaşabilirsin.",
+    ],
+    ["Hazırlık · Çalışma planlanıyor", "preparing", defaults.preparing],
+    ["Tamamlandı · Kütüphaneyi kontrol et", "completed", defaults.completed],
+    ["Uygun değil · Zaman ayıramıyoruz", "declined", defaults.declined],
+    [
+      "Uygun değil · Oyun elimizde yok",
+      "declined",
+      "Oyunun kullanılabilir kopyası elimizde yok. Uygun sürüme eriştiğimizde tekrar değerlendirebiliriz.",
+    ],
+    [
+      "Uygun değil · Teknik uyumsuzluk",
+      "declined",
+      "Mevcut sürümde teknik uyumluluk sorunu var. Uygun araç veya sürüm bulunduğunda yeniden değerlendirebiliriz.",
+    ],
+  ];
   return (
     <form
       className="comment request-review"
@@ -202,7 +226,13 @@ export function RequestReview({ request, busy, onSave }) {
       <div className="form-two">
         <label className="field">
           İstek durumu
-          <select value={status} onChange={(e) => setStatus(e.target.value)}>
+          <select
+            value={status}
+            onChange={(e) => {
+              setStatus(e.target.value);
+              setReply(defaults[e.target.value]);
+            }}
+          >
             {Object.entries(statuses).map(([v, l]) => (
               <option key={v} value={v}>
                 {l}
@@ -215,19 +245,20 @@ export function RequestReview({ request, busy, onSave }) {
           <select
             defaultValue=""
             onChange={(e) => {
-              if (e.target.value) {
-                setReply(presets[e.target.value]);
-                setStatus(
-                  e.target.value === "preparing" ? "preparing" : "declined",
-                );
+              if (e.target.value !== "") {
+                const preset = presets[Number(e.target.value)];
+                setReply(preset[2]);
+                setStatus(preset[1]);
               }
+              e.target.value = "";
             }}
           >
             <option value="">Bir şablon seç</option>
-            <option value="no_time">Şu an zaman ayıramıyoruz</option>
-            <option value="no_copy">Oyun elimizde yok</option>
-            <option value="technical">Teknik uyumsuzluk</option>
-            <option value="preparing">Olumlu · Hazırlık aşamasında</option>
+            {presets.map(([label], index) => (
+              <option key={label} value={index}>
+                {label}
+              </option>
+            ))}
           </select>
         </label>
       </div>
@@ -239,6 +270,11 @@ export function RequestReview({ request, busy, onSave }) {
         value={reply}
         onChange={(e) => setReply(e.target.value)}
       />
+      <div className="request-reply">
+        <strong>E-posta önizlemesi · {statuses[status]}</strong>
+        <p>{reply || defaults[status]}</p>
+        <small>Kaydedildiğinde üyeye durum bildirimi gönderilir.</small>
+      </div>
       <button className="secondary" disabled={busy}>
         Durumu kaydet ve bildir
       </button>

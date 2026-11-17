@@ -83,6 +83,11 @@ export function AdminPage() {
               title="Topluluğun kontrol noktası."
               description={roleLabel[s.user.role] + " · " + s.user.email}
             >
+              {s.user.permissions.manage_games && (
+                <a className="secondary" href="/mail">
+                  Kurumsal e-posta hazırla
+                </a>
+              )}
               <span className="role-tag">
                 <ShieldCheck size={14} />
                 {roleLabel[s.user.role]}

@@ -1,6 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /account
+Disallow: /mail
 Disallow: /manage
 Disallow: /verify
 Disallow: /forgot-password

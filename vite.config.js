@@ -18,6 +18,13 @@ export default defineConfig(({ mode }) => {
         writeBundle(options) {
           // Real HTML entries avoid Cloudflare's /index.html canonical redirect.
           const directory = options.dir || "dist";
+          const apiOrigin = (
+            env.VITE_API_URL || "https://unlocktr-backend.onrender.com/api"
+          ).replace(/\/$/, "");
+          writeFileSync(
+            resolve(directory, "warmup.js"),
+            `fetch(${JSON.stringify(apiOrigin + "/health")},{cache:"no-store",signal:AbortSignal.timeout(90000)}).catch(function(){});`,
+          );
           const shell = readFileSync(resolve(directory, "index.html"), "utf8");
           for (const route of [
             "verify",
@@ -31,9 +38,11 @@ export default defineConfig(({ mode }) => {
             "requests",
             "support",
             "privacy",
+            "mail",
             adminSlug,
           ]) {
             const titles = {
+              mail: "Kurumsal e-posta",
               requests: "Oyun istekleri",
               support: "Destek ol",
               privacy: "Çerez ve hesap verileri",
@@ -48,7 +57,10 @@ export default defineConfig(({ mode }) => {
             };
             const title = (titles[route] || "Yönetim merkezi") + " · UnlockTR";
             const noindex = !["login", "register", "vip"].includes(route);
-            const page = shell
+            const routeShell = ["login", "register"].includes(route)
+              ? shell
+              : shell.replace(/<link[^>]+rel="preload"[^>]+>/g, "");
+            const page = routeShell
               .replace(/<title>.*?<\/title>/s, "<title>" + title + "</title>")
               .replace(
                 "</head>",

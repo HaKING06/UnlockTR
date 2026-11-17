@@ -2,7 +2,7 @@
 
 ## Kapsam
 
-Mevcut kod tabanı 0.4.0'dır. Bu belge güvenlik denetimi veya kusursuzluk beyanı değildir. Eski sürümler için ayrı bakım takvimi taahhüt edilmez.
+Mevcut kod tabanı 0.5.0'dır. Bu belge güvenlik denetimi veya kusursuzluk beyanı değildir. Eski sürümler için ayrı bakım takvimi taahhüt edilmez.
 
 ## Güvenli bildirim
 

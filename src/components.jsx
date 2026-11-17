@@ -12,12 +12,13 @@ export function Cover({ game }) {
           src={game.cover_image_url}
           alt={game.is_adult ? "Yetişkin içerik kapağı" : game.title}
           loading="lazy"
+          decoding="async"
           referrerPolicy="no-referrer"
           onError={() => setFailed(true)}
         />
       ) : (
         <div className="cover-fallback">
-          <Gamepad2 size={45} />
+          <img src="/brand/mark.webp" alt="UTR" width="110" height="55" />
           <span>UNLOCKTR</span>
         </div>
       )}

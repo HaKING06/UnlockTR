@@ -11,7 +11,10 @@ import { api } from "./api";
 import { useSession, nextPath } from "./state";
 import { Field, Notice } from "./ui";
 export function AuthPage({ mode = "login" }) {
-  const { setSession } = useSession();
+  const { setSession, user, loading } = useSession();
+  useEffect(() => {
+    if (!loading && user) location.replace(nextPath());
+  }, [loading, user]);
   const [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [reset, setReset] = useState(false);
@@ -57,12 +60,18 @@ export function AuthPage({ mode = "login" }) {
     <section className="auth-layout">
       <aside className="auth-story">
         <div>
-          <Gamepad2 size={40} />
+          <img
+            className="auth-brand-mark"
+            src="/brand/mark.svg"
+            alt="UTR"
+            width="200"
+            height="80"
+          />
           <p className="eyebrow">OYUNUN SINIRLARINI KALDIR</p>
           <h2>
             Bir hesap.
             <br />
-            Binlerce yeni hikâye.
+            Yeni hikâyeler.
           </h2>
           <p>
             Oyunları keşfet, yorumlarını paylaş ve sıradaki Türkçe yamaya sen
