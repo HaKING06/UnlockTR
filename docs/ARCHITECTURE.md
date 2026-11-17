@@ -1,4 +1,4 @@
-# Mimari · 0.6.0
+# Mimari · 0.7.0
 
 ```mermaid
 flowchart LR
@@ -74,4 +74,19 @@ Kuyruk aynı Node sürecinde 30 saniyelik taramayla çalışır. SKIP LOCKED, en
 
 ## 0.6.0 ekonomi modülleri
 
-backend/src/coins.js: cüzdan, günlük ödül, erken erişim. transaction.js: pool bağlantılı transaction. admin-economy.js: kurucu yüklemesi, silinen e-postalar, proje silme/iade. migrations/0.6.0.sql: yeni tablolar ve FK silme kuralları. Frontend wallet-page.jsx, early-access.jsx, coin-admin.jsx, game-delete.jsx. /wallet ve /manage-coins gerçek HTML girişleri. Ayrıntılı kurallar ../RELEASE-0.6.0.md.
+backend/src/coins.js: cüzdan, günlük ödül, erken erişim. transaction.js: pool bağlantılı transaction. admin-economy.js: manuel yükleme, silinen e-postalar ve proje silme (iade davranışı 0.7.0 ile kaldırıldı). migrations/0.6.0.sql: yeni tablolar ve FK silme kuralları. Frontend wallet-page.jsx, early-access.jsx, coin-admin.jsx, game-delete.jsx. /wallet ve /manage-coins gerçek HTML girişleri. Ayrıntılı kurallar ../RELEASE-0.6.0.md.
+
+## 0.7.0 modülleri ve kuralları
+
+| Modül | Sorumluluk |
+|---|---|
+| frontend/src/confirm-dialog.jsx | Promise tabanlı, top-layer dialog ve zorunlu onay |
+| frontend/src/social-ui.jsx | Favori listesi/düğmesi, yetkili bağlantı açma |
+| frontend/src/staff-reports.jsx | Özel proje raporları |
+| frontend/src/coin-admin.jsx | Coin yükleme ve sayfalı operatör geçmişi |
+| backend/src/social.js | Favoriler, kapasite, indirme izinleri ve günlük tekilleştirme |
+| backend/src/mail-campaigns.js | Alıcı seçimi/hash onayı, idempotent toplu kuyruk |
+| backend/src/admin-economy.js | Coin geçmişi, kalıcı satış raporları, korumalı proje silme |
+| backend/migrations/0.7.0.sql | Şema, early_access_sales ve eski backend uyum trigger'ı |
+
+/favorites ve /reports HTML girişleri eklendi. Satışlar kullanıcı silinmesinde anonim kalır; game_unlocks erişim hakkı, early_access_sales kalıcı rapor kaydıdır. Satın alma tek transaction içinde bakiye/ledger/erişim/onay kaydeder. Satılmış oyun silinmez. Favori ve indirme sayıları public, alıcı/harcama detayları yalnız yetkili ekip içindir. Ölçüm dosyanın tamamlanmasını doğrulamaz. Migration komutu 0.6.0 ve 0.7.0 dahil bütün geçişleri uygular.

@@ -1,3 +1,3 @@
-# Güncel küçük görev notu · 0.6.0
+# Güncel küçük görev notu · 0.7.0
 
-UCoin cüzdanı, günlük ödüller, manuel kurucu yüklemesi, erken erişim ve yeni silme modeli eklendi. Yayın öncesi migrations/0.6.0.sql gerekir. Fiyat, bakiye, ledger, iade, rol veya silme kuralları küçük görsel iş kapsamında değiştirilmemeli. Proje devri istenmiyor; yalnız kullanıcı tarafından verilen küçük işi yap.
+Ana geliştirme devredilmiyor; yalnız kullanıcının verdiği küçük işi yap. Grafik/kırmızı kimlik ve dark/light tema korunur. Kurucu/yardımcı kurucu coin ve proje raporu yönetir; moderatör bu yetkilere sahip değildir. Favoriler, indirme bağlantısı ölçümü ve bildirim tercihleri eklendi. Satın alma onayı, kalıcı satış raporu ve toplu mail tekrar korumasını görsel görev kapsamında değiştirme. Ayrıntılar ../RELEASE-0.7.0.md.

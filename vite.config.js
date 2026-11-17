@@ -40,10 +40,14 @@ export default defineConfig(({ mode }) => {
             "privacy",
             "mail",
             "wallet",
+            "favorites",
+            "reports",
             "manage-coins",
             adminSlug,
           ]) {
             const titles = {
+              favorites: "Favorilerim",
+              reports: "Proje raporları",
               wallet: "UCoin cüzdanı",
               "manage-coins": "Coin yönetimi",
               mail: "Kurumsal e-posta",

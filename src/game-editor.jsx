@@ -1,3 +1,4 @@
+import { useConfirm } from "./confirm-dialog";
 import { GameDelete } from "./game-delete";
 import React, { useEffect, useState } from "react";
 import {
@@ -35,6 +36,7 @@ const empty = {
   mediafire_url: "",
 };
 export function GameEditor({ id, onDone, onDirtyChange }) {
+  const confirm = useConfirm();
   const { token } = useSession(),
     [draft, setDraft] = useState(empty),
     [ready, setReady] = useState(!id),
@@ -61,15 +63,19 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
     if (dirty) window.addEventListener("beforeunload", warn);
     return () => window.removeEventListener("beforeunload", warn);
   }, [dirty]);
-  const leave = () => {
+  const leave = async () => {
+    if (busy) return;
     if (
-      !busy &&
-      (!dirty ||
-        window.confirm(
-          "Kaydedilmemiş değişikliklerin var. Listene dönmek istiyor musun?",
-        ))
+      dirty &&
+      !(await confirm({
+        title: "Değişiklikleri bırak?",
+        description: "Kaydetmediğin oyun değişiklikleri kaybolacak.",
+        confirmLabel: "Kaydetmeden dön",
+        danger: true,
+      }))
     )
-      onDone("");
+      return;
+    onDone("");
   };
 
   useEffect(() => {

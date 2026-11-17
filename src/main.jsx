@@ -1,3 +1,6 @@
+import { FavoritesPage, FavoriteButton } from "./social-ui";
+import { StaffReports } from "./staff-reports";
+import { ConfirmProvider } from "./confirm-dialog";
 import { WalletPage, WalletLink } from "./wallet-page";
 import { CoinAdmin } from "./coin-admin";
 import { MailPage } from "./mail-page";
@@ -34,15 +37,16 @@ import {
   Settings,
   Mail,
   Coins,
+  Heart,
 } from "lucide-react";
 import { Cover } from "./components";
 import { AuthPage, VerifyPage } from "./auth-pages";
 import { AccountPage, GamePage, VipPage } from "./member-pages";
 import { AdminPage } from "./admin-page";
-import { SessionProvider, useSession } from "./state";
+import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.6.0";
+const VERSION = "0.7.0";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
@@ -116,7 +120,14 @@ function GameCard({ game }) {
           <a href={"/game?id=" + game.id}>{game.title}</a>
         </h3>
         <p className="card-description">{game.description}</p>
+        <div className="card-date">
+          Son güncelleme ·{" "}
+          {new Date(game.updated_at || game.created_at).toLocaleDateString(
+            "tr-TR",
+          )}
+        </div>
         <div className="card-bottom">
+          <FavoriteButton gameId={game.id} count={game.favorite_count || 0} />
           <span>
             <Clock3 size={12} />v{game.version}
           </span>
@@ -250,7 +261,11 @@ function App() {
     routePath === "/verify" ||
     (routePath === "" && new URLSearchParams(location.search).has("token"));
   const routeContent =
-    routePath === "/wallet" ? (
+    routePath === "/favorites" ? (
+      <FavoritesPage />
+    ) : routePath === "/reports" ? (
+      <StaffReports />
+    ) : routePath === "/wallet" ? (
       <WalletPage />
     ) : routePath === "/manage-coins" ? (
       <CoinAdmin />
@@ -350,12 +365,16 @@ function App() {
             </a>
             {user ? (
               <details className="user-menu">
-                <summary>
+                <summary aria-label={"Hesap menüsü · " + user.display_name}>
                   <UserRound size={15} />
                   <span>{user.display_name}</span>
                   <ChevronDown size={12} />
                 </summary>
                 <div>
+                  <div className="user-menu-identity">
+                    <strong>{user.display_name}</strong>
+                    <small>{roleLabel[user.role]}</small>
+                  </div>
                   <a href="/account">
                     <Settings size={14} />
                     Hesap ayarları
@@ -375,12 +394,20 @@ function App() {
                       <Mail size={14} /> Kurumsal e-posta
                     </a>
                   )}
+                  <a href="/favorites">
+                    <Heart size={14} /> Favorilerim
+                  </a>
                   <a href="/wallet">
                     <Coins size={14} /> UCoin cüzdanım
                   </a>
-                  {user.permissions.manage_users && (
+                  {user.permissions.manage_coins && (
                     <a href="/manage-coins">
                       <ShieldCheck size={14} /> Coin yönetimi
+                    </a>
+                  )}
+                  {user.permissions.manage_games && (
+                    <a href="/reports">
+                      <ShieldCheck size={14} /> Proje raporları
                     </a>
                   )}
                   <button onClick={() => logout().catch(() => {})}>
@@ -404,7 +431,7 @@ function App() {
             <div className="page-intro">
               <p>
                 <span className="dot" />
-                HİKÂYEN BURADA DEVAM EDİYOR
+                UNLOCKTR · YAMA KÜTÜPHANESİ
               </p>
               <span>Türkçe yama & mod platformu</span>
             </div>
@@ -414,12 +441,12 @@ function App() {
               <div className="hero-copy">
                 <span className="hero-pill">
                   <Sparkles size={13} />
-                  YENİ DÜNYALARIN KİLİDİNİ AÇ
+                  UTR / MODS & PATCHES
                 </span>
                 <h1>
-                  Aynı oyun.
+                  Türkçe oyna.
                   <br />
-                  <em>Bambaşka deneyim.</em>
+                  <em>Kendi deneyimini kur.</em>
                 </h1>
                 <p>
                   Hikâyeyi kendi dilinde yaşa. Türkçe yamalar ve modlarla
@@ -495,7 +522,7 @@ function App() {
                     KÜTÜPHANE
                   </p>
                   <h2>
-                    Bir sonraki maceran<span className="heading-dot">.</span>
+                    Yama kütüphanesi<span className="heading-dot">.</span>
                   </h2>
                   <p className="section-description">
                     Türkçe yamalar, yeni modlar ve keşfedilecek hikâyeler.
@@ -674,7 +701,7 @@ function App() {
               </div>
               <div className="community-copy">
                 <span className="eyebrow">BİRLİKTE DAHA FAZLASI</span>
-                <h2>Sen iste. Yeni bir hikâye başlasın.</h2>
+                <h2>Sıradaki yamayı birlikte seçelim.</h2>
                 <p>
                   Türkçe oynamak istediğin oyunu paylaş.
                   <br />
@@ -735,7 +762,9 @@ function App() {
   );
 }
 createRoot(document.getElementById("root")).render(
-  <SessionProvider>
-    <App />
-  </SessionProvider>,
+  <ConfirmProvider>
+    <SessionProvider>
+      <App />
+    </SessionProvider>
+  </ConfirmProvider>,
 );

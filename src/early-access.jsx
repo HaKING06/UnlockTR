@@ -1,3 +1,4 @@
+import { useConfirm } from "./confirm-dialog";
 import React, { useEffect, useState } from "react";
 import { Coins, LockKeyhole, UnlockKeyhole } from "lucide-react";
 import { useSession } from "./state";
@@ -5,6 +6,7 @@ import { api } from "./api";
 import { coinsChanged } from "./wallet-page";
 import { Notice } from "./ui";
 export function EarlyAccess({ game, onAccess }) {
+  const confirm = useConfirm();
   const { user, token } = useSession(),
     [access, setAccess] = useState(null),
     [message, setMessage] = useState(""),
@@ -33,10 +35,19 @@ export function EarlyAccess({ game, onAccess }) {
   }, [game.id, token, !!user, tick]);
   async function unlock() {
     if (
-      !window.confirm(
-        access.price +
-          " UCoin harcayarak bu projeye erken erişimi açmak istiyor musun?",
-      )
+      !(await confirm({
+        title: "Erken erişimi aç",
+        description:
+          game.title +
+          " hesabına açılacak. " +
+          access.price +
+          " UCoin bakiyenden düşülecek.",
+        detail:
+          "İşlem uygulama üzerinden geri alınamaz; otomatik coin iadesi yapılmaz. Yasal hakların saklıdır.",
+        acknowledgement:
+          "Bedeli kontrol ettim; coin harcamasını ve anında erişim açılmasını onaylıyorum.",
+        confirmLabel: access.price + " UCoin harca ve aç",
+      }))
     )
       return;
     setBusy(true);
@@ -44,7 +55,7 @@ export function EarlyAccess({ game, onAccess }) {
       const d = await api("/games/" + game.id + "/unlock", {
         method: "POST",
         token,
-        body: { expected_price: access.price },
+        body: { expected_price: access.price, accepted_no_refund: true },
       });
       setMessage(d.message);
       setTick((t) => t + 1);

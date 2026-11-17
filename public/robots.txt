@@ -1,6 +1,8 @@
 User-agent: *
 Allow: /
 Disallow: /account
+Disallow: /favorites
+Disallow: /reports
 Disallow: /wallet
 Disallow: /manage-coins
 Disallow: /mail

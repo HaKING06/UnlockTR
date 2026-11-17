@@ -1,9 +1,11 @@
+import { useConfirm } from "./confirm-dialog";
 import React, { useState, useEffect } from "react";
 import { Coins, Search, ShieldCheck } from "lucide-react";
 import { useSession } from "./state";
 import { api } from "./api";
 import { Protected, PageHeader, Field, Notice } from "./ui";
 export function CoinAdmin() {
+  const confirm = useConfirm();
   const s = useSession(),
     [q, setQ] = useState(
       new URLSearchParams(location.search).get("email") || "",
@@ -11,25 +13,37 @@ export function CoinAdmin() {
     [search, setSearch] = useState(q),
     [users, setUsers] = useState([]),
     [deleted, setDeleted] = useState([]),
+    [history, setHistory] = useState(null),
+    [historyPage, setHistoryPage] = useState(1),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState(""),
     [target, setTarget] = useState(null),
     [tick, setTick] = useState(0),
     [reference, setReference] = useState(() => crypto.randomUUID());
   useEffect(() => {
-    if (!s.user?.permissions.manage_users) return;
+    if (!s.user?.permissions.manage_coins) return;
     const c = new AbortController();
     Promise.all([
       api("/admin/coins/users?q=" + encodeURIComponent(search), {
         token: s.token,
         signal: c.signal,
       }),
-      api("/admin/deleted-emails?q=" + encodeURIComponent(search), {
-        token: s.token,
-        signal: c.signal,
-      }),
+      s.user.permissions.manage_users
+        ? api("/admin/deleted-emails?q=" + encodeURIComponent(search), {
+            token: s.token,
+            signal: c.signal,
+          })
+        : Promise.resolve([]),
+      api(
+        "/admin/coins/history?q=" +
+          encodeURIComponent(search) +
+          "&page=" +
+          historyPage,
+        { token: s.token, signal: c.signal },
+      ),
     ])
-      .then(([u, d]) => {
+      .then(([u, d, h]) => {
+        setHistory(h);
         setUsers(u);
         setDeleted(d);
       })
@@ -37,17 +51,18 @@ export function CoinAdmin() {
         if (e.name !== "AbortError") setMessage(e.message);
       });
     return () => c.abort();
-  }, [search, tick, s.token, !!s.user]);
+  }, [search, tick, s.token, !!s.user, historyPage]);
   async function grant(e) {
     e.preventDefault();
     const data = Object.fromEntries(new FormData(e.currentTarget));
     if (
-      !window.confirm(
-        target.email +
-          " hesabına " +
-          data.amount +
-          " UCoin eklenecek. Onaylıyor musun?",
-      )
+      !(await confirm({
+        title: "UCoin yüklemesini onayla",
+        description:
+          target.email + " hesabına " + data.amount + " UCoin eklenecek.",
+        detail: data.reason,
+        confirmLabel: "Yüklemeyi tamamla",
+      }))
     )
       return;
     setBusy(true);
@@ -75,10 +90,10 @@ export function CoinAdmin() {
   }
   return (
     <Protected user={s.user} loading={s.loading}>
-      {s.user?.permissions.manage_users ? (
+      {s.user?.permissions.manage_coins ? (
         <section>
           <PageHeader
-            eyebrow="KURUCU ARAÇLARI"
+            eyebrow="EKİP · COIN OPERASYONLARI"
             title="Cüzdan ve hesap kayıtları."
             description="Doğrulanmış üyelere satış veya hediye coin yükle. Her yükleme işlem kaydına alınır."
           />
@@ -89,6 +104,7 @@ export function CoinAdmin() {
             className="search manage-search"
             onSubmit={(e) => {
               e.preventDefault();
+              setHistoryPage(1);
               setSearch(q);
               setTick((t) => t + 1);
             }}
@@ -178,39 +194,96 @@ export function CoinAdmin() {
                   <ShieldCheck size={24} />
                   <h2>Kontrollü manuel yükleme</h2>
                   <p className="muted">
-                    Bir üye seç. Coin yüklemesi yalnız kurucu tarafından
-                    yapılabilir; yardımcı kurucu ve moderatörlerin erişimi
-                    yoktur.
+                    Bir üye seç. Coin yüklemesini kurucu ve yardımcı kurucular
+                    yapabilir. İşlem yapan ekip üyesi geçmişe kaydedilir.
                   </p>
                 </>
               )}
             </aside>
           </div>
-          <section className="panel deleted-email-panel">
-            <h2>Silinen e-postalar</h2>
+          <section className="panel">
+            <h2>Geçmiş yüklemeler</h2>
             <p className="muted">
-              Yalnız e-posta ve silinme tarihi tutulur. Aynı adresle yeni hesap
-              doğrulandığında kayıt kalkar. Eski bakiye, roller veya erişimler
-              geri yüklenmez. Eski anonim kayıtlardan e-posta geri kazanılamaz.
+              Kimin, hangi hesaba, ne kadar coin yüklediğini izle.
             </p>
-            {deleted.map((d) => (
-              <article className="audit-row" key={d.email}>
-                <strong>{d.email}</strong>
-                <time>{new Date(d.deleted_at).toLocaleString("tr-TR")}</time>
-              </article>
-            ))}
-            {!deleted.length && (
-              <p className="muted">Bu aramada silinmiş e-posta kaydı yok.</p>
+            <div className="grant-history">
+              {history?.history.map((h) => (
+                <article key={h.id}>
+                  <div>
+                    <strong>{h.recipient_email}</strong>
+                    <small>
+                      {new Date(h.created_at).toLocaleString("tr-TR")}
+                    </small>
+                    <p>{h.note}</p>
+                  </div>
+                  <div>
+                    <strong>+{h.amount} UCoin</strong>
+                    <small>
+                      {h.actor_name} ·{" "}
+                      {h.actor_role === "founder"
+                        ? "Kurucu"
+                        : h.actor_role === "cofounder"
+                          ? "Yardımcı kurucu"
+                          : "Eski ekip üyesi"}
+                    </small>
+                    {h.actor_email && <small>{h.actor_email}</small>}
+                    <small>İşlem sonrası: {h.balance_after}</small>
+                  </div>
+                </article>
+              ))}
+            </div>
+            {history && !history.history.length && (
+              <p className="muted">Henüz yükleme kaydı yok.</p>
             )}
-            <small>
-              Arama son 50 eşleşmeyi gösterir; bu alan yalnız kurucuya açıktır.
-            </small>
+            {history && (
+              <div className="report-pagination">
+                <button
+                  className="secondary"
+                  disabled={historyPage === 1}
+                  onClick={() => setHistoryPage((p) => p - 1)}
+                >
+                  Önceki yüklemeler
+                </button>
+                <span>Sayfa {historyPage}</span>
+                <button
+                  className="secondary"
+                  disabled={!history.has_more}
+                  onClick={() => setHistoryPage((p) => p + 1)}
+                >
+                  Sonraki yüklemeler
+                </button>
+              </div>
+            )}
           </section>
+          {s.user.permissions.manage_users && (
+            <section className="panel deleted-email-panel">
+              <h2>Silinen e-postalar</h2>
+              <p className="muted">
+                Yalnız e-posta ve silinme tarihi tutulur. Aynı adresle yeni
+                hesap doğrulandığında kayıt kalkar. Eski bakiye, roller veya
+                erişimler geri yüklenmez. Eski anonim kayıtlardan e-posta geri
+                kazanılamaz.
+              </p>
+              {deleted.map((d) => (
+                <article className="audit-row" key={d.email}>
+                  <strong>{d.email}</strong>
+                  <time>{new Date(d.deleted_at).toLocaleString("tr-TR")}</time>
+                </article>
+              ))}
+              {!deleted.length && (
+                <p className="muted">Bu aramada silinmiş e-posta kaydı yok.</p>
+              )}
+              <small>
+                Arama son 50 eşleşmeyi gösterir; bu alan yalnız kurucuya
+                açıktır.
+              </small>
+            </section>
+          )}
         </section>
       ) : (
         s.user && (
           <div className="empty">
-            <h1>Bu alan yalnız kurucuya açık.</h1>
+            <h1>Bu alan kurucu ve yardımcı kuruculara açık.</h1>
             <a href="/account">Hesabıma dön</a>
           </div>
         )

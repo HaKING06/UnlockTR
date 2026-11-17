@@ -30,6 +30,30 @@ export function SessionProvider({ children }) {
     }),
     [loading, setLoading] = useState(true);
   const [nsfw, setNsfw] = useState(() => get("unlocktr-nsfw") === "true");
+  const [favoriteIds, setFavoriteIds] = useState([]);
+  useEffect(() => {
+    if (!token) {
+      setFavoriteIds([]);
+      return;
+    }
+    setFavoriteIds([]);
+    const c = new AbortController();
+    api("/me/favorites/ids", { token, signal: c.signal })
+      .then((d) => setFavoriteIds(d.ids))
+      .catch(() => {});
+    return () => c.abort();
+  }, [token]);
+  async function toggleFavorite(id) {
+    const already = favoriteIds.includes(id);
+    const d = await api("/games/" + id + "/favorite", {
+      token,
+      method: already ? "DELETE" : "POST",
+    });
+    setFavoriteIds((ids) =>
+      d.favorite ? [...new Set([...ids, id])] : ids.filter((x) => x !== id),
+    );
+    return d;
+  }
   function setSession(data) {
     setToken(data?.token || "");
     setUser(data?.user || null);
@@ -128,7 +152,17 @@ export function SessionProvider({ children }) {
   }
   return (
     <SessionContext.Provider
-      value={{ token, user, loading, setSession, logout, nsfw, showNsfw }}
+      value={{
+        token,
+        user,
+        loading,
+        setSession,
+        logout,
+        nsfw,
+        showNsfw,
+        favoriteIds,
+        toggleFavorite,
+      }}
     >
       {children}
     </SessionContext.Provider>

@@ -182,13 +182,24 @@ export function PrivacyPage() {
         e-postasıdır; pazarlama bülteni değildir. Bildirim kuyruğu ve yetkili
         işlem kayıtları kurucuya açıktır.
       </p>
+      <h2>Favoriler ve indirme ölçümü</h2>
+      <p>
+        Favoriler hesabına bağlıdır; oyunların toplam favori sayısı herkese
+        açıktır. İndirme bağlantısı açma talepleri Türkiye takvim gününde
+        oyun/sağlayıcı/ziyaretçi için tekilleştirilir. Bu metrikte ham IP
+        veritabanına yazılmaz; kimliksiz ziyaretlerde günlük değişen tek yönlü
+        özet kullanılır. Bu metrik dosyanın tamamının indirildiğini göstermez.
+        Duyuru ve VIP favori sürüm e-postalarını hesap tercihlerinden
+        kapatabilirsin.
+      </p>
       <h2>UCoin ve erken erişim</h2>
       <p>
         Cüzdan bakiyesi, günlük ödül günleri, yükleme/harcama/iade işlemleri ve
         açılan projeler hizmetin çalışması için saklanır. Hesap silinince cüzdan
         ve erişimler kaldırılır; işlem defterindeki hesap bağlantısı ayrılır.
-        Coin devredilemez ve nakde çevrilemez. Silinen projenin erken erişim
-        bedeli aktif cüzdanlara iade edilir.
+        Coin devredilemez ve nakde çevrilemez. Erken erişim açma işlemlerinde
+        otomatik coin iadesi yapılmaz; satın alımı olan projeler kalıcı
+        silinemez. Yasal hakların saklıdır.
       </p>
       <h2>Hesabını silme</h2>
       <p>

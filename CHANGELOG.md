@@ -1,5 +1,9 @@
 # Frontend changelog
 
+## 0.7.0 · 2026-11-17
+
+Site içi onaylar; kurucu/yardımcı kurucu coin geçmişi ve proje raporları; favoriler, bağlantı ölçümleri ve VIP sürüm bildirimleri; onaylı erken erişim ve toplu e-posta. Otomatik coin iadesi kaldırıldı, satılmış proje silinmez. [Şema, doğrulama ve yayın notları](RELEASE-0.7.0.md).
+
 ## 0.6.0 · 2026-11-17
 
 UCoin cüzdanı, günlük seri ödülü, VIP fiyatı, manuel kurucu yüklemesi, güvenli erken erişim, doğrulamalı proje silme/coin iadesi ve ayrı silinen e-postalar kaydı. **Yeni migration gerekir.** [Yayın notları](RELEASE-0.6.0.md).

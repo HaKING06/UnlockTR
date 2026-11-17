@@ -30,3 +30,7 @@ PGlite + Supertest testleri gerçek Neon veya Resend teslim testi değildir. 0.5
 ## Sürüm ve raporlama
 
 Güncel uygulama sürümü 0.5.0. Bu sürüm yeni schema migration gerektirmez. Sonraki gerçek kod tesliminde kullanıcı talimatına uygun sürüm kararı ver. Test etmediğin canlı davranışı başarılı gibi sunma. Güvenlik/erişilebilirlik/Google sıralaması için kanıtsız garanti verme.
+
+## 0.7.0 · 2026-11-17
+
+29 backend testi, frontend production build ve format kontrolü geçti. İzole yerel Express/PGlite ile 390/768 px Playwright kontrolü: giriş, coin geçmişi/ekleme, favori, satın alma onayı, özel raporlar, mail alıcı önizleme/onayı, tema ve menü; taşma görülmedi. Harici indirme sayfası fixture; gerçek mail/ödeme yok. Neon migration iki kez test dalında, sonra mevcut veriyi karşılaştırarak production üzerinde uygulandı. Ayrıntı: ../RELEASE-0.7.0.md.

@@ -1,3 +1,4 @@
+import { FavoriteButton, DownloadButton } from "./social-ui";
 import { EarlyAccess } from "./early-access";
 import { AccountDeletion } from "./account-deletion";
 import { modLabel } from "./game-data";
@@ -25,7 +26,13 @@ export function AccountPage() {
     e.preventDefault();
     setBusy(true);
     let body = Object.fromEntries(new FormData(e.currentTarget));
-    if (path === "/me") body.show_nsfw = body.show_nsfw === "on";
+    if (path === "/me")
+      for (const key of [
+        "show_nsfw",
+        "announcements_enabled",
+        "favorite_updates_enabled",
+      ])
+        body[key] = body[key] === "on";
     try {
       const d = await api(path, { token: s.token, method, body });
       if (d.token) s.setSession(d);
@@ -117,6 +124,30 @@ export function AccountPage() {
                     name="show_nsfw"
                     defaultChecked={s.nsfw}
                     key={String(s.nsfw)}
+                  />
+                </label>
+                <label className="switch-row">
+                  <span>
+                    <strong>Platform duyuruları</strong>
+                    <small>Yeni özellik ve topluluk bilgilendirmeleri.</small>
+                  </span>
+                  <input
+                    type="checkbox"
+                    name="announcements_enabled"
+                    defaultChecked={s.user.announcements_enabled !== false}
+                  />
+                </label>
+                <label className="switch-row">
+                  <span>
+                    <strong>Favori sürüm bildirimleri</strong>
+                    <small>
+                      VIP avantajı: favori yamaların sürümü değişince e-posta.
+                    </small>
+                  </span>
+                  <input
+                    type="checkbox"
+                    name="favorite_updates_enabled"
+                    defaultChecked={s.user.favorite_updates_enabled !== false}
                   />
                 </label>
                 <button className="primary" disabled={busy}>
@@ -243,6 +274,8 @@ export function VipPage() {
             <ul>
               <li>Reklamsız Pixeldrain / MediaFire alternatifleri</li>
               <li>Günlük giriş ödülünde 2 kat UCoin</li>
+              <li>1000 oyunluk favori kütüphanesi</li>
+              <li>Favori yamaların yeni sürümleri için isteğe bağlı e-posta</li>
               <li>Erken erişim projelerinde VIP coin fiyatı</li>
               <li>VIP oyun isteklerinde öncelikli değerlendirme</li>
               <li>İsteğin kurucuya e-posta ile bildirilmesi</li>
@@ -304,6 +337,14 @@ export function GamePage() {
         if (e.name !== "AbortError") setError(e.message);
       });
     return () => c.abort();
+  }, [id]);
+  useEffect(() => {
+    const update = (e) => {
+      if (e.detail.gameId === id)
+        setGame((g) => (g ? { ...g, download_count: e.detail.count } : g));
+    };
+    window.addEventListener("unlocktr-download", update);
+    return () => window.removeEventListener("unlocktr-download", update);
   }, [id]);
   async function comment(e) {
     e.preventDefault();
@@ -386,7 +427,14 @@ export function GamePage() {
       <PageHeader
         eyebrow={game.engine}
         title={game.title}
-        description={"Sürüm " + game.version}
+        description={
+          "Sürüm " +
+          game.version +
+          " · Son güncelleme " +
+          new Date(game.updated_at || game.created_at).toLocaleDateString(
+            "tr-TR",
+          )
+        }
       >
         {s.user?.permissions.manage_games && (
           <a className="secondary" href={"/manage?edit=" + id}>
@@ -395,6 +443,15 @@ export function GamePage() {
           </a>
         )}
       </PageHeader>
+      <div className="game-social-bar">
+        <FavoriteButton gameId={id} count={game.favorite_count || 0} />
+        <span>
+          <Download size={15} /> {game.download_count || 0} bağlantı açılışı
+        </span>
+        <span>
+          Eklenme: {new Date(game.created_at).toLocaleDateString("tr-TR")}
+        </span>
+      </div>
       <div className="game-layout">
         <div>
           <Cover game={game} />
@@ -452,23 +509,14 @@ export function GamePage() {
               }}
             />
           )}
-          {[["trlink_url", "Standart indirme", "TRLink · Reklamlı"]].map(
-            ([key, title, label]) =>
-              game[key] && (
-                <a
-                  key={key}
-                  className="download-option"
-                  href={game[key]}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <span>
-                    <strong>{title}</strong>
-                    <small>{label}</small>
-                  </span>
-                  <Download size={18} />
-                </a>
-              ),
+          {game.trlink_url && (
+            <DownloadButton
+              gameId={id}
+              provider="standard"
+              label="Standart indirme"
+              description="TRLink · Reklamlı"
+              onError={setMessage}
+            />
           )}
           {game.has_vip_download &&
             (!game.early_access_active || earlyUnlocked) && (
@@ -490,19 +538,17 @@ export function GamePage() {
               </div>
             )}
           {vipLinks.map((link) => (
-            <a
-              key={link.url}
-              className="download-option vip-provider"
-              href={link.url}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <span>
-                <strong>{link.label}</strong>
-                <small>VIP · Reklamsız alternatif</small>
-              </span>
-              <Download size={18} />
-            </a>
+            <DownloadButton
+              key={link.label}
+              gameId={id}
+              provider={
+                link.label === "Pixeldrain" ? "pixeldrain" : "mediafire"
+              }
+              label={link.label}
+              description="VIP · Reklamsız alternatif"
+              onError={setMessage}
+              className="vip-provider"
+            />
           ))}
           <small className="muted">
             Dosyaları çalıştırmadan önce güvenlik taraması yap.

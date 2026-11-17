@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version 0.6.0" src="https://img.shields.io/badge/version-0.6.0-8b5cf6?style=flat-square" />
+  <img alt="Version 0.7.0" src="https://img.shields.io/badge/version-0.7.0-dc2626?style=flat-square" />
   <img alt="Language Turkish" src="https://img.shields.io/badge/language-T%C3%BCrk%C3%A7e-60a5fa?style=flat-square" />
   <img alt="License All rights reserved" src="https://img.shields.io/badge/license-All_rights_reserved-64748b?style=flat-square" />
 </p>
@@ -19,7 +19,7 @@
 
 **Türkçe yamalar, oyun modları ve oyuncu topluluğu.** UnlockTR; oyunları keşfetme, yama indirme, deneyim paylaşma ve yeni oyun isteme akışlarını aynı platformda toplar.
 
-> **Mevcut sürüm: 0.6.0.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
+> **Mevcut sürüm: 0.7.0.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
 
 ## İçindekiler
 
@@ -144,4 +144,8 @@ Favicon ve uygulama ikonları kullanıcı marka paftasındaki kare U ikonundan k
 
 ## 0.6.0 · UCoin ve erken erişim
 
-Günlük ödüller, VIP coin avantajları, kurucu manuel yüklemesi, doğrulamalı proje silme/iade ve yeni hesap silme modeli eklendi. **Yayın öncesi 0.6.0 SQL migration zorunludur.** [Kurulum, ekonomi ve doğrulama notları](RELEASE-0.6.0.md). Yeni secret gerekmez.
+Önceki sürüm günlük ödüller, erken erişim ve coin cüzdanını getirdi. [Tarihsel yayın notları](RELEASE-0.6.0.md). Proje silme/iade davranışı 0.7.0 ile değiştirilmiştir; güncel kurallar aşağıdaki notlardadır.
+
+## 0.7.0 güncellemesi
+
+Favoriler ve herkese açık sayaçlar; site içi satın alma/işlem onayı; özel proje raporları; kurucu ve yardımcı kurucu için coin geçmişi; tekli/toplu kurumsal e-posta ve bildirim tercihleri. Yeni ortam değişkeni yok. Şema Neon üzerinde hazırlandı; önce backend, sonra frontend yayınlanır. [Kurallar, doğrulama ve yayın notları](RELEASE-0.7.0.md).

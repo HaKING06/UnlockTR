@@ -1,3 +1,4 @@
+import { useConfirm } from "./confirm-dialog";
 import { GameEditor } from "./game-editor";
 import { RequestReview } from "./request-page";
 import React, { useEffect, useState } from "react";
@@ -17,6 +18,7 @@ import { api, engines } from "./api";
 import { useSession, roleLabel } from "./state";
 import { Field, Notice, PageHeader, Protected } from "./ui";
 export function AdminPage() {
+  const confirm = useConfirm();
   const s = useSession(),
     [tab, setTab] = useState("games"),
     [result, setResult] = useState(null),
@@ -89,11 +91,14 @@ export function AdminPage() {
                   Kurumsal e-posta hazırla
                 </a>
               )}
-              {s.user.permissions.manage_users && (
+              {s.user.permissions.manage_coins && (
                 <a className="secondary" href="/manage-coins">
                   UCoin yönetimi
                 </a>
               )}
+              <a className="secondary" href="/reports">
+                Proje raporları
+              </a>
               <span className="role-tag">
                 <ShieldCheck size={14} />
                 {roleLabel[s.user.role]}
@@ -106,12 +111,16 @@ export function AdminPage() {
                   <button
                     className={active === key ? "active" : ""}
                     key={key}
-                    onClick={() => {
+                    onClick={async () => {
                       if (
                         editorDirty &&
-                        !window.confirm(
-                          "Kaydedilmemiş oyun değişikliklerin var. Sekmeyi değiştirmek istiyor musun?",
-                        )
+                        !(await confirm({
+                          title: "Sekmeyi değiştir?",
+                          description:
+                            "Kaydedilmemiş oyun değişiklikleri kaybolacak.",
+                          confirmLabel: "Sekmeyi değiştir",
+                          danger: true,
+                        }))
                       )
                         return;
                       setTab(key);

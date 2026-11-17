@@ -35,9 +35,9 @@ export function GameDelete({ id, title, onDeleted }) {
         <Trash2 size={18} /> Projeyi sil
       </h3>
       <p className="muted">
-        Oyun, yorumları ve erken erişim kayıtları kalıcı olarak silinir. Varsa
-        ödenmiş erken erişim coinleri aktif hesaplara iade edilir. Bu işlem geri
-        alınamaz.
+        Oyun ve yorumları kalıcı olarak silinir. Satın alımı olan projelerde
+        mevcut erişimleri korumak için silme kapalıdır; otomatik coin iadesi
+        yapılmaz. Bu işlem geri alınamaz.
       </p>
       {!open ? (
         <button

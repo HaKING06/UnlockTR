@@ -2,7 +2,7 @@
 
 ## Kapsam
 
-Mevcut kod tabanı 0.6.0'dır. Bu belge güvenlik denetimi veya kusursuzluk beyanı değildir. Eski sürümler için ayrı bakım takvimi taahhüt edilmez.
+Mevcut kod tabanı 0.7.0'dır. Bu belge güvenlik denetimi veya kusursuzluk beyanı değildir. Eski sürümler için ayrı bakım takvimi taahhüt edilmez.
 
 ## Güvenli bildirim
 
@@ -27,3 +27,5 @@ JWT localStorage'dadır; HttpOnly cookie tabanlı oturum değildir. XSS'den koru
 Sızmış bir sır varsa ilgili sağlayıcıda iptal/rotasyon yap; dosyadan silmek geçmişteki sızıntıyı tek başına gidermez. Log/rapor yayımlamadan önce sırları temizle. Gerçek anahtar veya doğrulama kodu isteme/paylaşma.
 
 UCoin: yalnız sunucu hesaplar; bakiye/ledger/erişim transaction içinde kaydedilir, rol ve fiyat doğrulanır. Günlük ödül Türkiye tarihiyle, manuel yükleme işlem referansıyla tekilleştirilir. Erken erişim linkleri üyelik ve proje hakkıyla korunur. Harici URL paylaşımını engelleyen DRM sağlanmaz.
+
+0.7.0: coin atama/özel rapor izinleri API üzerinde denetlenir. Alıcı kümesi ve sayı onayı toplu gönderimde zorunlu; taslak tekrarları tekilleştirilir. Favori kapasitesi ve indirme yetkisi sunucudadır. Satın alma onayı atlanamaz, satılmış oyun silinemez. Ham IP indirme olayına yazılmaz.
