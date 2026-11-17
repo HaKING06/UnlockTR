@@ -1,5 +1,9 @@
 # Frontend changelog
 
+## 0.6.0 · 2026-11-17
+
+UCoin cüzdanı, günlük seri ödülü, VIP fiyatı, manuel kurucu yüklemesi, güvenli erken erişim, doğrulamalı proje silme/coin iadesi ve ayrı silinen e-postalar kaydı. **Yeni migration gerekir.** [Yayın notları](RELEASE-0.6.0.md).
+
 ## 0.5.2 · 2026-11-17
 
 Menü katmanı, tam katalog filtreleri, sayfalama, profil adı ve uzun açıklama hataları düzeltildi. Yayın stüdyosuna önizleme, kontrol listesi ve değişiklik uyarıları eklendi. [Yayın notları](RELEASE-0.5.2.md).

@@ -1,3 +1,5 @@
+import { WalletPage, WalletLink } from "./wallet-page";
+import { CoinAdmin } from "./coin-admin";
 import { MailPage } from "./mail-page";
 import { CookieNotice, SupportPage, PrivacyPage } from "./site-extras";
 import { RequestPage } from "./request-page";
@@ -30,6 +32,8 @@ import {
   Eye,
   Crown,
   Settings,
+  Mail,
+  Coins,
 } from "lucide-react";
 import { Cover } from "./components";
 import { AuthPage, VerifyPage } from "./auth-pages";
@@ -38,7 +42,7 @@ import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.5.2";
+const VERSION = "0.6.0";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
@@ -90,6 +94,11 @@ function GameCard({ game }) {
       </div>
       <div className="game-content">
         <div className="tags">
+          {game.early_access_active && (
+            <span className="early-badge">
+              Erken erişim · {game.coin_price} UCoin
+            </span>
+          )}
           {game.has_tr_patch && (
             <span className="badge-patch">
               <FileText size={11} />
@@ -241,7 +250,11 @@ function App() {
     routePath === "/verify" ||
     (routePath === "" && new URLSearchParams(location.search).has("token"));
   const routeContent =
-    routePath === "/mail" ? (
+    routePath === "/wallet" ? (
+      <WalletPage />
+    ) : routePath === "/manage-coins" ? (
+      <CoinAdmin />
+    ) : routePath === "/mail" ? (
       <MailPage />
     ) : routePath === "/requests" ? (
       <RequestPage />
@@ -310,6 +323,7 @@ function App() {
             </button>
           </nav>
           <div className="account">
+            <WalletLink />
             <button
               className="icon theme-toggle"
               aria-label={
@@ -357,7 +371,17 @@ function App() {
                     </a>
                   )}
                   {user.permissions.manage_games && (
-                    <a href="/mail">Kurumsal e-posta</a>
+                    <a href="/mail">
+                      <Mail size={14} /> Kurumsal e-posta
+                    </a>
+                  )}
+                  <a href="/wallet">
+                    <Coins size={14} /> UCoin cüzdanım
+                  </a>
+                  {user.permissions.manage_users && (
+                    <a href="/manage-coins">
+                      <ShieldCheck size={14} /> Coin yönetimi
+                    </a>
                   )}
                   <button onClick={() => logout().catch(() => {})}>
                     <LogOut size={14} />
@@ -681,6 +705,7 @@ function App() {
               <a href="/login">Topluluğa katıl</a>
             )}
             <a href="/vip">VIP</a>
+            <a href="/wallet">UCoin & günlük ödüller</a>
             <a href="/support">Destek & iletişim</a>
             <button
               onClick={() =>

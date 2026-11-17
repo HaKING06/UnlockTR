@@ -182,12 +182,22 @@ export function PrivacyPage() {
         e-postasıdır; pazarlama bülteni değildir. Bildirim kuyruğu ve yetkili
         işlem kayıtları kurucuya açıktır.
       </p>
+      <h2>UCoin ve erken erişim</h2>
+      <p>
+        Cüzdan bakiyesi, günlük ödül günleri, yükleme/harcama/iade işlemleri ve
+        açılan projeler hizmetin çalışması için saklanır. Hesap silinince cüzdan
+        ve erişimler kaldırılır; işlem defterindeki hesap bağlantısı ayrılır.
+        Coin devredilemez ve nakde çevrilemez. Silinen projenin erken erişim
+        bedeli aktif cüzdanlara iade edilir.
+      </p>
       <h2>Hesabını silme</h2>
       <p>
         Hesap ayarlarında şifren ve e-postana gelen kodla silme onayı
-        verebilirsin. Profil/e-posta anonimleştirilir, istekler ve oturumlar
-        kaldırılır; yorumlar “Silinen kullanıcı” olarak kalır. Kurucu hesabı
-        için önce sahiplik devri gerekir.
+        verebilirsin. Aktif kullanıcı kaydı kalıcı olarak kaldırılır; e-posta ve
+        silinme tarihi yalnız kurucuya açık silinen e-postalar kaydında tutulur.
+        Aynı adresle yeniden doğrulanmış hesap oluşturulduğunda bu kayıt
+        kaldırılır. İstekler ve oturumlar kaldırılır; yorumlar “Silinen
+        kullanıcı” olarak kalır. Kurucu hesabı için önce sahiplik devri gerekir.
       </p>
       <a href="/account" className="primary">
         Hesap ayarlarını aç

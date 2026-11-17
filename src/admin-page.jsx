@@ -89,6 +89,11 @@ export function AdminPage() {
                   Kurumsal e-posta hazırla
                 </a>
               )}
+              {s.user.permissions.manage_users && (
+                <a className="secondary" href="/manage-coins">
+                  UCoin yönetimi
+                </a>
+              )}
               <span className="role-tag">
                 <ShieldCheck size={14} />
                 {roleLabel[s.user.role]}

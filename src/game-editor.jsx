@@ -1,3 +1,4 @@
+import { GameDelete } from "./game-delete";
 import React, { useEffect, useState } from "react";
 import {
   Gamepad2,
@@ -14,6 +15,9 @@ import { useSession } from "./state";
 import { Field, Notice } from "./ui";
 import { modOptions } from "./game-data";
 const empty = {
+  early_access_until: "",
+  coin_price: 150,
+  vip_coin_price: 100,
   title: "",
   description: "",
   version: "1.0",
@@ -38,7 +42,8 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
     [busy, setBusy] = useState(false),
     [dirty, setDirty] = useState(false),
     [attempt, setAttempt] = useState(0),
-    [coverFailed, setCoverFailed] = useState(false);
+    [coverFailed, setCoverFailed] = useState(false),
+    [savedTitle, setSavedTitle] = useState("");
   useEffect(() => {
     onDirtyChange?.(dirty);
     return () => onDirtyChange?.(false);
@@ -75,9 +80,20 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
       .then((g) => {
         setDraft(
           Object.fromEntries(
-            Object.keys(empty).map((k) => [k, g[k] ?? empty[k]]),
+            Object.keys(empty).map((k) => [
+              k,
+              k === "early_access_until" && g[k]
+                ? new Date(
+                    new Date(g[k]).getTime() -
+                      new Date(g[k]).getTimezoneOffset() * 60000,
+                  )
+                    .toISOString()
+                    .slice(0, 16)
+                : (g[k] ?? empty[k]),
+            ]),
           ),
         );
+        setSavedTitle(g.title);
         setReady(true);
       })
       .catch((e) => {
@@ -104,7 +120,12 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
     e.preventDefault();
     setBusy(true);
     try {
-      const body = { ...draft };
+      const body = {
+        ...draft,
+        early_access_until: draft.early_access_until
+          ? new Date(draft.early_access_until).toISOString()
+          : null,
+      };
       for (const k of ["trlink_url", "pixeldrain_url", "mediafire_url"])
         body[k] = body[k] || null;
       if (body.has_mod && !body.mod_types.length) {
@@ -382,6 +403,42 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
               </section>
             </div>
             <aside className="panel editor-summary">
+              <div className="early-editor">
+                <h3>Erken erişim</h3>
+                <p className="muted small">
+                  Boş bırakılırsa herkes indirebilir. Gelecek tarih seçilirse
+                  hem standart hem VIP üyeler coinle açar. Tarih dolunca
+                  otomatik genel erişim başlar.
+                </p>
+                <Field
+                  label="Genel erişim tarihi (cihazının yerel saati)"
+                  type="datetime-local"
+                  value={draft.early_access_until}
+                  onChange={(e) => change("early_access_until", e.target.value)}
+                />
+                <Field
+                  label="Standart UCoin fiyatı"
+                  type="number"
+                  min={1}
+                  max={100000}
+                  step={1}
+                  value={draft.coin_price}
+                  onChange={(e) => change("coin_price", Number(e.target.value))}
+                  required
+                />
+                <Field
+                  label="VIP UCoin fiyatı"
+                  type="number"
+                  min={1}
+                  max={draft.coin_price}
+                  step={1}
+                  value={draft.vip_coin_price}
+                  onChange={(e) =>
+                    change("vip_coin_price", Number(e.target.value))
+                  }
+                  required
+                />
+              </div>
               <span className="eyebrow">YAYIN ÖZETİ</span>
               {draft.cover_image_url.startsWith("https://") && !coverFailed && (
                 <img
@@ -460,6 +517,9 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
             </aside>
           </div>
         </form>
+      )}
+      {id && ready && (
+        <GameDelete id={id} title={savedTitle} onDeleted={onDone} />
       )}
     </section>
   );

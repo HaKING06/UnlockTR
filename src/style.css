@@ -5081,3 +5081,335 @@ body {
 .editor-checklist .incomplete {
   color: var(--accent);
 }
+
+/* UCoin: deterministic rewards, transparent prices, responsive finance-free wallet. */
+.wallet-nav {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 10px;
+  border: 1px solid #d8ad4c35;
+  border-radius: 9px;
+  color: #f5d788;
+  background: #b88a1110;
+  font-size: 12px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.wallet-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  background:
+    radial-gradient(ellipse at 15% 30%, #8b5a1620, transparent 60%),
+    var(--panel);
+  border-color: #d8ad4c33;
+}
+.wallet-balance {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.coin-emblem {
+  display: grid;
+  place-items: center;
+  width: 70px;
+  height: 70px;
+  border: 1px solid #e0b84a66;
+  border-radius: 22px;
+  color: #f5d788;
+  background: linear-gradient(135deg, #6f4b191a, #eebc2818);
+}
+.wallet-balance small {
+  font-size: 10px;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+.wallet-balance h2 {
+  font-size: 40px;
+  margin: 4px 0 0;
+}
+.wallet-balance h2 span {
+  font-size: 14px;
+  color: var(--muted);
+}
+.wallet-dashboard {
+  display: grid;
+  grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+  gap: 22px;
+  margin: 24px 0;
+}
+.wallet-page h2 {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.wallet-page .panel {
+  margin-bottom: 24px;
+}
+.daily-grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 8px;
+  margin: 24px 0;
+}
+.daily-day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 16px 4px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--input);
+  color: var(--muted);
+}
+.daily-day small {
+  font-size: 9px;
+  letter-spacing: 0.5px;
+}
+.daily-day strong {
+  font-size: 24px;
+  color: var(--text);
+}
+.daily-day > span {
+  font-size: 9px;
+}
+.daily-day.available {
+  border-color: #e6bd5f88;
+  background: #d6a33412;
+  box-shadow: 0 0 24px #c4921910;
+}
+.daily-day.available strong {
+  color: #e9c36b;
+}
+.daily-day.earned {
+  border-color: #3b9e5e44;
+  background: #26714312;
+}
+.wallet-benefits {
+  border-top: 2px solid #d6ad57;
+}
+.wallet-benefits > svg {
+  color: #dfb45b;
+}
+.wallet-benefits p {
+  color: var(--muted);
+  font-size: 14px;
+}
+.coin-packages {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+.coin-packages .panel {
+  border-color: #d8ad4c33;
+}
+.coin-packages svg {
+  color: #e8bf63;
+}
+.coin-history article,
+.coin-admin-user {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--line);
+  overflow-wrap: anywhere;
+}
+.coin-history small,
+.coin-admin-user small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.coin-positive {
+  color: #a5d9ae;
+}
+.coin-negative {
+  color: #fda4a4;
+}
+.coin-history article > span {
+  text-align: right;
+  white-space: nowrap;
+}
+.coin-admin-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+  gap: 22px;
+  align-items: start;
+  margin: 24px 0;
+}
+.coin-admin-user span {
+  font-size: 12px;
+  color: #dfbb67;
+}
+.deleted-email-panel {
+  margin-top: 24px;
+}
+.unlocked-list {
+  display: grid;
+  gap: 10px;
+}
+.unlocked-list a {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+}
+.unlocked-list span {
+  color: var(--muted);
+  font-size: 12px;
+}
+.early-access-panel {
+  padding: 20px;
+  border: 1px solid #deb65255;
+  border-radius: 13px;
+  background: #c28c1210;
+  margin: 20px 0;
+}
+.early-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  color: #e6c16b !important;
+  border: 1px solid #d1a43b55 !important;
+  background: #b1871620 !important;
+  border-radius: 6px;
+  padding: 6px 9px;
+}
+.early-access-panel h3 {
+  margin-top: 18px;
+}
+.early-access-panel p {
+  font-size: 13px;
+}
+.early-prices {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.early-prices span {
+  font-size: 11px;
+  color: var(--muted);
+}
+.early-prices strong {
+  display: block;
+  color: #e3c275;
+  font-size: 16px;
+  margin-top: 5px;
+}
+.early-access-panel .primary,
+.early-access-panel .secondary {
+  width: 100%;
+  margin-top: 12px;
+}
+.early-editor {
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+}
+.game-delete {
+  margin-top: 28px;
+}
+.game-delete form {
+  max-width: 600px;
+}
+.game-delete h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+[data-theme="light"] .wallet-nav,
+[data-theme="light"] .early-badge {
+  color: #7c4d08 !important;
+}
+[data-theme="light"] .coin-positive {
+  color: #26703b;
+}
+[data-theme="light"] .coin-negative {
+  color: #b91c1c;
+}
+@media (max-width: 768px) {
+  .wallet-dashboard,
+  .coin-admin-layout {
+    grid-template-columns: 1fr;
+  }
+  .wallet-hero {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .wallet-dashboard .panel {
+    margin-bottom: 0;
+  }
+  .wallet-balance h2 {
+    font-size: 32px;
+  }
+  .coin-packages {
+    grid-template-columns: 1fr;
+    gap: 4px;
+  }
+  .daily-grid {
+    gap: 5px;
+  }
+  .daily-day {
+    padding: 14px 2px;
+  }
+  .daily-day strong {
+    font-size: 20px;
+  }
+  .coin-emblem {
+    width: 56px;
+    height: 56px;
+  }
+  .coin-history article {
+    gap: 10px;
+    font-size: 12px;
+  }
+  .unlocked-list a {
+    flex-direction: column;
+  }
+  .coin-admin-user {
+    align-items: flex-start;
+  }
+}
+@media (max-width: 480px) {
+  .topbar .account {
+    gap: 4px;
+  }
+  .topbar .brand .brand-mobile {
+    width: 120px;
+  }
+  .header-vip {
+    display: none;
+  }
+  .wallet-nav {
+    padding: 7px 5px;
+    font-size: 10px;
+  }
+  .wallet-nav svg {
+    width: 15px;
+  }
+  .daily-grid {
+    gap: 3px;
+  }
+  .daily-day small {
+    font-size: 8px;
+  }
+  .daily-day strong {
+    font-size: 18px;
+  }
+}
+
+[data-theme="light"] .early-prices strong,
+[data-theme="light"] .coin-admin-user span,
+[data-theme="light"] .daily-day.available strong,
+[data-theme="light"] .coin-packages svg {
+  color: #80520c;
+}

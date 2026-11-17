@@ -1,3 +1,4 @@
+import { EarlyAccess } from "./early-access";
 import { AccountDeletion } from "./account-deletion";
 import { modLabel } from "./game-data";
 import React, { useEffect, useState } from "react";
@@ -183,7 +184,10 @@ export function AccountPage() {
                   <p className="muted">
                     Profilin ve e-postan kaldırılır, oturumların kapanır,
                     isteklerin silinir. Mevcut yorumların “Silinen kullanıcı”
-                    adıyla anonim kalır. Bu işlem geri alınamaz.
+                    adıyla anonim kalır. Yalnız e-postan ve silinme tarihi ayrı
+                    kayıtta tutulur; aynı adresle yeniden doğrulanmış üyelik
+                    oluşturunca bu kayıt kaldırılır. Coinlerin ve açtığın
+                    erişimler yeni hesaba aktarılmaz. Bu işlem geri alınamaz.
                   </p>
                   <AccountDeletion />
                 </>
@@ -238,6 +242,8 @@ export function VipPage() {
             <p className="muted">{desc}</p>
             <ul>
               <li>Reklamsız Pixeldrain / MediaFire alternatifleri</li>
+              <li>Günlük giriş ödülünde 2 kat UCoin</li>
+              <li>Erken erişim projelerinde VIP coin fiyatı</li>
               <li>VIP oyun isteklerinde öncelikli değerlendirme</li>
               <li>İsteğin kurucuya e-posta ile bildirilmesi</li>
               <li>VIP tanımlama ve istek durumu bildirimleri</li>
@@ -273,6 +279,7 @@ export function GamePage() {
   const s = useSession(),
     id = new URLSearchParams(location.search).get("id"),
     [vipLinks, setVipLinks] = useState([]),
+    [earlyUnlocked, setEarlyUnlocked] = useState(false),
     [game, setGame] = useState(null),
     [comments, setComments] = useState([]),
     [message, setMessage] = useState(""),
@@ -436,6 +443,15 @@ export function GamePage() {
           <p className="muted">
             Oyun sürümünü kontrol et. Bağlantılar harici sağlayıcıda açılır.
           </p>
+          {game.early_access_active && (
+            <EarlyAccess
+              game={game}
+              onAccess={(url) => {
+                setEarlyUnlocked(true);
+                setGame((g) => ({ ...g, trlink_url: url }));
+              }}
+            />
+          )}
           {[["trlink_url", "Standart indirme", "TRLink · Reklamlı"]].map(
             ([key, title, label]) =>
               game[key] && (
@@ -454,24 +470,25 @@ export function GamePage() {
                 </a>
               ),
           )}
-          {game.has_vip_download && (
-            <div className="vip-download">
-              <Crown size={24} />
-              <h3>VIP hızlı erişim</h3>
-              <p>Pixeldrain / MediaFire · Reklamlı yönlendirme olmadan</p>
-              {s.user?.vip.active ? (
-                <button disabled={busy} className="primary" onClick={vip}>
-                  Reklamsız bağlantıları göster
-                  <ArrowUpRight size={15} />
-                </button>
-              ) : (
-                <a className="primary" href="/vip">
-                  VIP’yi keşfet
-                  <ArrowRightIcon />
-                </a>
-              )}
-            </div>
-          )}
+          {game.has_vip_download &&
+            (!game.early_access_active || earlyUnlocked) && (
+              <div className="vip-download">
+                <Crown size={24} />
+                <h3>VIP hızlı erişim</h3>
+                <p>Pixeldrain / MediaFire · Reklamlı yönlendirme olmadan</p>
+                {s.user?.vip.active ? (
+                  <button disabled={busy} className="primary" onClick={vip}>
+                    Reklamsız bağlantıları göster
+                    <ArrowUpRight size={15} />
+                  </button>
+                ) : (
+                  <a className="primary" href="/vip">
+                    VIP’yi keşfet
+                    <ArrowRightIcon />
+                  </a>
+                )}
+              </div>
+            )}
           {vipLinks.map((link) => (
             <a
               key={link.url}

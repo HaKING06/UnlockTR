@@ -39,9 +39,13 @@ export default defineConfig(({ mode }) => {
             "support",
             "privacy",
             "mail",
+            "wallet",
+            "manage-coins",
             adminSlug,
           ]) {
             const titles = {
+              wallet: "UCoin cüzdanı",
+              "manage-coins": "Coin yönetimi",
               mail: "Kurumsal e-posta",
               requests: "Oyun istekleri",
               support: "Destek ol",

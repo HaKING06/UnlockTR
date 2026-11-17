@@ -1,4 +1,4 @@
-# Mimari · 0.5.0
+# Mimari · 0.6.0
 
 ```mermaid
 flowchart LR
@@ -71,3 +71,7 @@ Kuyruk aynı Node sürecinde 30 saniyelik taramayla çalışır. SKIP LOCKED, en
 - backend/src/mail-layout.js: tüm e-postalar için kaçışlanmış içerik taşıyan ortak kurumsal HTML çerçevesi.
 - public/brand: responsive SVG, WebP marka izi ve e-posta için PNG. public/warmup.js build sırasında VITE_API_URL ile üretilir.
 - src/api.js: yalnız herkese açık katalog için 24 saat yerel önbellek; açılışta tekrar doğrulama.
+
+## 0.6.0 ekonomi modülleri
+
+backend/src/coins.js: cüzdan, günlük ödül, erken erişim. transaction.js: pool bağlantılı transaction. admin-economy.js: kurucu yüklemesi, silinen e-postalar, proje silme/iade. migrations/0.6.0.sql: yeni tablolar ve FK silme kuralları. Frontend wallet-page.jsx, early-access.jsx, coin-admin.jsx, game-delete.jsx. /wallet ve /manage-coins gerçek HTML girişleri. Ayrıntılı kurallar ../RELEASE-0.6.0.md.
