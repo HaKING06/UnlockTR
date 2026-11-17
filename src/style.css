@@ -4945,11 +4945,6 @@ body {
   background: #ffffffde;
   border-color: #18181b1c;
 }
-[data-theme="light"] .brand img {
-  background: #171717;
-  border-radius: 8px;
-  padding: 4px;
-}
 [data-theme="light"] .auth-story {
   color: #f4f4f5;
 }

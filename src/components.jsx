@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { Gamepad2, Eye, EyeOff } from "lucide-react";
 import { useSession } from "./state";
-export function Cover({ game }) {
+export function Cover({ game, detail = false }) {
   const { nsfw: reveal, showNsfw } = useSession();
   const onReveal = () => showNsfw(true);
   const [failed, setFailed] = useState(false);
   return (
-    <div className={"cover " + (game.is_adult && !reveal ? "restricted" : "")}>
+    <div
+      className={
+        "cover " +
+        (detail ? "detail-cover " : "") +
+        (game.is_adult && !reveal ? "restricted" : "")
+      }
+    >
       {!failed ? (
         <img
           src={game.cover_image_url}
@@ -18,7 +24,12 @@ export function Cover({ game }) {
         />
       ) : (
         <div className="cover-fallback">
-          <img src="/brand/mark.webp" alt="UTR" width="110" height="55" />
+          <img
+            src="/brand/mark.webp?v=0.9.0"
+            alt="UTR"
+            width="110"
+            height="55"
+          />
           <span>UTRZONE</span>
         </div>
       )}

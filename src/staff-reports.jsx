@@ -1,3 +1,4 @@
+import { Select } from "./select";
 import React, { useEffect, useState } from "react";
 import {
   BarChart3,
@@ -13,6 +14,9 @@ import { Protected, PageHeader, Notice } from "./ui";
 export function StaffReports() {
   const s = useSession(),
     [rows, setRows] = useState([]),
+    [status, setStatus] = useState("all"),
+    [sort, setSort] = useState("updated"),
+    [totals, setTotals] = useState(null),
     [page, setPage] = useState(1),
     [more, setMore] = useState(false),
     [q, setQ] = useState(""),
@@ -23,12 +27,22 @@ export function StaffReports() {
     if (!s.user?.permissions.manage_games) return;
     const c = new AbortController();
     setBusy(true);
+    setRows([]);
+    setMessage("");
     api(
-      "/admin/project-stats?page=" + page + "&q=" + encodeURIComponent(search),
+      "/admin/project-stats?page=" +
+        page +
+        "&status=" +
+        status +
+        "&sort=" +
+        sort +
+        "&q=" +
+        encodeURIComponent(search),
       { token: s.token, signal: c.signal },
     )
       .then((d) => {
         setRows(d.projects);
+        setTotals(d.totals);
         setMore(d.has_more);
       })
       .catch((e) => {
@@ -38,7 +52,7 @@ export function StaffReports() {
         if (!c.signal.aborted) setBusy(false);
       });
     return () => c.abort();
-  }, [s.token, !!s.user, page, search]);
+  }, [s.token, !!s.user, page, search, status, sort]);
   return (
     <Protected user={s.user} loading={s.loading}>
       {s.user?.permissions.manage_games ? (
@@ -68,7 +82,51 @@ export function StaffReports() {
             />
             <button>Filtrele</button>
           </form>
+          <div
+            className="report-filter-bar"
+            aria-label="Proje raporu filtreleri"
+          >
+            {[
+              ["all", "Hepsi", "all_count"],
+              ["live", "Yayında", "live"],
+              ["hidden", "Gizli", "hidden"],
+              ["early", "Erken erişim", "early"],
+              ["deleted", "Kaldırılanlar", "deleted"],
+            ].map(([key, label, count]) => (
+              <button
+                key={key}
+                className={status === key ? "active" : ""}
+                aria-pressed={status === key}
+                onClick={() => {
+                  setPage(1);
+                  setStatus(key);
+                }}
+              >
+                {label}
+                <span>{totals?.[count] ?? "—"}</span>
+              </button>
+            ))}
+          </div>
+          <label className="report-sort field">
+            Sıralama
+            <Select
+              value={sort}
+              onChange={(e) => {
+                setPage(1);
+                setSort(e.target.value);
+              }}
+            >
+              <option value="updated">Son güncelleme</option>
+              <option value="coins">Harcanan coin</option>
+              <option value="buyers">Alıcı sayısı</option>
+              <option value="downloads">Bağlantı açılışı</option>
+              <option value="favorites">Favori sayısı</option>
+            </Select>
+          </label>
           <Notice>{message}</Notice>
+          {!busy && !rows.length && (
+            <div className="empty">Bu filtrede proje bulunamadı.</div>
+          )}
           <p className="muted small">
             İndirme sayısı; Türkiye takvim gününde aynı ziyaretçi / oyun /
             sağlayıcı için tekilleştirilmiş bağlantı açma talepleridir. Dosyanın
@@ -83,9 +141,11 @@ export function StaffReports() {
                     <small>
                       {g.deleted_at
                         ? "KALDIRILDI · SATIŞ ARŞİVİ"
-                        : g.early_access_active
-                          ? "ERKEN ERİŞİM"
-                          : "GENEL ERİŞİM"}
+                        : g.is_hidden
+                          ? "GİZLİ · YALNIZ YÖNETİM"
+                          : g.early_access_active
+                            ? "ERKEN ERİŞİM"
+                            : "GENEL ERİŞİM"}
                     </small>
                     <h2>{g.title}</h2>
                     <small>

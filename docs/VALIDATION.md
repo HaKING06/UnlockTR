@@ -38,3 +38,9 @@ Güncel uygulama sürümü 0.5.0. Bu sürüm yeni schema migration gerektirmez. 
 ## 0.8.0 · UTRZONE
 
 31 backend testi, frontend build ve format kontrolü. 390/768px izole yerel API ile vitrin, giriş/kayıt, istek kartı, hesap yönlendirmesi, mail önizleme, onaylı kaldırma ve rapor kontrolü; taşma görülmedi. Örnek kapak 404 fallback kontrolü; gerçek mail/ödeme/yıkıcı canlı işlem yok. Neon migration test dalında iki kez, sonra production üzerinde veri korunumu kontrolüyle uygulandı. Ayrıntılar ../RELEASE-0.8.0.md.
+
+## 0.9.0
+
+34 backend + 3 frontend VM testi geçti. 390/768px izole gerçek yerel API ile liste/klavye, dark varsayılan, light logo, galeri, kaydetme, rapor, yorum silme, yönetim ve giriş kontrolü; yatay taşma yok. Görsel fixture kullanıldı; gerçek mail/ödeme/silme yok. SQL önce production kopyasında iki kez, sonra veri karşılaştırmasıyla production üzerinde uygulandı. Ayrıntı ../RELEASE-0.9.0.md.
+
+0.9.0 production CSP: derlenmiş dosyalar gerçek _headers ve yerel test API endpointiyle açıldı. 390/768px Select menüsü/seçim/Escape; sıfır konsol hatası. Dinamik stil engeli yalnız style öğelerine izin verilerek düzeltildi; script kuralı değişmedi.

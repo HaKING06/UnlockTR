@@ -1,3 +1,5 @@
+import { GameGallery } from "./gallery";
+import { useConfirm } from "./confirm-dialog";
 import { FavoriteButton, DownloadButton } from "./social-ui";
 import { EarlyAccess } from "./early-access";
 import { AccountDeletion } from "./account-deletion";
@@ -309,6 +311,7 @@ export function VipPage() {
   );
 }
 export function GamePage() {
+  const confirm = useConfirm();
   const s = useSession(),
     id = new URLSearchParams(location.search).get("id"),
     [vipLinks, setVipLinks] = useState([]),
@@ -367,21 +370,32 @@ export function GamePage() {
   }
   async function moderate(event, item, hide = false) {
     event.preventDefault();
+    if (
+      hide &&
+      !(await confirm({
+        title: "Yorumu kalıcı olarak sil?",
+        description:
+          "Yorum metni veritabanından kaldırılacak. Bu işlem geri alınamaz.",
+        confirmLabel: "Yorumu sil",
+        danger: true,
+      }))
+    )
+      return;
     setBusy(true);
     try {
       const body = hide
-        ? undefined
+        ? { confirmed: true }
         : {
             body: new FormData(event.currentTarget).get("body"),
             is_deleted: false,
           };
-      await api("/admin/comments/" + item.id, {
+      await api("/admin/comments/" + item.id + (hide ? "/permanent" : ""), {
         token: s.token,
         method: hide ? "DELETE" : "PATCH",
         body,
       });
       setComments(await api("/games/" + id + "/comments"));
-      setMessage(hide ? "Yorum gizlendi." : "Yorum güncellendi.");
+      setMessage(hide ? "Yorum silindi." : "Yorum güncellendi.");
     } catch (error) {
       setMessage(error.message);
     } finally {
@@ -454,7 +468,7 @@ export function GamePage() {
       </div>
       <div className="game-layout">
         <div>
-          <Cover game={game} />
+          <GameGallery game={game} />
           <div className="tags">
             <span>{game.engine}</span>
             {game.has_tr_patch && <span className="badge-patch">TR Yama</span>}
@@ -599,7 +613,7 @@ export function GamePage() {
                       disabled={busy}
                       onClick={(e) => moderate(e, c, true)}
                     >
-                      Yorumu gizle
+                      Yorumu sil
                     </button>
                   </div>
                 </form>

@@ -1,3 +1,4 @@
+import { Select } from "./select";
 import { FavoritesPage, FavoriteButton } from "./social-ui";
 import { StaffReports } from "./staff-reports";
 import { ConfirmProvider } from "./confirm-dialog";
@@ -46,20 +47,25 @@ import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.8.0";
+import "./refinements.css";
+const VERSION = "0.9.0";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UTRZONE ana sayfa">
       <img
         className={compact ? "brand-compact" : "brand-wide"}
-        src={compact ? "/brand/compact.webp" : "/brand/horizontal.webp"}
+        src={
+          compact
+            ? "/brand/compact.webp?v=0.9.0"
+            : "/brand/horizontal.webp?v=0.9.0"
+        }
         alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
         height="48"
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.webp"
+        src="/brand/compact.webp?v=0.9.0"
         alt="UTR · UTRZONE"
         width="190"
         height="36"
@@ -84,7 +90,7 @@ function GameCard({ game }) {
         <Cover game={game} />
         <img
           className="card-brand-bug"
-          src="/brand/mark.webp"
+          src="/brand/mark.webp?v=0.9.0"
           alt=""
           width="58"
           height="28"
@@ -150,7 +156,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.webp"
+            src="/brand/mark.webp?v=0.9.0"
             alt=""
             width="90"
             height="36"
@@ -605,7 +611,7 @@ function App() {
                   </form>
                   <div className="select-wrap">
                     <SlidersHorizontal size={14} />
-                    <select
+                    <Select
                       aria-label="Oyun motoru filtresi"
                       value={engine}
                       onChange={(e) => {
@@ -618,7 +624,7 @@ function App() {
                       {engines.map((x) => (
                         <option key={x}>{x}</option>
                       ))}
-                    </select>
+                    </Select>
                   </div>
                 </div>
               </div>
@@ -696,8 +702,12 @@ function App() {
             <section className="community">
               <div className="community-visual" aria-hidden="true">
                 <span />
-                <img src="/brand/mark.webp" alt="" width="120" height="50" />
-                <Plus size={17} />
+                <img
+                  src="/brand/mark.webp?v=0.9.0"
+                  alt=""
+                  width="120"
+                  height="50"
+                />
               </div>
               <div className="community-copy">
                 <span className="eyebrow">BİRLİKTE DAHA FAZLASI</span>

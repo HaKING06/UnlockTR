@@ -2,7 +2,7 @@
 
 ## Kapsam
 
-Mevcut kod tabanı 0.8.0'dır. Bu belge güvenlik denetimi veya kusursuzluk beyanı değildir. Eski sürümler için ayrı bakım takvimi taahhüt edilmez.
+Mevcut kod tabanı 0.9.0'dır. Bu belge güvenlik denetimi veya kusursuzluk beyanı değildir. Eski sürümler için ayrı bakım takvimi taahhüt edilmez.
 
 ## Güvenli bildirim
 
@@ -29,3 +29,7 @@ Sızmış bir sır varsa ilgili sağlayıcıda iptal/rotasyon yap; dosyadan silm
 UCoin: yalnız sunucu hesaplar; bakiye/ledger/erişim transaction içinde kaydedilir, rol ve fiyat doğrulanır. Günlük ödül Türkiye tarihiyle, manuel yükleme işlem referansıyla tekilleştirilir. Erken erişim linkleri üyelik ve proje hakkıyla korunur. Harici URL paylaşımını engelleyen DRM sağlanmaz.
 
 0.7.0: coin atama/özel rapor izinleri API üzerinde denetlenir. Alıcı kümesi ve sayı onayı toplu gönderimde zorunlu; taslak tekrarları tekilleştirilir. Favori kapasitesi ve indirme yetkisi sunucudadır. Satın alma onayı atlanamaz, satılmış oyun adı/şifre/erişim kapanması onayıyla kaldırılabilir. Ham IP indirme olayına yazılmaz.
+
+0.9.0: is_hidden ve deleted_at bütün public erişim rotalarında denetlenir. Kalıcı yorum silme yetki, açık onay ve transaction audit gerektirir. Görsel adreslerini sunucu indirmez; browser HTTPS üzerinden alır. Sağlık kontrolü üye belirteci taşımaz.
+
+0.9.0 CSP: Radix çalışma anı stil öğeleri için style-src-elem self/unsafe-inline kullanılır; style-src-attr none ve script-src self korunur. Bu bir nonce tabanlı katı stil politikası değildir. Kullanıcı HTML enjeksiyonu ekleme; bağımlılık güncellemesinde production CSP testi gerekir.

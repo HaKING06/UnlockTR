@@ -23,7 +23,12 @@ export default defineConfig(({ mode }) => {
           ).replace(/\/$/, "");
           writeFileSync(
             resolve(directory, "warmup.js"),
-            `fetch(${JSON.stringify(apiOrigin + "/health")},{cache:"no-store",signal:AbortSignal.timeout(90000)}).catch(function(){});`,
+            readFileSync(resolve("public/warmup.js"), "utf8").replace(
+              JSON.stringify(
+                "https://unlocktr-backend.onrender.com/api/health",
+              ),
+              JSON.stringify(apiOrigin + "/health"),
+            ),
           );
           const shell = readFileSync(
             resolve(directory, "index.html"),

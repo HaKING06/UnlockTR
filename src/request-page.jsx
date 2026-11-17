@@ -1,3 +1,4 @@
+import { Select } from "./select";
 import React, { useEffect, useState } from "react";
 import { Crown, Plus, Clock3 } from "lucide-react";
 import { api } from "./api";
@@ -90,19 +91,19 @@ export function RequestPage() {
               <div className="form-two">
                 <label className="field">
                   İstek türü
-                  <select name="request_type">
+                  <Select name="request_type">
                     <option value="translation">Türkçe yama</option>
                     <option value="mod">Mod çalışması</option>
                     <option value="update">Mevcut yama güncellemesi</option>
-                  </select>
+                  </Select>
                 </label>
                 <label className="field">
                   Platform
-                  <select name="platform">
+                  <Select name="platform">
                     <option>PC</option>
                     <option>Android</option>
                     <option>PC + Android</option>
-                  </select>
+                  </Select>
                 </label>
               </div>
               <Field
@@ -226,7 +227,7 @@ export function RequestReview({ request, busy, onSave }) {
       <div className="form-two">
         <label className="field">
           İstek durumu
-          <select
+          <Select
             value={status}
             onChange={(e) => {
               setStatus(e.target.value);
@@ -238,11 +239,11 @@ export function RequestReview({ request, busy, onSave }) {
                 {l}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
         <label className="field">
           Hazır yanıt
-          <select
+          <Select
             defaultValue=""
             onChange={(e) => {
               if (e.target.value !== "") {
@@ -259,7 +260,7 @@ export function RequestReview({ request, busy, onSave }) {
                 {label}
               </option>
             ))}
-          </select>
+          </Select>
         </label>
       </div>
       <Field

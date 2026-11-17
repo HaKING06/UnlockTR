@@ -158,6 +158,13 @@ export function PrivacyPage() {
         fazla 24 saat saklanır. Site açıldığında liste yenilenir. VIP indirme
         adresleri bu önbelleğe dahil değildir.
       </p>
+      <h2>Bağlantının hazır tutulması</h2>
+      <p>
+        Site açıkken API bağlantısını kontrol etmek için belirli aralıklarla
+        sağlık isteği gönderilir. Sekmelerin aynı isteği gereksiz yere
+        tekrarlamaması için bu cihazda yalnız son kontrol zamanı tutulur; hesap
+        bilgisi bu isteğe eklenmez.
+      </p>
       <h2>Tercihlerin</h2>
       <p>
         utrzone_consent çerezi seçimini 180 gün hatırlar. İzin verdiğinde tema

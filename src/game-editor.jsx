@@ -1,3 +1,4 @@
+import { Select } from "./select";
 import { useConfirm } from "./confirm-dialog";
 import { GameDelete } from "./game-delete";
 import React, { useEffect, useState } from "react";
@@ -23,6 +24,8 @@ const empty = {
   description: "",
   version: "1.0",
   cover_image_url: "",
+  gallery_images: [],
+  is_hidden: false,
   engine: "Ren'Py",
   is_adult: false,
   has_tr_patch: true,
@@ -211,14 +214,14 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                 <div className="form-two">
                   <label className="field">
                     Oyun motoru
-                    <select
+                    <Select
                       value={draft.engine}
                       onChange={(e) => change("engine", e.target.value)}
                     >
                       {engines.map((v) => (
                         <option key={v}>{v}</option>
                       ))}
-                    </select>
+                    </Select>
                   </label>
                   <Field
                     label="Kapak görseli HTTPS URL *"
@@ -230,6 +233,70 @@ export function GameEditor({ id, onDone, onDirtyChange }) {
                     placeholder="https://utr.haking.tr/games/oyun-adi/cover.webp"
                   />
                 </div>
+                <section className="editor-gallery">
+                  <h4>
+                    Görsel galerisi{" "}
+                    <span>{draft.gallery_images.length}/12</span>
+                  </h4>
+                  <p className="field-help">
+                    Kapak dışında en fazla 12 görsel ekleyebilirsin. Büyük
+                    görüntü için en az 1600px genişlikte kaynak önerilir; küçük
+                    görseli büyütmek ayrıntı kazandırmaz.
+                  </p>
+                  {draft.gallery_images.map((url, index) => (
+                    <div className="gallery-url-row" key={index}>
+                      <Field
+                        label={`${index + 1}. görsel HTTPS adresi`}
+                        type="url"
+                        value={url}
+                        required
+                        maxLength={2048}
+                        onChange={(e) =>
+                          change(
+                            "gallery_images",
+                            draft.gallery_images.map((v, i) =>
+                              i === index ? e.target.value : v,
+                            ),
+                          )
+                        }
+                      />
+                      <button
+                        type="button"
+                        className="text-danger"
+                        onClick={() =>
+                          change(
+                            "gallery_images",
+                            draft.gallery_images.filter((_, i) => i !== index),
+                          )
+                        }
+                      >
+                        Kaldır
+                      </button>
+                    </div>
+                  ))}
+                  <button
+                    type="button"
+                    className="secondary small-button"
+                    disabled={draft.gallery_images.length >= 12}
+                    onClick={() =>
+                      change("gallery_images", [...draft.gallery_images, ""])
+                    }
+                  >
+                    + Görsel ekle
+                  </button>
+                </section>
+                <label className="field">
+                  Yayın görünürlüğü
+                  <Select
+                    value={draft.is_hidden ? "hidden" : "live"}
+                    onChange={(e) =>
+                      change("is_hidden", e.target.value === "hidden")
+                    }
+                  >
+                    <option value="live">Yayında · Herkes görebilir</option>
+                    <option value="hidden">Gizli · Yalnız yönetim</option>
+                  </Select>
+                </label>
                 <Field
                   label="Oyuncuya gösterilecek açıklama *"
                   textarea

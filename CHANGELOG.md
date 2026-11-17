@@ -1,5 +1,9 @@
 # Frontend changelog
 
+## 0.9.0 · 2026-11-17
+
+Site listeleri, şeffaf logolar, galeri, gizli yayın ve özel rapor filtreleri; onaylı kalıcı yorum silme; sekmeler arası tekrar önlemeli API sağlık isteği. [Yayın notları](RELEASE-0.9.0.md).
+
 ## 0.8.0 · 2026-11-17
 
 UTRZONE kimliği ve alan adı; özgün paftadan raster logo/ikonlar; mobil istek kartı ve footer; kurumsal e-posta adresi; kaldırılan projelerde iadesiz erişim kapatma ve satış arşivi. [Yayın notları](RELEASE-0.8.0.md).

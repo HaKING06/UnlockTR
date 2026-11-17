@@ -62,7 +62,7 @@ export function AuthPage({ mode = "login" }) {
         <div>
           <img
             className="auth-brand-mark"
-            src="/brand/mark.webp"
+            src="/brand/mark.webp?v=0.9.0"
             alt="UTR"
             width="200"
             height="80"

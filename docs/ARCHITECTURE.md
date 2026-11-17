@@ -1,4 +1,4 @@
-# Mimari · 0.8.0
+# Mimari · 0.9.0
 
 ```mermaid
 flowchart LR
@@ -90,3 +90,7 @@ backend/src/coins.js: cüzdan, günlük ödül, erken erişim. transaction.js: p
 | backend/migrations/0.7.0.sql | Şema, early_access_sales ve eski backend uyum trigger'ı |
 
 /favorites ve /reports HTML girişleri eklendi. Satışlar kullanıcı silinmesinde anonim kalır; game_unlocks erişim hakkı, early_access_sales kalıcı rapor kaydıdır. Satın alma tek transaction içinde bakiye/ledger/erişim/onay kaydeder. Satılmış oyun kaldırılabilir; bütün erişim yolları kapanır, satış raporu korunur. Favori ve indirme sayıları public, alıcı/harcama detayları yalnız yetkili ekip içindir. Ölçüm dosyanın tamamlanmasını doğrulamaz. Migration komutu 0.6.0 ve 0.7.0 dahil bütün geçişleri uygular.
+
+## 0.9.0 ekleri
+
+src/select.jsx: Radix Root/Trigger/Portal ile ortak kontrollü/form uyumlu seçim. src/gallery.jsx: session NSFW tercihiyle 12 ek görsel, doğal boyut ve native dialog. src/refinements.css: bu sürüm kontrol/medya düzenleri. public/warmup.js: tek kurulum, sekme zaman damgası, 5 dakikalık credentials-free health, online/pageshow/visibility tekrar kontrolü; build API endpointini yerleştirir. test/warmup.test.js VM runtime testleri. Backend games.gallery_images/is_hidden ve özel rapor durum/sıralama whitelist; DELETE comments/:id/permanent izin+onay+transaction audit.

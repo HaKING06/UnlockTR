@@ -3,7 +3,7 @@
 </p>
 
 <p align="center">
-  <img alt="Version 0.8.0" src="https://img.shields.io/badge/version-0.8.0-dc2626?style=flat-square" />
+  <img alt="Version 0.9.0" src="https://img.shields.io/badge/version-0.9.0-dc2626?style=flat-square" />
   <img alt="Language Turkish" src="https://img.shields.io/badge/language-T%C3%BCrk%C3%A7e-60a5fa?style=flat-square" />
   <img alt="License All rights reserved" src="https://img.shields.io/badge/license-All_rights_reserved-64748b?style=flat-square" />
 </p>
@@ -19,7 +19,7 @@
 
 **Türkçe yamalar, oyun modları ve oyuncu topluluğu.** UTRZONE; oyunları keşfetme, yama indirme, deneyim paylaşma ve yeni oyun isteme akışlarını aynı platformda toplar.
 
-> **Mevcut sürüm: 0.8.0.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
+> **Mevcut sürüm: 0.9.0.** UTR marka kimliği, gelişmiş topluluk araçları ve kurumsal iletişim.
 
 ## İçindekiler
 
@@ -153,3 +153,7 @@ Favoriler ve herkese açık sayaçlar; site içi satın alma/işlem onayı; öze
 ## 0.8.0 · UTRZONE
 
 UTRZONE · **Underground Translation & Reworks** (Yeraltı Çeviri & Yeniden Yapımlar). Yeni site: https://utrzone.haking.tr; iletişim: utrzone@haking.tr. Yeni paftadan raster logolar/favicon, güncel e-postalar, mobil istek kartı ve footer. Satılmış projeler de iadesiz kaldırılabilir; indirme erişimi kapanır, satış raporu korunur. [Yayın ayarları ve doğrulama](RELEASE-0.8.0.md). Mevcut Render servis ve GitHub checkout isimleri bağlantı uyumluluğu için değişmedi.
+
+## 0.9.0 · Arayüz ve galeri
+
+Klavye destekli site listeleri, şeffaf logolar, doğru oranlı galeri ve 12 ek görsel; gizli yayın, özel rapor filtreleri ve onaylı kalıcı yorum silme. Açılış + 5 dakikalık API sağlık isteği ve sekme tekrar önleme. 34 backend + 3 frontend testi. [Kurallar, sınırlar ve yayın notları](RELEASE-0.9.0.md).

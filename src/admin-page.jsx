@@ -1,3 +1,4 @@
+import { Select } from "./select";
 import { useConfirm } from "./confirm-dialog";
 import { GameEditor } from "./game-editor";
 import { RequestReview } from "./request-page";
@@ -68,6 +69,31 @@ export function AdminPage() {
       setBusy(false);
     }
   }
+  async function removeComment(id) {
+    if (
+      !(await confirm({
+        title: "Yorumu kalıcı olarak sil?",
+        description: "Yorum metni kaldırılır; işlem geri alınamaz.",
+        confirmLabel: "Yorumu sil",
+        danger: true,
+      }))
+    )
+      return;
+    setBusy(true);
+    try {
+      await api("/admin/comments/" + id + "/permanent", {
+        token: s.token,
+        method: "DELETE",
+        body: { confirmed: true },
+      });
+      setTick((t) => t + 1);
+      setMessage("Yorum silindi.");
+    } catch (e) {
+      setMessage(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
   const labels = {
     games: ["Oyunlar", Gamepad2],
     comments: ["Yorumlar", MessageSquare],
@@ -86,23 +112,28 @@ export function AdminPage() {
               title="Topluluğun kontrol noktası."
               description={roleLabel[s.user.role] + " · " + s.user.email}
             >
-              {s.user.permissions.manage_games && (
-                <a className="secondary" href="/mail">
-                  Kurumsal e-posta hazırla
-                </a>
-              )}
-              {s.user.permissions.manage_coins && (
-                <a className="secondary" href="/manage-coins">
-                  UCoin yönetimi
-                </a>
-              )}
-              <a className="secondary" href="/reports">
-                Proje raporları
-              </a>
-              <span className="role-tag">
-                <ShieldCheck size={14} />
-                {roleLabel[s.user.role]}
-              </span>
+              <div className="management-quick-actions">
+                {" "}
+                {s.user.permissions.manage_games && (
+                  <a className="secondary" href="/mail">
+                    Kurumsal e-posta hazırla
+                  </a>
+                )}
+                {s.user.permissions.manage_coins && (
+                  <a className="secondary" href="/manage-coins">
+                    UCoin yönetimi
+                  </a>
+                )}
+                {s.user.permissions.manage_games && (
+                  <a className="secondary" href="/reports">
+                    Proje raporları
+                  </a>
+                )}
+                <span className="role-tag">
+                  <ShieldCheck size={14} />
+                  {roleLabel[s.user.role]}
+                </span>
+              </div>{" "}
             </PageHeader>
             <nav className="manage-tabs">
               {allowed.map((key) => {
@@ -273,6 +304,14 @@ export function AdminPage() {
                             <button className="secondary" disabled={busy}>
                               Kaydet
                             </button>
+                            <button
+                              type="button"
+                              className="text-danger"
+                              disabled={busy}
+                              onClick={() => removeComment(c.id)}
+                            >
+                              Yorumu sil
+                            </button>
                           </div>
                         </form>
                       ))}
@@ -324,7 +363,7 @@ export function AdminPage() {
                             <div className="user-controls">
                               <label className="field">
                                 Ekip rolü
-                                <select
+                                <Select
                                   value={u.role}
                                   disabled={busy}
                                   onChange={(e) =>
@@ -338,7 +377,7 @@ export function AdminPage() {
                                   <option value="cofounder">
                                     Yardımcı kurucu
                                   </option>
-                                </select>
+                                </Select>
                               </label>
                               <div>
                                 <span className="vip-badge">

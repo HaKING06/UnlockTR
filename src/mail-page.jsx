@@ -161,7 +161,7 @@ export function MailPage() {
               <aside>
                 <div className="mail-preview">
                   <div className="mail-preview-top">
-                    <img src="/brand/horizontal.webp" alt="UTRZONE" />
+                    <img src="/brand/horizontal.webp?v=0.9.0" alt="UTRZONE" />
                     <span>ÖNİZLEME</span>
                   </div>
                   <small>
