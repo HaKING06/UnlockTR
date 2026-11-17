@@ -33,6 +33,7 @@ export function SessionProvider({ children }) {
   function setSession(data) {
     setToken(data?.token || "");
     setUser(data?.user || null);
+    if (data?.user) setNsfw(!!data.user.show_nsfw);
     try {
       if (data?.token) {
         localStorage.setItem("unlocktr-token", data.token);

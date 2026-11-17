@@ -38,7 +38,7 @@ import { AdminPage } from "./admin-page";
 import { SessionProvider, useSession } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
-const VERSION = "0.5.1";
+const VERSION = "0.5.2";
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UnlockTR ana sayfa">
@@ -147,7 +147,13 @@ function Skeletons() {
 function App() {
   const { token, user, nsfw, showNsfw, logout } = useSession();
   const [theme, setTheme] = useState(getTheme),
-    [games, setGames] = useState(() => readCatalog()?.games || []),
+    [games, setGames] = useState(() =>
+      ["patch", "mod"].includes(
+        new URLSearchParams(location.search).get("type"),
+      )
+        ? []
+        : readCatalog()?.games || [],
+    ),
     [query, setQuery] = useState(""),
     [search, setSearch] = useState(""),
     [filter, setFilter] = useState(() =>
@@ -163,6 +169,23 @@ function App() {
     [more, setMore] = useState(false),
     [retry, setRetry] = useState(0);
   useEffect(() => {
+    const closeMenu = (event) => {
+      const menu = document.querySelector(".user-menu[open]");
+      if (!menu) return;
+      if (event.type === "keydown" && event.key === "Escape") {
+        menu.open = false;
+        menu.querySelector("summary")?.focus();
+      } else if (event.type === "pointerdown" && !menu.contains(event.target))
+        menu.open = false;
+    };
+    document.addEventListener("pointerdown", closeMenu);
+    document.addEventListener("keydown", closeMenu);
+    return () => {
+      document.removeEventListener("pointerdown", closeMenu);
+      document.removeEventListener("keydown", closeMenu);
+    };
+  }, []);
+  useEffect(() => {
     document.documentElement.dataset.theme = theme;
     try {
       if (preferencesAllowed()) localStorage.setItem("theme", theme);
@@ -172,12 +195,30 @@ function App() {
     if (location.pathname !== "/") return;
     const controller = new AbortController();
     setStatus("loading");
-    api("/games?q=" + encodeURIComponent(search) + "&page=" + page, {
-      signal: controller.signal,
-    })
+    api(
+      "/games?" +
+        new URLSearchParams({
+          q: search,
+          page: String(page),
+          type: filter,
+          engine,
+        }),
+      {
+        signal: controller.signal,
+      },
+    )
       .then((d) => {
-        setGames((g) => (page === 1 ? d.games : [...g, ...d.games]));
-        if (page === 1 && !search) saveCatalog(d);
+        setGames((g) =>
+          page === 1
+            ? d.games
+            : [
+                ...new Map(
+                  [...g, ...d.games].map((item) => [item.id, item]),
+                ).values(),
+              ],
+        );
+        if (page === 1 && !search && filter === "all" && engine === "all")
+          saveCatalog(d);
         setMore(d.has_more);
         setStatus("ready");
       })
@@ -185,7 +226,7 @@ function App() {
         if (e.name !== "AbortError") setStatus("error");
       });
     return () => controller.abort();
-  }, [search, page, retry]);
+  }, [search, page, retry, filter, engine]);
   const shown = games.filter(
     (g) =>
       (engine === "all" || g.engine === engine) &&
@@ -230,6 +271,8 @@ function App() {
       location.href = "/?type=" + value + "#library";
       return;
     }
+    setPage(1);
+    if (filter !== value || page !== 1) setGames([]);
     setFilter(value);
     document.getElementById("library")?.scrollIntoView({
       behavior: matchMedia("(prefers-reduced-motion: reduce)").matches
@@ -467,12 +510,21 @@ function App() {
                       key={key}
                       aria-pressed={filter === key}
                       className={filter === key ? "active" : ""}
-                      onClick={() => setFilter(key)}
+                      onClick={() => {
+                        setPage(1);
+                        if (filter !== key || page !== 1) setGames([]);
+                        setFilter(key);
+                      }}
                     >
                       <Icon size={15} />
                       {label}
                       {key === "all" && status === "ready" && (
-                        <span className="tab-count">{games.length}</span>
+                        <span
+                          className="tab-count"
+                          title="Yüklenen oyun sayısı"
+                        >
+                          {games.length}
+                        </span>
                       )}
                     </button>
                   ))}
@@ -483,7 +535,9 @@ function App() {
                     onSubmit={(e) => {
                       e.preventDefault();
                       setPage(1);
+                      setGames([]);
                       setSearch(query);
+                      setRetry((r) => r + 1);
                     }}
                   >
                     <Search size={17} />
@@ -503,7 +557,11 @@ function App() {
                     <select
                       aria-label="Oyun motoru filtresi"
                       value={engine}
-                      onChange={(e) => setEngine(e.target.value)}
+                      onChange={(e) => {
+                        setPage(1);
+                        setGames([]);
+                        setEngine(e.target.value);
+                      }}
                     >
                       <option value="all">Tüm motorlar</option>
                       {engines.map((x) => (
@@ -580,7 +638,7 @@ function App() {
                   üyelere özel.
                 </span>
                 <span className="filter-note">
-                  Filtreler yüklenen oyunlara uygulanır.
+                  Filtreler tüm kütüphanede aranır.
                 </span>
               </div>
             </section>

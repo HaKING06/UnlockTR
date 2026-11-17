@@ -33,7 +33,7 @@ export function AccountPage() {
         location.href = "/login";
         return;
       }
-      if (path === "/me") await s.showNsfw(body.show_nsfw);
+
       setMessage(d.message || "Ayarların kaydedildi.");
     } catch (e) {
       setMessage(e.message);

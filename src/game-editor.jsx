@@ -30,15 +30,46 @@ const empty = {
   pixeldrain_url: "",
   mediafire_url: "",
 };
-export function GameEditor({ id, onDone }) {
+export function GameEditor({ id, onDone, onDirtyChange }) {
   const { token } = useSession(),
     [draft, setDraft] = useState(empty),
     [ready, setReady] = useState(!id),
     [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false);
-  const change = (key, value) => setDraft((d) => ({ ...d, [key]: value }));
+    [busy, setBusy] = useState(false),
+    [dirty, setDirty] = useState(false),
+    [attempt, setAttempt] = useState(0),
+    [coverFailed, setCoverFailed] = useState(false);
+  useEffect(() => {
+    onDirtyChange?.(dirty);
+    return () => onDirtyChange?.(false);
+  }, [dirty, onDirtyChange]);
+  const change = (key, value) => {
+    setDirty(true);
+    if (key === "cover_image_url") setCoverFailed(false);
+    setDraft((d) => ({ ...d, [key]: value }));
+  };
+  useEffect(() => {
+    const warn = (e) => {
+      e.preventDefault();
+      e.returnValue = "";
+    };
+    if (dirty) window.addEventListener("beforeunload", warn);
+    return () => window.removeEventListener("beforeunload", warn);
+  }, [dirty]);
+  const leave = () => {
+    if (
+      !busy &&
+      (!dirty ||
+        window.confirm(
+          "Kaydedilmemiş değişikliklerin var. Listene dönmek istiyor musun?",
+        ))
+    )
+      onDone("");
+  };
+
   useEffect(() => {
     if (!id) return;
+    setMessage("");
     const c = new AbortController();
     api("/admin/games/" + id, { token, signal: c.signal })
       .then((g) => {
@@ -53,8 +84,9 @@ export function GameEditor({ id, onDone }) {
         if (e.name !== "AbortError") setMessage(e.message);
       });
     return () => c.abort();
-  }, [id, token]);
+  }, [id, token, attempt]);
   function toggleMod(key, checked) {
+    setDirty(true);
     setDraft((d) => {
       let types = checked
         ? [...d.mod_types, key]
@@ -84,6 +116,7 @@ export function GameEditor({ id, onDone }) {
         token,
         body,
       });
+      setDirty(false);
       onDone("Oyun " + (id ? "güncellendi." : "yayınlandı."));
     } catch (e) {
       setMessage(e.message);
@@ -101,11 +134,25 @@ export function GameEditor({ id, onDone }) {
             Oyunu tanıt, yama içeriğini açıkla ve indirme erişimini ayarla.
           </p>
         </div>
-        <button className="secondary" onClick={() => onDone("")}>
+        <button className="secondary" disabled={busy} onClick={leave}>
           Listeye dön
         </button>
       </div>
       <Notice>{message}</Notice>
+      {!ready && (
+        <div className="panel" role="status">
+          {message ? (
+            <button
+              className="secondary"
+              onClick={() => setAttempt((a) => a + 1)}
+            >
+              Yüklemeyi tekrar dene
+            </button>
+          ) : (
+            "Oyun bilgileri yükleniyor…"
+          )}
+        </div>
+      )}
       {ready && (
         <form onSubmit={submit}>
           <div className="editor-layout">
@@ -336,7 +383,38 @@ export function GameEditor({ id, onDone }) {
             </div>
             <aside className="panel editor-summary">
               <span className="eyebrow">YAYIN ÖZETİ</span>
+              {draft.cover_image_url.startsWith("https://") && !coverFailed && (
+                <img
+                  className={
+                    "editor-cover-preview" +
+                    (draft.is_adult ? " restricted" : "")
+                  }
+                  src={draft.cover_image_url}
+                  alt="Kapak önizlemesi"
+                  referrerPolicy="no-referrer"
+                  onError={() => setCoverFailed(true)}
+                />
+              )}
+              {coverFailed && (
+                <p className="notice">
+                  Kapak yüklenemedi. Görsel adresini kontrol et.
+                </p>
+              )}
               <h3>{draft.title || "Yeni oyun"}</h3>
+              <div className="editor-checklist">
+                <strong>Yayın kontrol listesi</strong>
+                {[
+                  ["Oyun adı", draft.title.trim()],
+                  ["Açıklama", draft.description.trim()],
+                  ["HTTPS kapak", draft.cover_image_url.startsWith("https://")],
+                  ["Reklamlı indirme", draft.trlink_url.startsWith("https://")],
+                  ["Mod türleri", !draft.has_mod || draft.mod_types.length],
+                ].map(([label, ok]) => (
+                  <p key={label} className={ok ? "" : "incomplete"}>
+                    {ok ? "✓" : "○"} {label}
+                  </p>
+                ))}
+              </div>
               <p>
                 {draft.engine} · v{draft.version || "—"}
               </p>

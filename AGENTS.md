@@ -11,5 +11,5 @@
 
 - Proje başka bir AI'a devredilmiyor. Ana geliştirme mevcut kullanıcı/Codex akışında sürer.
 - Yardımcı AI yalnız kullanıcının belirttiği küçük, sınırları belli işi yapmalı; kendi başına yeniden tasarım, mimari göç veya geniş sürüm çalışması başlatmamalı.
-- Güncel sürüm 0.5.1. UTR grafit/kırmızı kimliği ve rol denetimleri korunmalı.
+- Güncel sürüm 0.5.2. UTR grafit/kırmızı kimliği ve rol denetimleri korunmalı.
 - İlgili dosyalar için docs/ARCHITECTURE.md ve görsel görevde docs/VISUAL_BRIEF.md referanstır.

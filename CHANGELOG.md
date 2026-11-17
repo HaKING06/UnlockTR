@@ -1,5 +1,9 @@
 # Frontend changelog
 
+## 0.5.2 · 2026-11-17
+
+Menü katmanı, tam katalog filtreleri, sayfalama, profil adı ve uzun açıklama hataları düzeltildi. Yayın stüdyosuna önizleme, kontrol listesi ve değişiklik uyarıları eklendi. [Yayın notları](RELEASE-0.5.2.md).
+
 ## 0.5.1 · 2026-11-17
 
 Orijinal kare U marka görselinden favicon/app ikonları; ICO, PNG, Apple touch icon ve web manifest. Çizim SVG favicon kaldırıldı. Backend değişmedi.

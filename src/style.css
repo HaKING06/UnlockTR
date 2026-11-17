@@ -5039,3 +5039,45 @@ body {
   pointer-events: none;
   filter: drop-shadow(0 2px 4px #000);
 }
+
+/* 0.5.2: header is above content stacking contexts created by glass panels. */
+.site-header {
+  position: relative;
+  z-index: 50;
+  isolation: isolate;
+}
+.user-menu > div {
+  max-height: min(70dvh, 480px);
+  overflow-y: auto;
+  max-width: calc(100vw - 32px);
+}
+.skip-link {
+  z-index: 110;
+}
+.cookie-notice {
+  z-index: 100;
+}
+.editor-cover-preview {
+  width: 100%;
+  aspect-ratio: 16/9;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--raised);
+  margin-bottom: 16px;
+}
+.editor-cover-preview.restricted {
+  filter: blur(16px);
+}
+.editor-checklist {
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  margin: 16px 0;
+  font-size: 12px;
+}
+.editor-checklist p {
+  margin: 5px 0;
+}
+.editor-checklist .incomplete {
+  color: var(--accent);
+}

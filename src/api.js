@@ -16,7 +16,16 @@ export async function api(path, { token, body, method = "GET", signal } = {}) {
     },
     ...(body ? { body: JSON.stringify(body) } : {}),
   });
-  const data = await res.json();
+  let data;
+  try {
+    data = await res.json();
+  } catch {
+    const error = new Error(
+      "Sunucuya şu an ulaşılamıyor. Biraz sonra tekrar dene.",
+    );
+    error.status = res.status;
+    throw error;
+  }
   if (!res.ok) {
     const error = new Error(data.error || "İşlem başarısız.");
     error.status = res.status;

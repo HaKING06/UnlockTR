@@ -29,6 +29,7 @@ export function AdminPage() {
     [editor, setEditor] = useState(
       () => new URLSearchParams(location.search).get("edit") || "",
     );
+  const [editorDirty, setEditorDirty] = useState(false);
   const allowed = s.user?.permissions.manage_users
     ? ["games", "comments", "requests", "users", "notifications", "audit"]
     : s.user?.permissions.manage_games
@@ -101,6 +102,13 @@ export function AdminPage() {
                     className={active === key ? "active" : ""}
                     key={key}
                     onClick={() => {
+                      if (
+                        editorDirty &&
+                        !window.confirm(
+                          "Kaydedilmemiş oyun değişikliklerin var. Sekmeyi değiştirmek istiyor musun?",
+                        )
+                      )
+                        return;
                       setTab(key);
                       setPage(1);
                       setEditor("");
@@ -118,6 +126,7 @@ export function AdminPage() {
             <Notice>{message}</Notice>
             {active === "games" && s.user.permissions.manage_games && editor ? (
               <GameEditor
+                onDirtyChange={setEditorDirty}
                 key={editor}
                 id={editor === "new" ? null : editor}
                 onDone={(msg) => {
