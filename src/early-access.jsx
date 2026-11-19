@@ -1,3 +1,4 @@
+import { gamePath } from "./game-url";
 import { useConfirm } from "./confirm-dialog";
 import React, { useEffect, useState } from "react";
 import { Coins, LockKeyhole, UnlockKeyhole } from "lucide-react";
@@ -92,7 +93,7 @@ export function EarlyAccess({ game, onAccess }) {
       {!user ? (
         <a
           className="primary"
-          href={"/login?next=" + encodeURIComponent("/game?id=" + game.id)}
+          href={"/login?next=" + encodeURIComponent(gamePath(game))}
         >
           Giriş yap ve erişimi aç
         </a>

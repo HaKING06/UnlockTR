@@ -1,3 +1,4 @@
+import { gamePath } from "./game-url";
 import React, { useState, useEffect } from "react";
 import {
   Coins,
@@ -165,7 +166,7 @@ export function WalletPage() {
               ) : (
                 <div className="unlocked-list">
                   {data.unlocked.map((g) => (
-                    <a key={g.id} href={"/game?id=" + g.id}>
+                    <a key={g.id} href={gamePath(g)}>
                       <strong>{g.title}</strong>
                       <span>
                         {g.paid} UCoin · Açıldı <ArrowUpRight size={14} />

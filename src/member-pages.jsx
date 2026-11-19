@@ -1,3 +1,5 @@
+import { initialGame, updateGameSeo, gameTitle } from "./game-url";
+import { gamePath } from "./game-url";
 import { GameGallery } from "./gallery";
 import { useConfirm } from "./confirm-dialog";
 import { FavoriteButton, DownloadButton } from "./social-ui";
@@ -313,34 +315,53 @@ export function VipPage() {
 export function GamePage() {
   const confirm = useConfirm();
   const s = useSession(),
-    id = new URLSearchParams(location.search).get("id"),
+    legacyId = new URLSearchParams(location.search).get("id"),
+    slug = location.pathname.startsWith("/oyun/")
+      ? location.pathname.slice(6).replace(/\/$/, "")
+      : null,
     [vipLinks, setVipLinks] = useState([]),
     [earlyUnlocked, setEarlyUnlocked] = useState(false),
-    [game, setGame] = useState(null),
+    [game, setGame] = useState(initialGame),
     [comments, setComments] = useState([]),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
     [error, setError] = useState("");
+  const id = game?.id || legacyId;
   useEffect(() => {
-    if (!id) {
+    const c = new AbortController();
+    if (!slug && !legacyId) {
       setError("Oyun adresi geçersiz.");
       return;
     }
-    const c = new AbortController();
-    Promise.all([
-      api("/games/" + id, { signal: c.signal }),
-      api("/games/" + id + "/comments", { signal: c.signal }),
-    ])
-      .then(([g, cm]) => {
+    const loaded = initialGame();
+    const pending = loaded
+      ? Promise.resolve(loaded)
+      : api(
+          slug
+            ? "/games/by-slug/" + encodeURIComponent(slug)
+            : "/games/" + legacyId,
+          { signal: c.signal },
+        );
+    pending
+      .then((g) => {
+        if (c.signal.aborted) return;
         setGame(g);
-        setComments(cm);
-        document.title = g.title + " · UTRZONE";
+        updateGameSeo(g);
+        if (!slug && g.slug) history.replaceState({}, "", gamePath(g));
+        api("/games/" + g.id + "/comments", { signal: c.signal })
+          .then(setComments)
+          .catch((e) => {
+            if (e.name !== "AbortError")
+              setMessage(
+                "Yorumlar şu anda yüklenemedi. Daha sonra tekrar deneyebilirsin.",
+              );
+          });
       })
       .catch((e) => {
         if (e.name !== "AbortError") setError(e.message);
       });
     return () => c.abort();
-  }, [id]);
+  }, [slug, legacyId]);
   useEffect(() => {
     const update = (e) => {
       if (e.detail.gameId === id)
@@ -440,7 +461,7 @@ export function GamePage() {
       </div>
       <PageHeader
         eyebrow={game.engine}
-        title={game.title}
+        title={gameTitle(game).replace(" | UTRZONE", "")}
         description={
           "Sürüm " +
           game.version +
@@ -458,6 +479,23 @@ export function GamePage() {
         )}
       </PageHeader>
       <div className="game-social-bar">
+        <button
+          className="secondary"
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(
+                "https://utrzone.haking.tr" + gamePath(game),
+              );
+              setMessage("Oyun bağlantısı kopyalandı.");
+            } catch {
+              setMessage(
+                "Bağlantı: https://utrzone.haking.tr" + gamePath(game),
+              );
+            }
+          }}
+        >
+          Bağlantıyı kopyala
+        </button>
         <FavoriteButton gameId={id} count={game.favorite_count || 0} />
         <span>
           <Download size={15} /> {game.download_count || 0} bağlantı açılışı
@@ -638,7 +676,7 @@ export function GamePage() {
         ) : (
           <a
             className="secondary"
-            href={"/login?next=" + encodeURIComponent("/game?id=" + id)}
+            href={"/login?next=" + encodeURIComponent(gamePath(game))}
           >
             Yorum yazmak için giriş yap
           </a>

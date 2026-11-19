@@ -56,7 +56,8 @@ export function useClientNavigation(adminSlug) {
       const url = new URL(link.href, location.href);
       if (
         url.origin !== location.origin ||
-        !routes.has(url.pathname.replace(/\/$/, "") || "/")
+        (!routes.has(url.pathname.replace(/\/$/, "") || "/") &&
+          !/^\/oyun\/[a-z0-9-]+\/?$/.test(url.pathname))
       )
         return;
       // Preserve the browser's existing unsaved-form confirmation.
@@ -81,9 +82,53 @@ export function useClientNavigation(adminSlug) {
       "/terms": "Kullanım koşulları",
       "/content-policy": "İçerik ve telif",
     }[location.pathname.replace(/\/$/, "")];
-    document.title = title
-      ? title + " · UTRZONE"
-      : "UTRZONE — Oyunun dilini değiştir.";
+    if (
+      !location.pathname.startsWith("/oyun/") &&
+      location.pathname !== "/game"
+    ) {
+      document.getElementById("utrzone-game-schema")?.remove();
+      document.querySelector('meta[name="rating"]')?.remove();
+      for (const [property, content] of [
+        ["og:title", "UTRZONE — Underground Translation & Reworks"],
+        ["og:description", "Türkçe oyun yamaları, modlar ve oyuncu topluluğu."],
+        ["og:url", "https://utrzone.haking.tr" + location.pathname],
+        ["og:image", "https://utrzone.haking.tr/brand/social-card.png"],
+      ])
+        document
+          .querySelector(`meta[property="${property}"]`)
+          ?.setAttribute("content", content);
+      document
+        .querySelector('link[rel="canonical"]')
+        ?.setAttribute("href", "https://utrzone.haking.tr" + location.pathname);
+      document
+        .querySelector('meta[name="description"]')
+        ?.setAttribute(
+          "content",
+          "UTRZONE: Türkçe oyun yamaları, modlar ve oyuncu topluluğu.",
+        );
+      document
+        .querySelector('meta[name="robots"]')
+        ?.setAttribute(
+          "content",
+          [
+            "/",
+            "/login",
+            "/register",
+            "/vip",
+            "/support",
+            "/about",
+            "/advertise",
+            "/help",
+            "/terms",
+            "/content-policy",
+          ].includes(location.pathname)
+            ? "index,follow"
+            : "noindex,nofollow",
+        );
+      document.title = title
+        ? title + " · UTRZONE"
+        : "UTRZONE — Oyunun dilini değiştir.";
+    }
     document.querySelector(".user-menu[open]")?.removeAttribute("open");
     const main = document.getElementById("main");
     main?.setAttribute("tabindex", "-1");

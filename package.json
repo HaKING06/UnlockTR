@@ -1,6 +1,6 @@
 {
   "name": "utrzone-web",
-  "version": "0.11.4",
+  "version": "0.11.5",
   "private": true,
   "type": "module",
   "scripts": {
@@ -20,7 +20,8 @@
   "devDependencies": {
     "@vitejs/plugin-react": "^5.1.1",
     "prettier": "^3.10.1",
-    "vite": "^7.2.2"
+    "vite": "^7.2.2",
+    "wrangler": "^4.165.0"
   },
   "engines": {
     "node": ">=22.12"

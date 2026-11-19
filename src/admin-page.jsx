@@ -1,3 +1,4 @@
+import { gamePath } from "./game-url";
 import { Select } from "./select";
 import { useConfirm } from "./confirm-dialog";
 import { GameEditor } from "./game-editor";
@@ -249,10 +250,7 @@ export function AdminPage() {
                               </p>
                             </div>
                             <div>
-                              <a
-                                className="secondary"
-                                href={"/game?id=" + g.id}
-                              >
+                              <a className="secondary" href={gamePath(g)}>
                                 <ArrowUpRight size={15} />
                                 Görüntüle
                               </a>

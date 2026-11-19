@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/media/utrzone-banner.webp" alt="UTRZONE — Underground Translation & Reworks" width="100%" /></p>
 <p align="center"><strong>Oyunun dilini değiştir. Kendi deneyimini kur.</strong><br />Türkçe yamalar · Ren’Py & Unity modları · Oyuncu topluluğu</p>
 <p align="center"><a href="https://utrzone.haking.tr">Platformu keşfet</a> · <a href="https://utrzone.haking.tr/register">Topluluğa katıl</a> · <a href="https://utrzone.haking.tr/vip">VIP ayrıcalıkları</a></p>
-<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.4-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
+<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.5-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
 
 ## Deneyim
 
@@ -57,3 +57,13 @@ Build, doğrudan açılan uygulama rotaları için HTML girişleri üretir. HTML
 ## Açılış performansı
 
 Katalog son başarılı listeyi cihazdan gösterirken arka planda yenilenir. Yönetim ve hesap ekranları ayrı JavaScript parçaları olarak yüklenir. İlk ana görsel önceliklidir; katalog kapakları tembel yüklenir. Hash içeren JS/CSS dosyaları bir yıl önbelleklenir; HTML yeniden doğrulanır. Vercel API’nin herkese açık katalog önbelleği özel hesap ve indirme işlemlerinden ayrıdır.
+
+## Paylaşılabilir oyun sayfaları
+
+Oyunlar `/oyun/oyun-adi` adresiyle paylaşılır. Adres ilk yayında oluşturulur ve başlık değiştiğinde korunur. Eski `/game?id=...` bağlantıları kalıcı olarak yeni adrese yönlendirilir.
+
+Cloudflare Worker, oyun içeriğini ve sayfaya özel başlık, açıklama, canonical ve yapılandırılmış veriyi ilk HTML yanıtında sunar. `/sitemap.xml` yayınlanan oyunları otomatik listeler; yeni oyun için frontend yayını gerekmez. Gizli ve kaldırılmış projeler listelenmez.
+
+`npm run build` statik arayüzü üretir; `npx wrangler deploy` aynı Worker üzerinde statik varlıklar ile oyun sayfası katmanını birlikte yayınlar. `PUBLIC_API_URL` Worker'ın herkese açık API adresidir; gizli anahtar içermez. Yerel tam sayfa testi için build sonrasında `npx wrangler dev` kullanılabilir.
+
+Arama görünürlüğü için Search Console'a sitemap gönderilebilir. İndekslenme ve sıralama arama motorunun kararına bağlıdır.

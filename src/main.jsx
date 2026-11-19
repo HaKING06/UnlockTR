@@ -1,3 +1,4 @@
+import { gamePath } from "./game-url";
 import { useClientNavigation, navigate } from "./navigation";
 import { Select } from "./select";
 import { FavoriteButton } from "./social-ui";
@@ -103,7 +104,7 @@ const WalletPage = lazy(() =>
 const FavoritesPage = lazy(() =>
   import("./favorites-page").then((m) => ({ default: m.FavoritesPage })),
 );
-const VERSION = "0.11.4";
+const VERSION = "0.11.5";
 class RouteBoundary extends React.Component {
   state = { failed: false };
   static getDerivedStateFromError() {
@@ -130,8 +131,8 @@ function Brand({ compact = false }) {
         className={compact ? "brand-compact" : "brand-wide"}
         src={
           compact
-            ? "/brand/compact.webp?v=0.11.4"
-            : "/brand/horizontal.webp?v=0.11.4"
+            ? "/brand/compact.webp?v=0.11.5"
+            : "/brand/horizontal.webp?v=0.11.5"
         }
         alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
@@ -139,7 +140,7 @@ function Brand({ compact = false }) {
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.webp?v=0.11.4"
+        src="/brand/compact.webp?v=0.11.5"
         alt="UTR · UTRZONE"
         width="190"
         height="36"
@@ -164,7 +165,7 @@ function GameCard({ game }) {
         <Cover game={game} />
         <img
           className="card-brand-bug"
-          src="/brand/mark.webp?v=0.11.4"
+          src="/brand/mark.webp?v=0.11.5"
           alt=""
           width="58"
           height="28"
@@ -197,7 +198,7 @@ function GameCard({ game }) {
           )}
         </div>
         <h3>
-          <a href={"/game?id=" + game.id}>{game.title}</a>
+          <a href={gamePath(game)}>{game.title}</a>
         </h3>
         <p className="card-description">{game.description}</p>
         <div className="card-date">
@@ -211,10 +212,7 @@ function GameCard({ game }) {
           <span>
             <Clock3 size={12} />v{game.version}
           </span>
-          <a
-            href={"/game?id=" + game.id}
-            aria-label={game.title + " oyun sayfası"}
-          >
+          <a href={gamePath(game)} aria-label={game.title + " oyun sayfası"}>
             Oyunu keşfet
             <ArrowUpRight size={16} />
           </a>
@@ -230,7 +228,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.webp?v=0.11.4"
+            src="/brand/mark.webp?v=0.11.5"
             alt=""
             width="90"
             height="36"
@@ -389,8 +387,8 @@ function App() {
       <AuthPage mode="forgot" />
     ) : routePath === "/account" ? (
       <AccountPage />
-    ) : routePath === "/game" ? (
-      <GamePage />
+    ) : routePath === "/game" || routePath.startsWith("/oyun/") ? (
+      <GamePage key={location.pathname + location.search} />
     ) : routePath === "/vip" ? (
       <VipPage />
     ) : null;
@@ -815,7 +813,7 @@ function App() {
               <div className="community-visual" aria-hidden="true">
                 <span />
                 <img
-                  src="/brand/mark.webp?v=0.11.4"
+                  src="/brand/mark.webp?v=0.11.5"
                   alt=""
                   width="120"
                   height="50"

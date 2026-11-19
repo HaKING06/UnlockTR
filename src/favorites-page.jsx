@@ -1,3 +1,4 @@
+import { gamePath } from "./game-url";
 import React, { useState, useEffect } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { api } from "./api";
@@ -52,7 +53,7 @@ export function FavoritesPage() {
                     {g.engine} · v{g.version}
                   </small>
                   <h2>
-                    <a href={"/game?id=" + g.id}>{g.title}</a>
+                    <a href={gamePath(g)}>{g.title}</a>
                   </h2>
                   <p>{g.description}</p>
                   <span>
@@ -62,7 +63,7 @@ export function FavoritesPage() {
                 </div>
                 <div>
                   <FavoriteButton gameId={g.id} count={g.favorite_count} />
-                  <a className="secondary" href={"/game?id=" + g.id}>
+                  <a className="secondary" href={gamePath(g)}>
                     Oyun sayfası <ArrowUpRight size={15} />
                   </a>
                 </div>

@@ -15,3 +15,5 @@ preview-*.png
 /docs/*.md
 /docs/local/
 /public/brand/README.md
+
+.wrangler/

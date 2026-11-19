@@ -6172,3 +6172,21 @@ body {
     min-width: 0;
   }
 }
+
+.seo-game {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 24px;
+  color: #f3f4f6;
+  background: #111;
+  min-height: 60vh;
+}
+.seo-game p {
+  white-space: pre-line;
+  line-height: 1.7;
+}
+
+/* Allow gallery grids to shrink below their thumbnails intrinsic width. */
+.game-layout > * {
+  min-width: 0;
+}
