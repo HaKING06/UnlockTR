@@ -2,7 +2,7 @@
 (() => {
   if (window.__utrzoneWarmup) return;
   window.__utrzoneWarmup = true;
-  const endpoint = "https://unlocktr-backend.onrender.com/api/health",
+  const endpoint = "https://unlocktr-backend.vercel.app/api/health",
     key = "utrzone-api-heartbeat";
   let pending = false,
     last = 0;

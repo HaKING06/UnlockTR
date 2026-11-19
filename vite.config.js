@@ -19,13 +19,13 @@ export default defineConfig(({ mode }) => {
           // Real HTML entries avoid Cloudflare's /index.html canonical redirect.
           const directory = options.dir || "dist";
           const apiOrigin = (
-            env.VITE_API_URL || "https://unlocktr-backend.onrender.com/api"
+            env.VITE_API_URL || "https://unlocktr-backend.vercel.app/api"
           ).replace(/\/$/, "");
           writeFileSync(
             resolve(directory, "warmup.js"),
             readFileSync(resolve("public/warmup.js"), "utf8").replace(
               JSON.stringify(
-                "https://unlocktr-backend.onrender.com/api/health",
+                "https://unlocktr-backend.vercel.app/api/health",
               ),
               JSON.stringify(apiOrigin + "/health"),
             ),

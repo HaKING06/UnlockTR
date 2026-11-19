@@ -3,7 +3,7 @@ const API = (
   import.meta.env.VITE_API_URL ||
   (import.meta.env.DEV
     ? "http://localhost:3001/api"
-    : "https://unlocktr-backend.onrender.com/api")
+    : "https://unlocktr-backend.vercel.app/api")
 ).replace(/\/$/, "");
 export const ADMIN = import.meta.env.VITE_ADMIN_ROUTE_SLUG || "founder-console";
 export const engines = ["Ren'Py", "Unity"];
