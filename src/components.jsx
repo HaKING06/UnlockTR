@@ -32,6 +32,7 @@ export function Cover({ game, detail = false, onSize }) {
           src={imageUrl.href}
           alt={game.is_adult ? "Yetişkin içerik kapağı" : game.title}
           loading={detail ? "eager" : "lazy"}
+          fetchPriority={detail ? "high" : "auto"}
           decoding="async"
           referrerPolicy="no-referrer"
           onLoad={(e) =>

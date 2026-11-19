@@ -2,7 +2,7 @@
 (() => {
   if (window.__utrzoneWarmup) return;
   window.__utrzoneWarmup = true;
-  const endpoint = "https://unlocktr-backend.vercel.app/api/health",
+  const endpoint = "https://unlocktr-backend.vercel.app/api/ping",
     key = "utrzone-api-heartbeat";
   let pending = false,
     last = 0;
@@ -22,7 +22,7 @@
     try {
       await fetch(
         location.hostname === "localhost" || location.hostname === "127.0.0.1"
-          ? "http://localhost:3001/api/health"
+          ? "http://localhost:3001/api/ping"
           : endpoint,
         {
           cache: "no-store",

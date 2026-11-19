@@ -1,7 +1,7 @@
 <p align="center"><img src="docs/media/utrzone-banner.webp" alt="UTRZONE — Underground Translation & Reworks" width="100%" /></p>
 <p align="center"><strong>Oyunun dilini değiştir. Kendi deneyimini kur.</strong><br />Türkçe yamalar · Ren’Py & Unity modları · Oyuncu topluluğu</p>
 <p align="center"><a href="https://utrzone.haking.tr">Platformu keşfet</a> · <a href="https://utrzone.haking.tr/register">Topluluğa katıl</a> · <a href="https://utrzone.haking.tr/vip">VIP ayrıcalıkları</a></p>
-<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.3-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
+<p align="center"><img alt="Version" src="https://img.shields.io/badge/version-0.11.4-b91c1c" /> <img alt="React" src="https://img.shields.io/badge/React-19-202020" /> <img alt="Vite" src="https://img.shields.io/badge/Vite-7-202020" /></p>
 
 ## Deneyim
 
@@ -53,3 +53,7 @@ Build, doğrudan açılan uygulama rotaları için HTML girişleri üretir. HTML
 [Backend API](https://github.com/HaKING06/UnlockTR-Backend) · [Görsel arşivi](https://github.com/HaKING06/UnlockTR-Images) · [İletişim](mailto:utrzone@haking.tr) · [Destek ol](https://buymeacoffee.com/haking)
 
 [Katkı rehberi](CONTRIBUTING.md) · [Güvenlik bildirimi](SECURITY.md) · [Topluluk ilkeleri](CODE_OF_CONDUCT.md) · [Lisans](LICENSE)
+
+## Açılış performansı
+
+Katalog son başarılı listeyi cihazdan gösterirken arka planda yenilenir. Yönetim ve hesap ekranları ayrı JavaScript parçaları olarak yüklenir. İlk ana görsel önceliklidir; katalog kapakları tembel yüklenir. Hash içeren JS/CSS dosyaları bir yıl önbelleklenir; HTML yeniden doğrulanır. Vercel API’nin herkese açık katalog önbelleği özel hesap ve indirme işlemlerinden ayrıdır.

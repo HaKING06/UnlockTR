@@ -523,7 +523,7 @@ export function GamePage() {
               }}
             />
           )}
-          {game.trlink_url && (
+          {(game.has_standard_download || game.trlink_url) && (
             <DownloadButton
               gameId={id}
               provider="standard"

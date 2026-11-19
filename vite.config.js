@@ -24,10 +24,8 @@ export default defineConfig(({ mode }) => {
           writeFileSync(
             resolve(directory, "warmup.js"),
             readFileSync(resolve("public/warmup.js"), "utf8").replace(
-              JSON.stringify(
-                "https://unlocktr-backend.vercel.app/api/health",
-              ),
-              JSON.stringify(apiOrigin + "/health"),
+              JSON.stringify("https://unlocktr-backend.vercel.app/api/ping"),
+              JSON.stringify(apiOrigin + "/ping"),
             ),
           );
           const shell = readFileSync(

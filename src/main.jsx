@@ -1,22 +1,14 @@
-import {
-  AboutPage,
-  AdvertisePage,
-  HelpPage,
-  TermsPage,
-  ContentPolicyPage,
-} from "./platform-pages";
 import { useClientNavigation, navigate } from "./navigation";
 import { Select } from "./select";
-import { FavoritesPage, FavoriteButton } from "./social-ui";
-import { StaffReports } from "./staff-reports";
+import { FavoriteButton } from "./social-ui";
+
 import { ConfirmProvider } from "./confirm-dialog";
-import { WalletPage, WalletLink } from "./wallet-page";
-import { CoinAdmin } from "./coin-admin";
-import { MailPage } from "./mail-page";
-import { CookieNotice, SupportPage, PrivacyPage } from "./site-extras";
-import { RequestPage } from "./request-page";
+import { WalletLink } from "./wallet-link";
+
+import { CookieNotice } from "./cookie-notice";
+
 import { preferencesAllowed } from "./consent";
-import React, { useEffect, useState } from "react";
+import React, { lazy, Suspense, useEffect, useState } from "react";
 import { createRoot } from "react-dom/client";
 import {
   ArrowUpRight,
@@ -49,14 +41,88 @@ import {
   Heart,
 } from "lucide-react";
 import { Cover } from "./components";
-import { AuthPage, VerifyPage } from "./auth-pages";
-import { AccountPage, GamePage, VipPage } from "./member-pages";
-import { AdminPage } from "./admin-page";
+
 import { SessionProvider, useSession, roleLabel } from "./state";
 import { api, ADMIN, engines, readCatalog, saveCatalog } from "./api";
 import "./style.css";
 import "./refinements.css";
-const VERSION = "0.11.3";
+const AboutPage = lazy(() =>
+  import("./platform-pages").then((m) => ({ default: m.AboutPage })),
+);
+const AdvertisePage = lazy(() =>
+  import("./platform-pages").then((m) => ({ default: m.AdvertisePage })),
+);
+const HelpPage = lazy(() =>
+  import("./platform-pages").then((m) => ({ default: m.HelpPage })),
+);
+const TermsPage = lazy(() =>
+  import("./platform-pages").then((m) => ({ default: m.TermsPage })),
+);
+const ContentPolicyPage = lazy(() =>
+  import("./platform-pages").then((m) => ({ default: m.ContentPolicyPage })),
+);
+const StaffReports = lazy(() =>
+  import("./staff-reports").then((m) => ({ default: m.StaffReports })),
+);
+const CoinAdmin = lazy(() =>
+  import("./coin-admin").then((m) => ({ default: m.CoinAdmin })),
+);
+const MailPage = lazy(() =>
+  import("./mail-page").then((m) => ({ default: m.MailPage })),
+);
+const RequestPage = lazy(() =>
+  import("./request-page").then((m) => ({ default: m.RequestPage })),
+);
+const SupportPage = lazy(() =>
+  import("./site-extras").then((m) => ({ default: m.SupportPage })),
+);
+const PrivacyPage = lazy(() =>
+  import("./site-extras").then((m) => ({ default: m.PrivacyPage })),
+);
+const AuthPage = lazy(() =>
+  import("./auth-pages").then((m) => ({ default: m.AuthPage })),
+);
+const VerifyPage = lazy(() =>
+  import("./auth-pages").then((m) => ({ default: m.VerifyPage })),
+);
+const AccountPage = lazy(() =>
+  import("./member-pages").then((m) => ({ default: m.AccountPage })),
+);
+const GamePage = lazy(() =>
+  import("./member-pages").then((m) => ({ default: m.GamePage })),
+);
+const VipPage = lazy(() =>
+  import("./member-pages").then((m) => ({ default: m.VipPage })),
+);
+const AdminPage = lazy(() =>
+  import("./admin-page").then((m) => ({ default: m.AdminPage })),
+);
+const WalletPage = lazy(() =>
+  import("./wallet-page").then((m) => ({ default: m.WalletPage })),
+);
+const FavoritesPage = lazy(() =>
+  import("./favorites-page").then((m) => ({ default: m.FavoritesPage })),
+);
+const VERSION = "0.11.4";
+class RouteBoundary extends React.Component {
+  state = { failed: false };
+  static getDerivedStateFromError() {
+    return { failed: true };
+  }
+  render() {
+    return this.state.failed ? (
+      <section className="panel">
+        <h1>Sayfa yüklenemedi.</h1>
+        <p>Bağlantını kontrol edip tekrar deneyebilirsin.</p>
+        <button className="primary" onClick={() => location.reload()}>
+          Yeniden yükle
+        </button>
+      </section>
+    ) : (
+      this.props.children
+    );
+  }
+}
 function Brand({ compact = false }) {
   return (
     <a href="/" className="brand" aria-label="UTRZONE ana sayfa">
@@ -64,8 +130,8 @@ function Brand({ compact = false }) {
         className={compact ? "brand-compact" : "brand-wide"}
         src={
           compact
-            ? "/brand/compact.webp?v=0.11.3"
-            : "/brand/horizontal.webp?v=0.11.3"
+            ? "/brand/compact.webp?v=0.11.4"
+            : "/brand/horizontal.webp?v=0.11.4"
         }
         alt="UTRZONE · Underground Translation & Reworks"
         width={compact ? 240 : 290}
@@ -73,7 +139,7 @@ function Brand({ compact = false }) {
       />
       <img
         className="brand-mobile"
-        src="/brand/compact.webp?v=0.11.3"
+        src="/brand/compact.webp?v=0.11.4"
         alt="UTR · UTRZONE"
         width="190"
         height="36"
@@ -98,7 +164,7 @@ function GameCard({ game }) {
         <Cover game={game} />
         <img
           className="card-brand-bug"
-          src="/brand/mark.webp?v=0.11.3"
+          src="/brand/mark.webp?v=0.11.4"
           alt=""
           width="58"
           height="28"
@@ -164,7 +230,7 @@ function Skeletons() {
         <div className="skeleton-card" key={i}>
           <img
             className="loading-mark"
-            src="/brand/mark.webp?v=0.11.3"
+            src="/brand/mark.webp?v=0.11.4"
             alt=""
             width="90"
             height="36"
@@ -460,8 +526,25 @@ function App() {
         </header>
       </div>
       <main id="main">
-        {(routeContent &&
-          React.cloneElement(routeContent, { key: routeKey })) || (
+        {(routeContent && (
+          <RouteBoundary key={routeKey}>
+            <Suspense
+              fallback={
+                <section
+                  className="panel route-loading"
+                  role="status"
+                  aria-label="Sayfa yükleniyor"
+                >
+                  <div className="route-skeleton" />
+                  <div className="route-skeleton" />
+                  <div className="route-skeleton" />
+                </section>
+              }
+            >
+              {routeContent}
+            </Suspense>
+          </RouteBoundary>
+        )) || (
           <>
             <div className="page-intro">
               <p>
@@ -732,7 +815,7 @@ function App() {
               <div className="community-visual" aria-hidden="true">
                 <span />
                 <img
-                  src="/brand/mark.webp?v=0.11.3"
+                  src="/brand/mark.webp?v=0.11.4"
                   alt=""
                   width="120"
                   height="50"

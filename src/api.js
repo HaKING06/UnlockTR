@@ -11,6 +11,8 @@ export async function api(path, { token, body, method = "GET", signal } = {}) {
   const res = await requestWithRetry(API + path, {
     method,
     signal,
+    credentials: "omit",
+    cache: token || method !== "GET" ? "no-store" : "default",
     headers: {
       ...(body ? { "Content-Type": "application/json" } : {}),
       ...(token ? { Authorization: "Bearer " + token } : {}),

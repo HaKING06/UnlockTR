@@ -47,12 +47,20 @@
       href="/apple-touch-icon.png?v=0.8.0"
     />
     <link rel="manifest" href="/site.webmanifest" />
-    <link rel="preload" as="image" href="/images/utr-world.webp" />
+    <link
+      rel="preload"
+      as="image"
+      href="/images/utr-world.webp"
+      fetchpriority="high"
+    />
     <link
       rel="preconnect"
       href="https://unlocktr-backend.vercel.app"
       crossorigin
     />
+    <link rel="preconnect" href="https://utr.haking.tr" />
+    <link rel="dns-prefetch" href="//utr.haking.tr" />
+    <link rel="dns-prefetch" href="//unlocktr-backend.vercel.app" />
     <script src="/recovery.js"></script>
     <script src="/warmup.js" async></script>
     <title>UTRZONE — Oyunun dilini değiştir.</title>

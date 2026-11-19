@@ -17,3 +17,8 @@
   Cache-Control: no-cache
 /warmup.js
   Cache-Control: no-cache
+
+/images/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+/brand/*
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
