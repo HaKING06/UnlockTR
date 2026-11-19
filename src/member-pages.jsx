@@ -334,6 +334,7 @@ export function GamePage() {
       return;
     }
     const loaded = initialGame();
+    document.getElementById("utrzone-game-data")?.remove();
     const pending = loaded
       ? Promise.resolve(loaded)
       : api(
