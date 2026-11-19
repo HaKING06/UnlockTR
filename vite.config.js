@@ -121,7 +121,7 @@ export default defineConfig(({ mode }) => {
             writeFileSync(
               headerPath,
               readFileSync(headerPath, "utf8") +
-                `\n/${route}\n  Cache-Control: no-store\n`,
+                `\n/${route}\n  Cache-Control: no-store, no-transform\n`,
             );
           }
         },
